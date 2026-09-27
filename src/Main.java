@@ -52,14 +52,15 @@ public class Main extends PApplet {
 			new PVector(width-off, off)
 		);
 
-		pos.key(Key.at(frames.get(1)).setEaseInOut(Easing.QUAD_IN_OUT), path.at(0.0f));
+		pos.key(Key.at(frames.get(2)).setEaseInOut(Easing.LINEAR), path.at(0.0f));
 		// pos.key(frames.get(1), new PVector(width/2, height/2));
-		pos.key(Key.at(frames.get(4)).setEaseInOut(Easing.QUAD_IN_OUT), path.at(1.0f));
+		pos.key(Key.at(frames.get(3)).setEaseInOut(Easing.LINEAR), path.at(1.0f));
 
 		// pos.addEffect(Effect.WIGGLE(100f, 0.1f));
 		// pos.addEffect(new Orbit(20f, 0.01f));
 		// pos.addEffect(new PixelSnap(10));
-		pos.addEffect(new StopMotion<>(4f));
+		// pos.addEffect(new StopMotion<>(4f));
+		pos.addEffect(new Spring<>(new PVectorLerp(), 2f / fps, 0.2f));  // 2 wobbles per second
 	}
 
 	public void draw() {
