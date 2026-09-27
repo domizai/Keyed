@@ -31,7 +31,7 @@ public class Keyed<A> {
         return key(k, new TweenAt<>(tween));
     }
 
-    public Keyed<A> key(Frame f, Tween<A> tween) {
+    public Keyed<A> key(Pin f, Tween<A> tween) {
         return key(Key.at(f), tween);
     }
 
@@ -46,7 +46,7 @@ public class Keyed<A> {
         return this;
     }
     
-    public Keyed<A> key(Frame f, TweenAt<A> tweenAt) {
+    public Keyed<A> key(Pin f, TweenAt<A> tweenAt) {
         return key(Key.at(f), tweenAt);
     }
 
@@ -55,7 +55,7 @@ public class Keyed<A> {
         return key(k, new TweenAt<>(d -> v));
     }
     
-    public Keyed<A> key(Frame f, A value) {
+    public Keyed<A> key(Pin f, A value) {
         return key(Key.at(f), value);
     }
 

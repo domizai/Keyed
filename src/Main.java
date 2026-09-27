@@ -12,7 +12,7 @@ public class Main extends PApplet {
 	Keyed<Float> rot;
 
 	float fps = 30f; 
-	ArrayList<Frame> frames = new ArrayList<>();
+	ArrayList<Pin> frames = new ArrayList<>();
 	BezierTween path;
 
 	public void settings() {
@@ -29,10 +29,10 @@ public class Main extends PApplet {
 		fill(0, 75);
 		smooth();
 
-		// Timeline
-		tm = new Timeline();
-		tm.setDuration(5 * fps);
-		for (int f = 0; f < 6; f++) frames.add(Frame.at(f * fps));
+		// Timeline (seconds)
+		tm = new Timeline(this);
+		tm.setDuration(5);
+		for (int f = 0; f < 6; f++) frames.add(Pin.at(f));
 
 		// Keyed values
 		rot = new Keyed<>(new FloatLerp(), 0f);
@@ -56,16 +56,15 @@ public class Main extends PApplet {
 		// pos.key(frames.get(1), new PVector(width/2, height/2));
 		pos.key(Key.at(frames.get(3)).setEasing(Easing.QUAD_IN_OUT), path.at(1.0f));
 
-		// pos.addEffect(Effect.WIGGLE(100f, 0.1f));
-		// pos.addEffect(new Orbit(20f, 0.01f));
+		// pos.addEffect(Effect.WIGGLE(100f, 3f));
+		// pos.addEffect(new Orbit(20f, 0.3f));
 		// pos.addEffect(new PixelSnap(10));
-		// pos.addEffect(new StopMotion<>(4f));
-		// pos.addEffect(new Spring<>(new PVectorLerp(), 2f / fps, 0.2f));  // 2 wobbles per second
+		// pos.addEffect(new StopMotion<>(4f / fps));
+		// pos.addEffect(new Spring<>(new PVectorLerp(), 2f, 0.2f));  // 2 wobbles per second
 	}
 
 	public void draw() {
 		background(255);
-		tm.step();
 		pushMatrix();
 		PVector p = pos.value();
 		translate(p.x, p.y);

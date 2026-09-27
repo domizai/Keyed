@@ -2,7 +2,7 @@ package ch.domizai.keyed.effect;
 
 import ch.domizai.keyed.tween.Tween;
 
-// Holds each pose for `step` timeline units; step 2 with one timeline step per frame animates "on twos".
+// Holds each pose for `step` seconds; 2f / 24 animates "on twos" at 24 fps.
 public class StopMotion<T> implements TimeEffect<T> {
     private final float step;
 

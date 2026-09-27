@@ -5,7 +5,7 @@ import processing.core.PConstants;
 import processing.core.PVector;
 
 public class Orbit implements Effect<PVector> {
-    private final float radius, frequency; // frequency in cycles per timeline unit
+    private final float radius, frequency; // frequency in cycles per second
 
     public Orbit(float radius, float frequency) {
         this.radius = radius;
