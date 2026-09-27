@@ -4,7 +4,6 @@ import ch.domizai.keyed.effect.Effect;
 import ch.domizai.keyed.tween.Tween;
 import ch.domizai.keyed.tween.TweenAt;
 import ch.domizai.keyed.lerp.Lerp;
-import ch.domizai.keyed.easing.Easing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,18 +19,22 @@ public class Keyed<A> {
     private Timeline tm = new Timeline();
     private Lerp<A> lerper;
     private ArrayList<Effect<A>> effects = new ArrayList<>();
-    private Easing easing = Easing.CUBIC_IN_OUT; // TODO: add setter
+    private Easing easing = Easing.CUBIC_IN_OUT;
 
     public Keyed(Lerp<A> lerper, A defaultValue) {
         this.lerper = lerper;
         this.defaultValue = copy(defaultValue);
     }
 
-    public Keyed<A> addKey(Key k, Tween<A> tween) {
-        return addKey(k, new TweenAt<>(tween));
+    public Keyed<A> key(Key k, Tween<A> tween) {
+        return key(k, new TweenAt<>(tween));
     }
 
-    public Keyed<A> addKey(Key k, TweenAt<A> tweenAt) {
+    public Keyed<A> key(Frame f, Tween<A> tween) {
+        return key(Key.at(f), tween);
+    }
+
+    public Keyed<A> key(Key k, TweenAt<A> tweenAt) {
         for (KeyEntry<A> e : keys) {
             if (e.key == k) {
                 e.tween = tweenAt;
@@ -42,9 +45,21 @@ public class Keyed<A> {
         return this;
     }
     
-    public Keyed<A> addKey(Key k, A value) {
+    public Keyed<A> key(Frame f, TweenAt<A> tweenAt) {
+        return key(Key.at(f), tweenAt);
+    }
+    
+    public Keyed<A> key(Key k, A value) {
         A v = copy(value);
-        return addKey(k, new TweenAt<>(d -> v));
+        return key(k, new TweenAt<>(d -> v));
+    }
+    
+    public Keyed<A> key(Frame f, A value) {
+        return key(Key.at(f), value);
+    }
+
+    public void setEasing(Easing easing) {
+        this.easing = easing;
     }
 
     public Keyed<A> setTimeline(Timeline tm) {

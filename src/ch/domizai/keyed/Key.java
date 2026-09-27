@@ -3,8 +3,6 @@ package ch.domizai.keyed;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import ch.domizai.keyed.easing.Easing;
-
 public class Key implements Comparable<Key> {
     private Frame frame;
     private Easing easeIn;
@@ -13,8 +11,8 @@ public class Key implements Comparable<Key> {
 
     public Key(Frame frame) {
         this.frame = frame;
-        this.easeIn = Easing.CUBIC_IN;
-        this.easeOut = Easing.CUBIC_OUT;
+        this.easeIn = Easing.LINEAR;
+        this.easeOut = Easing.LINEAR;
     }
 
     public Key(float t) {

@@ -1,4 +1,4 @@
-package ch.domizai.keyed.easing;
+package ch.domizai.keyed;
 
 import static processing.core.PApplet.constrain;
 

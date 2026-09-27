@@ -1,16 +1,18 @@
 import processing.core.*;
 import java.util.ArrayList;
 import ch.domizai.keyed.*;
-import ch.domizai.keyed.easing.Easing;
-import ch.domizai.keyed.lerp.PVectorLerp;
-import ch.domizai.keyed.tween.BezierTween;
+import ch.domizai.keyed.effect.Effect;
+import ch.domizai.keyed.lerp.*;
+import ch.domizai.keyed.tween.*;
 
 public class Main extends PApplet {
 
 	Timeline tm;
 	Keyed<PVector> pos;
+	Keyed<Float> rot;
+
 	float fps = 30f; 
-	ArrayList<Key> keys = new ArrayList<>();
+	ArrayList<Frame> frames = new ArrayList<>();
 	BezierTween path;
 
 	public void settings() {
@@ -29,18 +31,17 @@ public class Main extends PApplet {
 
 		// Timeline
 		tm = new Timeline();
-		tm.setDuration(4 * fps);
-
-		// Keys
-		keys.add(Key.at(1 * fps));
-		keys.add(Key.at(2 * fps));
-		keys.add(Key.at(3 * fps));
-		keys.get(0).setEaseInOut(Easing.CUBIC_IN_OUT);
-		keys.get(1).setEaseInOut(Easing.CUBIC_IN_OUT);
-		keys.get(2).setEaseInOut(Easing.CUBIC_IN_OUT);
+		tm.setDuration(5 * fps);
+		for (int f = 0; f < 6; f++) frames.add(Frame.at(f * fps));
 
 		// Keyed values
-		pos = new Keyed<>(new PVectorLerp(), new PVector(20, 20)); 
+		rot = new Keyed<>(new FloatLerp(), 0f);
+		rot.setTimeline(tm);
+
+		rot.key(frames.get(0), 0f);
+		rot.key(frames.get(5), TWO_PI);
+
+		pos = new Keyed<>(new PVectorLerp(), new PVector(width/2, height/2));
 		pos.setTimeline(tm);
 
 		float off = 30f;
@@ -51,16 +52,22 @@ public class Main extends PApplet {
 			new PVector(width-off, off)
 		);
 
-		pos.addKey(keys.get(0), path.at(0.25f));
-		pos.addKey(keys.get(1), new PVector(width/2, height/2));
-		pos.addKey(keys.get(2), path.at(0.75f));
+		pos.key(Key.at(frames.get(1)).setEaseInOut(Easing.QUAD_IN_OUT), path.at(0.0f));
+		// pos.key(frames.get(1), new PVector(width/2, height/2));
+		pos.key(Key.at(frames.get(4)).setEaseInOut(Easing.QUAD_IN_OUT), path.at(1.0f));
+
+		pos.addEffect(Effect.WIGGLE(100f, 0.1f));
 	}
 
 	public void draw() {
 		background(255);
 		tm.step();
+		pushMatrix();
 		PVector p = pos.value();
-		rect(p.x, p.y, 5, 5);
+		translate(p.x, p.y);
+		rotate(rot.value());
+		rect(0, 0, 15, 15);
+		popMatrix();
 	}
 
     static public void main(String[] passedArgs) {
