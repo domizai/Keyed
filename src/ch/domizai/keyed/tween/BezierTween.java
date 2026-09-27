@@ -2,9 +2,16 @@ package ch.domizai.keyed.tween;
 
 import processing.core.PVector;
 
+import static processing.core.PApplet.constrain;
+
 public class BezierTween implements Tween<PVector> {
+    // Higher is more accurate.
+    private static final int LUT_STEPS = 50;
+
     private PVector p0, p1, p2, p3;
     private float t0 = 0, t1 = 1;
+    // Rebuilt lazily after setters; mutating the PVectors directly won't invalidate it.
+    private float[] lut;
 
     public BezierTween(PVector p0, PVector p1, PVector p2, PVector p3) {
         this.p0 = p0;
@@ -15,21 +22,25 @@ public class BezierTween implements Tween<PVector> {
     
     public BezierTween setP0(PVector p0) {
         this.p0 = p0;
+        lut = null;
         return this;
     }
 
     public BezierTween setP1(PVector p1) {
         this.p1 = p1;
+        lut = null;
         return this;
     }
 
     public BezierTween setP2(PVector p2) {
         this.p2 = p2;
+        lut = null;
         return this;
     }
 
     public BezierTween setP3(PVector p3) {
         this.p3 = p3;
+        lut = null;
         return this;
     }
 
@@ -38,6 +49,7 @@ public class BezierTween implements Tween<PVector> {
         this.p1 = p1;
         this.p2 = p2;
         this.p3 = p3;
+        lut = null;
         return this;
     }
 
@@ -47,19 +59,64 @@ public class BezierTween implements Tween<PVector> {
         BezierTween bc = new BezierTween(p0, p1, p2, p3);
         bc.t0 = t0;
         bc.t1 = t1;
+        bc.lut = lut;
         return bc;
     }
 
     @Override 
     public PVector value(float d) {
-        d = t0 + d * (t1 - t0);
-        float u = 1 - d;
+        return point(distToT(t0 + d * (t1 - t0)));
+    }
+
+    private PVector point(float t) {
+        float u = 1 - t;
         float b0 = u * u * u;
-        float b1 = 3 * u * u * d;
-        float b2 = 3 * u * d * d;
-        float b3 = d * d * d;
+        float b1 = 3 * u * u * t;
+        float b2 = 3 * u * t * t;
+        float b3 = t * t * t;
         return new PVector(
             b0 * p0.x + b1 * p1.x + b2 * p2.x + b3 * p3.x,
             b0 * p0.y + b1 * p1.y + b2 * p2.y + b3 * p3.y);
+    }
+
+    // Cumulative distances between LUT_STEPS + 1 evenly spaced samples of t.
+    private float[] lut() {
+        if (lut == null) {
+            float[] l = new float[LUT_STEPS + 1];
+            PVector prev = point(0);
+            for (int i = 1; i <= LUT_STEPS; i++) {
+                PVector p = point((float) i / LUT_STEPS);
+                l[i] = l[i - 1] + PVector.dist(prev, p);
+                prev = p;
+            }
+            lut = l;
+        }
+        return lut;
+    }
+
+    // Normalized distance (0..1) along the curve to the curve parameter t.
+    private float distToT(float dist) {
+        float[] l = lut();
+        int n = l.length - 1;
+        float total = l[n];
+        if (total == 0) {
+            return dist;
+        }
+        dist = constrain(dist * total, 0, total);
+
+        int lo = 1, hi = n;
+        while (lo < hi) {
+            int mid = (lo + hi) >>> 1;
+            if (l[mid] < dist) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+
+        float d0 = l[lo - 1], d1 = l[lo];
+        float ta = (lo - 1) / (float) n;
+        float tb = lo / (float) n;
+        return d1 > d0 ? ta + (dist - d0) * (tb - ta) / (d1 - d0) : ta;
     }
 }
