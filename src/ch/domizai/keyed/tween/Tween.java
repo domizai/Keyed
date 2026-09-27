@@ -1,8 +1,7 @@
 package ch.domizai.keyed.tween;
 
+@FunctionalInterface
 public interface Tween<T> {
-    Tween<T> clone();
-    void set(T value);
     T value(float d);
 
     default TweenAt<T> at(float position) {

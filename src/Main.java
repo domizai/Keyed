@@ -2,9 +2,8 @@ import processing.core.*;
 import java.util.ArrayList;
 import ch.domizai.keyed.*;
 import ch.domizai.keyed.easing.Easing;
-import ch.domizai.keyed.lerps.PVectorLerp;
+import ch.domizai.keyed.lerp.PVectorLerp;
 import ch.domizai.keyed.tween.BezierTween;
-import ch.domizai.keyed.tween.PVectorTween;
 
 public class Main extends PApplet {
 
@@ -41,7 +40,7 @@ public class Main extends PApplet {
 		keys.get(2).setEaseInOut(Easing.CUBIC_IN_OUT);
 
 		// Keyed values
-		pos = new Keyed<>(new PVectorLerp(), new PVectorTween(new PVector(20, 20))); 
+		pos = new Keyed<>(new PVectorLerp(), new PVector(20, 20)); 
 		pos.setTimeline(tm);
 
 		float off = 30f;

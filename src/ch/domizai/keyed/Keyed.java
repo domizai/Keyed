@@ -3,26 +3,28 @@ package ch.domizai.keyed;
 import ch.domizai.keyed.effect.Effect;
 import ch.domizai.keyed.tween.Tween;
 import ch.domizai.keyed.tween.TweenAt;
-import ch.domizai.keyed.lerps.Lerp;
+import ch.domizai.keyed.lerp.Lerp;
 import ch.domizai.keyed.easing.Easing;
-import ch.domizai.keyed.easing.PowerEasingInOut;
 
 import java.util.ArrayList;
 import java.util.List;
-import processing.core.PApplet;
+
+import static processing.core.PApplet.constrain;
+import static processing.core.PApplet.lerp;
+import static processing.core.PApplet.map;
 
 
-public class Keyed<A> extends PApplet {
-    private Tween<A> defaultTween;
+public class Keyed<A> {
+    private A defaultValue;
     private List<KeyEntry<A>> keys = new ArrayList<>();
     private Timeline tm = new Timeline();
     private Lerp<A> lerper;
     private ArrayList<Effect<A>> effects = new ArrayList<>();
-    private Easing easing = new PowerEasingInOut(3); 
+    private Easing easing = Easing.CUBIC_IN_OUT; // TODO: add setter
 
-    public Keyed(Lerp<A> lerper, Tween<A> defaultTween) {
+    public Keyed(Lerp<A> lerper, A defaultValue) {
         this.lerper = lerper;
-        this.defaultTween = defaultTween;
+        this.defaultValue = copy(defaultValue);
     }
 
     public Keyed<A> addKey(Key k, Tween<A> tween) {
@@ -41,9 +43,8 @@ public class Keyed<A> extends PApplet {
     }
     
     public Keyed<A> addKey(Key k, A value) {
-        Tween<A> clone = defaultTween.clone();
-        clone.set(value);
-        return addKey(k, new TweenAt<>(clone));
+        A v = copy(value);
+        return addKey(k, new TweenAt<>(d -> v));
     }
 
     public Keyed<A> setTimeline(Timeline tm) {
@@ -73,20 +74,26 @@ public class Keyed<A> extends PApplet {
         int n = keys.size();
 
         if (n == 0) {
-            return applyEffects(defaultTween.value(0), t);
+            return applyEffects(copy(defaultValue), t);
         }
 
         if (n == 1) {
             TweenAt<A> k = keys.get(0).tween;
-            return applyEffects(k.tween().value(k.positionOr(0)), t);
+            return applyEffects(copy(k.tween().value(k.positionOr(0))), t);
         }
 
-        int i = 1;
-        while (i < n - 1 && t >= keys.get(i).key.t()) {
-            i++;
+        // First key after t, limited to [1, n - 1] so t outside the keys uses the first or last segment.
+        int lo = 1, hi = n - 1;
+        while (lo < hi) {
+            int mid = (lo + hi) >>> 1;
+            if (t < keys.get(mid).key.t()) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
         }
-        KeyEntry<A> e1 = keys.get(i - 1);
-        KeyEntry<A> e2 = keys.get(i);
+        KeyEntry<A> e1 = keys.get(lo - 1);
+        KeyEntry<A> e2 = keys.get(lo);
 
         float from = e1.key.t();
         float to = e2.key.t();
@@ -110,6 +117,11 @@ public class Keyed<A> extends PApplet {
             value = effect.apply(value, t);
         }
         return value;
+    }
+
+    // lerp(v, v, 0) returns a new value, so callers can't mutate stored keys through it.
+    private A copy(A value) {
+        return lerper.lerp(value, value, 0);
     }
 
     // Keys are mutable (Key.to, shared Frames), so order is restored on read; stable for equal times.

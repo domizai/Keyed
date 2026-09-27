@@ -1,9 +1,10 @@
 package ch.domizai.keyed.tween;
 
-import processing.core.PApplet;
 import processing.core.PVector;
 
-public class BezierTween extends PApplet implements Tween<PVector>, Cloneable {
+import static processing.core.PApplet.pow;
+
+public class BezierTween implements Tween<PVector> {
     private PVector p0, p1, p2, p3;
     private float t0 = 0, t1 = 1;
 
@@ -45,23 +46,12 @@ public class BezierTween extends PApplet implements Tween<PVector>, Cloneable {
     public BezierTween slice(float t0, float t1) {
         t0 = t0 > 1 ? t0 = 1 : t0 < -1 ? t0 = -1 : t0;
         t1 = t1 > 1 ? t1 = 1 : t1 < -1 ? t1 = -1 : t1;
-        BezierTween bc = this.clone();
-        bc.t0 = t0;
-        bc.t1 = t1;
-        return bc;
-    }
-
-    public BezierTween clone() {
         BezierTween bc = new BezierTween(p0, p1, p2, p3);
         bc.t0 = t0;
         bc.t1 = t1;
         return bc;
     }
-    @Override
-    public void set(PVector value) {
-        this.p0 = value;
-    }
-    
+
     @Override 
     public PVector value(float d) {
         d = t0 + d * (t1 - t0);

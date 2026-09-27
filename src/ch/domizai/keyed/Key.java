@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import ch.domizai.keyed.easing.Easing;
-import ch.domizai.keyed.easing.LinearEasing;
-
 
 public class Key implements Comparable<Key> {
     private Frame frame;
@@ -15,8 +13,8 @@ public class Key implements Comparable<Key> {
 
     public Key(Frame frame) {
         this.frame = frame;
-        this.easeIn = new LinearEasing();
-        this.easeOut = new LinearEasing();
+        this.easeIn = Easing.CUBIC_IN;
+        this.easeOut = Easing.CUBIC_OUT;
     }
 
     public Key(float t) {
@@ -36,12 +34,6 @@ public class Key implements Comparable<Key> {
         notifyListeners();
         return this;
     }
-
-    // public Key toRelative(float t) {
-    //     frame.toRelative(t);
-    //     fireListeners();
-    //     return this;
-    // }
 
     public Frame getFrame() {
         return frame;

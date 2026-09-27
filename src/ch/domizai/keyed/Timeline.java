@@ -1,8 +1,8 @@
 package ch.domizai.keyed;
 
-import processing.core.PApplet;
+import static processing.core.PApplet.constrain;
 
-public class Timeline extends PApplet {
+public class Timeline {
     private boolean loop = true;
     private float duration = 0;
     private float t = 0;
