@@ -53,7 +53,8 @@ public class Main extends PApplet {
 		);
 
 		pos.addKey(keys.get(0), path.at(0.25f));
-		pos.addKey(keys.get(1), path.at(0.75f));
+		pos.addKey(keys.get(1), new PVector(width/2, height/2));
+		pos.addKey(keys.get(2), path.at(0.75f));
 	}
 
 	public void draw() {

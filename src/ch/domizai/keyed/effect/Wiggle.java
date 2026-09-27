@@ -19,9 +19,9 @@ public class Wiggle extends PApplet implements Effect<PVector> {
 
     @Override
     public PVector apply(PVector p, float t) {
-        off.set(off.x + frequency, off.y + frequency);
+        float s = t * frequency;
         return new PVector(
-            p.x + (noise(off.x, y.x) - 0.5f) * amplitude,
-            p.y + (noise(off.y, y.y) - 0.5f) * amplitude);
+            p.x + (noise(off.x + s, y.x) - 0.5f) * amplitude,
+            p.y + (noise(off.y + s, y.y) - 0.5f) * amplitude);
     }
 }

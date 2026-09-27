@@ -12,9 +12,7 @@ public class Timeline extends PApplet {
     public Timeline step(float delta) {
         if (!playing)
             return this;
-        t += delta;
-        if (duration > 0)
-            t = loop ? remEuclid(t, duration) : constrain(t, 0, duration - delta);
+        t = fit(t + delta);
         return this;
     }
 
@@ -41,7 +39,7 @@ public class Timeline extends PApplet {
     }
 
     public Timeline to(float t) {
-        this.t = duration > 0 ? remEuclid(t, duration) : t;
+        this.t = fit(t);
         return this;
     }
 
@@ -52,13 +50,19 @@ public class Timeline extends PApplet {
     public Timeline setDuration(float duration, boolean loop) {
         this.duration = duration;
         this.loop = loop;
-        t = remEuclid(t, duration);
+        t = fit(t);
         return this;
     }
 
     public Timeline loop(boolean l) {
         loop = l;
         return this;
+    }
+
+    private float fit(float t) {
+        if (duration <= 0)
+            return t;
+        return loop ? remEuclid(t, duration) : constrain(t, 0, duration);
     }
 
     private float remEuclid(float a, float b) {

@@ -6,7 +6,7 @@ public interface Easing {
 
     public static final Easing LINEAR = new LinearEasing();
     public static final Easing QUBIC_BEZIER = new QubicBezierEasing();
-    public static final Easing QUARTIC_BEZIER = new QuadraticBezierEasing();
+    public static final Easing QUADRATIC_BEZIER = new QuadraticBezierEasing();
 
     public static final Easing QUAD_IN = new PowerEasingIn(2);
     public static final Easing QUAD_OUT = new PowerEasingOut(2);
@@ -44,7 +44,11 @@ public interface Easing {
 
     public static final Easing STEP = new StepEasing();
 
-    public static Easing step(float steps) {
-        return new StepEasing(steps);
+    public static Easing step(float threshold) {
+        return new StepEasing(threshold);
+    }
+
+    public static Easing staircase(int steps) {
+        return new StaircaseEasing(steps);
     }
 }

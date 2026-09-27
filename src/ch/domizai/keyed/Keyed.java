@@ -8,17 +8,13 @@ import ch.domizai.keyed.easing.Easing;
 import ch.domizai.keyed.easing.PowerEasingInOut;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 import processing.core.PApplet;
 
 
 public class Keyed<A> extends PApplet {
     private Tween<A> defaultTween;
-    private Map<Key, TweenAt<A>> keys = new TreeMap<>();
+    private List<KeyEntry<A>> keys = new ArrayList<>();
     private Timeline tm = new Timeline();
     private Lerp<A> lerper;
     private ArrayList<Effect<A>> effects = new ArrayList<>();
@@ -34,15 +30,20 @@ public class Keyed<A> extends PApplet {
     }
 
     public Keyed<A> addKey(Key k, TweenAt<A> tweenAt) {
-        keys.put(k, tweenAt);
+        for (KeyEntry<A> e : keys) {
+            if (e.key == k) {
+                e.tween = tweenAt;
+                return this;
+            }
+        }
+        keys.add(new KeyEntry<>(k, tweenAt));
         return this;
     }
     
     public Keyed<A> addKey(Key k, A value) {
         Tween<A> clone = defaultTween.clone();
         clone.set(value);
-        keys.put(k, new TweenAt<>(clone));
-        return this;
+        return addKey(k, new TweenAt<>(clone));
     }
 
     public Keyed<A> setTimeline(Timeline tm) {
@@ -55,7 +56,12 @@ public class Keyed<A> extends PApplet {
     }
 
     public List<Key> keys() {
-        return new ArrayList<>(keys.keySet());
+        sortKeys();
+        List<Key> list = new ArrayList<>(keys.size());
+        for (KeyEntry<A> e : keys) {
+            list.add(e.key);
+        }
+        return list;
     }
 
     public Timeline timeline() {
@@ -63,37 +69,33 @@ public class Keyed<A> extends PApplet {
     }
 
     public A value(float t) {
-        Iterator<Entry<Key, TweenAt<A>>> it = keys.entrySet().iterator();
+        sortKeys();
+        int n = keys.size();
 
-        if (!it.hasNext()) {
+        if (n == 0) {
             return applyEffects(defaultTween.value(0), t);
         }
 
-        Entry<Key, TweenAt<A>> e1 = it.next();
-        TweenAt<A> k1 = e1.getValue();
-        float from = e1.getKey().t();
-
-        if (keys.size() < 2) {
-            return applyEffects(k1.tween().value(k1.positionOr(0)), t);
+        if (n == 1) {
+            TweenAt<A> k = keys.get(0).tween;
+            return applyEffects(k.tween().value(k.positionOr(0)), t);
         }
 
-        Entry<Key, TweenAt<A>> e2 = it.next();
-
-        while (it.hasNext()) {
-            if (t < e2.getKey().t())
-                break;
-            e1 = e2;
-            e2 = it.next();
+        int i = 1;
+        while (i < n - 1 && t >= keys.get(i).key.t()) {
+            i++;
         }
+        KeyEntry<A> e1 = keys.get(i - 1);
+        KeyEntry<A> e2 = keys.get(i);
 
-        from = e1.getKey().t();
-        float to = e2.getKey().t();
-        float d = map(constrain(t, from, to), from, to, 0f,1f);
+        float from = e1.key.t();
+        float to = e2.key.t();
+        float d = to > from ? map(constrain(t, from, to), from, to, 0f, 1f) : (t < to ? 0f : 1f);
         float e = easing.apply(d);
-        float ease = lerp(e1.getKey().easeOut().apply(d), e2.getKey().easeIn().apply(d), e); 
-        float position = lerp(e1.getValue().positionOr(0), e2.getValue().positionOr(1), ease);
-        A v0 = e1.getValue().tween().value(position);
-        A v1 = e2.getValue().tween().value(position);
+        float ease = lerp(e1.key.easeOut().apply(d), e2.key.easeIn().apply(d), e); 
+        float position = lerp(e1.tween.positionOr(0), e2.tween.positionOr(1), ease);
+        A v0 = e1.tween.tween().value(position);
+        A v1 = e2.tween.tween().value(position);
         A r = lerper.lerp(v0, v1, ease);
         return applyEffects(r, t);
     }
@@ -108,5 +110,20 @@ public class Keyed<A> extends PApplet {
             value = effect.apply(value, t);
         }
         return value;
+    }
+
+    // Keys are mutable (Key.to, shared Frames), so order is restored on read; stable for equal times.
+    private void sortKeys() {
+        keys.sort((a, b) -> a.key.compareTo(b.key));
+    }
+
+    private static final class KeyEntry<A> {
+        final Key key;
+        TweenAt<A> tween;
+
+        KeyEntry(Key key, TweenAt<A> tween) {
+            this.key = key;
+            this.tween = tween;
+        }
     }
 }
