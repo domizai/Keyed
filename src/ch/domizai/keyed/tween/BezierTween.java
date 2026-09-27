@@ -2,8 +2,6 @@ package ch.domizai.keyed.tween;
 
 import processing.core.PVector;
 
-import static processing.core.PApplet.pow;
-
 public class BezierTween implements Tween<PVector> {
     private PVector p0, p1, p2, p3;
     private float t0 = 0, t1 = 1;
@@ -55,11 +53,13 @@ public class BezierTween implements Tween<PVector> {
     @Override 
     public PVector value(float d) {
         d = t0 + d * (t1 - t0);
-        PVector c = new PVector(3 * (p1.x - p0.x), 3 * (p1.y - p0.y));
-        PVector b = new PVector(3 * (p2.x - p1.x) - c.x, 3 * (p2.y - p1.y) - c.y);
-        PVector a = new PVector(p3.x - p0.x - c.x - b.x, p3.y - p0.y - c.y - b.y);
+        float u = 1 - d;
+        float b0 = u * u * u;
+        float b1 = 3 * u * u * d;
+        float b2 = 3 * u * d * d;
+        float b3 = d * d * d;
         return new PVector(
-            a.x * pow(d, 3) + b.x * pow(d, 2) + c.x * d + p0.x,
-            a.y * pow(d, 3) + b.y * pow(d, 2) + c.y * d + p0.y);
+            b0 * p0.x + b1 * p1.x + b2 * p2.x + b3 * p3.x,
+            b0 * p0.y + b1 * p1.y + b2 * p2.y + b3 * p3.y);
     }
 }

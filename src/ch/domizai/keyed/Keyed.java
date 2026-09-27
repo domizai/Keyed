@@ -101,9 +101,11 @@ public class Keyed<A> {
         float e = easing.apply(d);
         float ease = lerp(e1.key.easeOut().apply(d), e2.key.easeIn().apply(d), e); 
         float position = lerp(e1.tween.positionOr(0), e2.tween.positionOr(1), ease);
-        A v0 = e1.tween.tween().value(position);
-        A v1 = e2.tween.tween().value(position);
-        A r = lerper.lerp(v0, v1, ease);
+        Tween<A> w0 = e1.tween.tween();
+        Tween<A> w1 = e2.tween.tween();
+        A v0 = w0.value(position);
+        // Same tween at the same position gives the same value; blending it with itself is a copy.
+        A r = w0 == w1 ? copy(v0) : lerper.lerp(v0, w1.value(position), ease);
         return applyEffects(r, t);
     }
 
