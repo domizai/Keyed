@@ -5,14 +5,12 @@ import java.util.function.Consumer;
 
 public class Key implements Comparable<Key> {
     private Frame frame;
-    private Easing easeIn;
-    private Easing easeOut;
+    // Shapes the segment arriving at this key; unused on the first key.
+    private Easing easing = Easing.LINEAR;
     private ArrayList<Consumer<Frame>> listeners;
 
     public Key(Frame frame) {
         this.frame = frame;
-        this.easeIn = Easing.LINEAR;
-        this.easeOut = Easing.LINEAR;
     }
 
     public Key(float t) {
@@ -37,19 +35,8 @@ public class Key implements Comparable<Key> {
         return frame;
     }
     
-    public Key setEaseInOut(Easing easeInOut) {
-        this.easeIn = easeInOut;
-        this.easeOut = easeInOut;
-        return this;
-    }
-
-    public Key setEaseIn(Easing easeIn) {
-        this.easeIn = easeIn;
-        return this;
-    }
-    
-    public Key setEaseOut(Easing easeOut) {
-        this.easeOut = easeOut;
+    public Key setEasing(Easing easing) {
+        this.easing = easing;
         return this;
     }
     
@@ -65,12 +52,8 @@ public class Key implements Comparable<Key> {
         return this;
     }
 
-    public Easing easeIn() {
-        return easeIn;
-    }
-
-    public Easing easeOut() {
-        return easeOut;
+    public Easing easing() {
+        return easing;
     }
 
     private void notifyListeners() {

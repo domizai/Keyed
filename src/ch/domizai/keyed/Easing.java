@@ -7,7 +7,6 @@ public interface Easing {
     float apply(float d); 
 
     public static final Easing LINEAR = d -> d;
-    public static final Easing CUBIC_BEZIER = cubicBezier(0, 1);
     public static final Easing QUADRATIC_BEZIER = quadraticBezier(0, 0, 1);
     public static final Easing SMOOTHSTEP = smoothstep(0, 1);
     public static final Easing STEP = step(0.5f);
@@ -55,11 +54,57 @@ public interface Easing {
         return d -> (float) Math.round(d * steps) / steps;
     }
 
-    public static Easing cubicBezier(float p1, float p2) {
+    // CSS cubic-bezier(x1, y1, x2, y2) from (0, 0) to (1, 1); y outside [0, 1] overshoots like CSS "back" easings.
+    public static Easing cubicBezier(float x1, float y1, float x2, float y2) {
+        if (x1 < 0 || x1 > 1 || x2 < 0 || x2 > 1) {
+            throw new IllegalArgumentException("x1 and x2 must be in [0, 1], were " + x1 + ", " + x2);
+        }
+        float cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+        float cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
         return d -> {
-            float a = 1 - d;
-            return 3 * a * a * d * p1 + 3 * a * d * d * p2 + d * d * d;
+            float s = solveBezierX(d, ax, bx, cx);
+            return ((ay * s + by) * s + cy) * s;
         };
+    }
+
+    // Curve parameter s in [0, 1] where ((ax*s + bx)*s + cx)*s == x: Newton's method, bisection if it stalls or leaves [0, 1].
+    private static float solveBezierX(float x, float ax, float bx, float cx) {
+        if (x <= 0) {
+            return 0;
+        }
+        if (x >= 1) {
+            return 1;
+        }
+        float s = x;
+        for (int i = 0; i < 8; i++) {
+            float err = ((ax * s + bx) * s + cx) * s - x;
+            if (Math.abs(err) < 1e-6f) {
+                return s;
+            }
+            float slope = (3 * ax * s + 2 * bx) * s + cx;
+            if (Math.abs(slope) < 1e-6f) {
+                break;
+            }
+            s -= err / slope;
+            if (s < 0 || s > 1) {
+                break;
+            }
+        }
+        float lo = 0, hi = 1;
+        s = x;
+        for (int i = 0; i < 40; i++) {
+            float xs = ((ax * s + bx) * s + cx) * s;
+            if (Math.abs(xs - x) < 1e-6f) {
+                break;
+            }
+            if (xs < x) {
+                lo = s;
+            } else {
+                hi = s;
+            }
+            s = (lo + hi) / 2;
+        }
+        return s;
     }
 
     public static Easing quadraticBezier(float p0, float p1, float p2) {

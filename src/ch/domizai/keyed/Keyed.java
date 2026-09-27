@@ -21,7 +21,6 @@ public class Keyed<A> {
     private Lerp<A> lerper;
     // raw() wrapped by each added effect in order; the outermost wrapper is the final value.
     private Tween<A> output = this::raw;
-    private Easing easing = Easing.CUBIC_IN_OUT;
 
     public Keyed(Lerp<A> lerper, A defaultValue) {
         this.lerper = lerper;
@@ -58,10 +57,6 @@ public class Keyed<A> {
     
     public Keyed<A> key(Frame f, A value) {
         return key(Key.at(f), value);
-    }
-
-    public void setEasing(Easing easing) {
-        this.easing = easing;
     }
 
     public Keyed<A> setTimeline(Timeline tm) {
@@ -119,8 +114,7 @@ public class Keyed<A> {
         float from = e1.key.t();
         float to = e2.key.t();
         float d = to > from ? map(constrain(t, from, to), from, to, 0f, 1f) : (t < to ? 0f : 1f);
-        float e = easing.apply(d);
-        float ease = lerp(e1.key.easeOut().apply(d), e2.key.easeIn().apply(d), e); 
+        float ease = e2.key.easing().apply(d);
         float position = lerp(e1.tween.positionOr(0), e2.tween.positionOr(1), ease);
         Tween<A> w0 = e1.tween.tween();
         Tween<A> w1 = e2.tween.tween();
