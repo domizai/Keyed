@@ -1,51 +1,40 @@
-package ch.domizai.keyed.path;
+package ch.domizai.keyed.tween;
 
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class BezierCurve extends PApplet implements Path {
+public class BezierTween extends PApplet implements Tween<PVector>, Cloneable {
     private PVector p0, p1, p2, p3;
-    private float t0, t1;
+    private float t0 = 0, t1 = 1;
 
-    public BezierCurve(PVector p0, PVector p1, PVector p2, PVector p3) {
+    public BezierTween(PVector p0, PVector p1, PVector p2, PVector p3) {
         this.p0 = p0;
         this.p1 = p1;
         this.p2 = p2;
         this.p3 = p3;
-        this.t0 = 0;
-        this.t1 = 1;
     }
     
-    public BezierCurve(PVector p0, PVector p1, PVector p2, PVector p3, float t0, float t1) {
-        this.p0 = p0;
-        this.p1 = p1;
-        this.p2 = p2;
-        this.p3 = p3;
-        this.t0 = t0;
-        this.t1 = t1;
-    }
-
-    public BezierCurve setP0(PVector p0) {
+    public BezierTween setP0(PVector p0) {
         this.p0 = p0;
         return this;
     }
 
-    public BezierCurve setP1(PVector p1) {
+    public BezierTween setP1(PVector p1) {
         this.p1 = p1;
         return this;
     }
 
-    public BezierCurve setP2(PVector p2) {
+    public BezierTween setP2(PVector p2) {
         this.p2 = p2;
         return this;
     }
 
-    public BezierCurve setP3(PVector p3) {
+    public BezierTween setP3(PVector p3) {
         this.p3 = p3;
         return this;
     }
 
-    public BezierCurve setCurve(PVector p0, PVector p1, PVector p2, PVector p3) {
+    public BezierTween setCurve(PVector p0, PVector p1, PVector p2, PVector p3) {
         this.p0 = p0;
         this.p1 = p1;
         this.p2 = p2;
@@ -53,11 +42,27 @@ public class BezierCurve extends PApplet implements Path {
         return this;
     }
 
-    public BezierCurve remap(float t0, float t1) {
-       return new BezierCurve(p0, p1, p2, p3, t0, t1);
+    public BezierTween slice(float t0, float t1) {
+        t0 = t0 > 1 ? t0 = 1 : t0 < -1 ? t0 = -1 : t0;
+        t1 = t1 > 1 ? t1 = 1 : t1 < -1 ? t1 = -1 : t1;
+        BezierTween bc = this.clone();
+        bc.t0 = t0;
+        bc.t1 = t1;
+        return bc;
     }
 
+    public BezierTween clone() {
+        BezierTween bc = new BezierTween(p0, p1, p2, p3);
+        bc.t0 = t0;
+        bc.t1 = t1;
+        return bc;
+    }
     @Override
+    public void set(PVector value) {
+        this.p0 = value;
+    }
+    
+    @Override 
     public PVector value(float d) {
         d = t0 + d * (t1 - t0);
         PVector c = new PVector(3 * (p1.x - p0.x), 3 * (p1.y - p0.y));

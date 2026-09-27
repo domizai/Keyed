@@ -1,9 +1,10 @@
 import processing.core.*;
 import java.util.ArrayList;
 import ch.domizai.keyed.*;
-import ch.domizai.keyed.tween.PVectorTween;
 import ch.domizai.keyed.easing.Easing;
-import ch.domizai.keyed.path.BezierCurve;
+import ch.domizai.keyed.lerps.PVectorLerp;
+import ch.domizai.keyed.tween.BezierTween;
+import ch.domizai.keyed.tween.PVectorTween;
 
 public class Main extends PApplet {
 
@@ -11,7 +12,7 @@ public class Main extends PApplet {
 	Keyed<PVector> pos;
 	float fps = 30f; 
 	ArrayList<Key> keys = new ArrayList<>();
-	BezierCurve path;
+	BezierTween path;
 
 	public void settings() {
 		size(400, 400);
@@ -40,18 +41,19 @@ public class Main extends PApplet {
 		keys.get(2).setEaseInOut(Easing.CUBIC_IN_OUT);
 
 		// Keyed values
-		pos = new Keyed<>(PVectorTween::tween, new PVector());
+		pos = new Keyed<>(new PVectorLerp(), new PVectorTween(new PVector(20, 20))); 
 		pos.setTimeline(tm);
 
 		float off = 30f;
-		path = new BezierCurve(
+		path = new BezierTween(
 			new PVector(off, height-off),
-			new PVector(off, off),
 			new PVector(width-off, height-off),
-			new PVector(width-off, height-off));
+			new PVector(off, off),
+			new PVector(width-off, off)
+		);
 
-		pos.addKey(keys.get(0), path);
-		pos.addKey(keys.get(2), path);
+		pos.addKey(keys.get(0), path.at(0.25f));
+		pos.addKey(keys.get(1), path.at(0.75f));
 	}
 
 	public void draw() {

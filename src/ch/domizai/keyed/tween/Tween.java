@@ -1,6 +1,11 @@
 package ch.domizai.keyed.tween;
 
-@FunctionalInterface
 public interface Tween<T> {
-    T lerp(T a, T b, float d);
+    Tween<T> clone();
+    void set(T value);
+    T value(float d);
+
+    default TweenAt<T> at(float position) {
+        return new TweenAt<>(this, position);
+    }
 }
