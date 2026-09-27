@@ -1,7 +1,7 @@
 import processing.core.*;
 import java.util.ArrayList;
 import ch.domizai.keyed.*;
-import ch.domizai.keyed.effect.Effect;
+import ch.domizai.keyed.effect.*;
 import ch.domizai.keyed.lerp.*;
 import ch.domizai.keyed.tween.*;
 
@@ -56,7 +56,10 @@ public class Main extends PApplet {
 		// pos.key(frames.get(1), new PVector(width/2, height/2));
 		pos.key(Key.at(frames.get(4)).setEaseInOut(Easing.QUAD_IN_OUT), path.at(1.0f));
 
-		pos.addEffect(Effect.WIGGLE(100f, 0.1f));
+		// pos.addEffect(Effect.WIGGLE(100f, 0.1f));
+		// pos.addEffect(new Orbit(20f, 0.01f));
+		// pos.addEffect(new PixelSnap(10));
+		pos.addEffect(new StopMotion<>(4f));
 	}
 
 	public void draw() {

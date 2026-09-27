@@ -1,6 +1,7 @@
 package ch.domizai.keyed;
 
 import ch.domizai.keyed.effect.Effect;
+import ch.domizai.keyed.effect.TimeEffect;
 import ch.domizai.keyed.tween.Tween;
 import ch.domizai.keyed.tween.TweenAt;
 import ch.domizai.keyed.lerp.Lerp;
@@ -18,7 +19,8 @@ public class Keyed<A> {
     private List<KeyEntry<A>> keys = new ArrayList<>();
     private Timeline tm = new Timeline();
     private Lerp<A> lerper;
-    private ArrayList<Effect<A>> effects = new ArrayList<>();
+    // raw() wrapped by each added effect in order; the outermost wrapper is the final value.
+    private Tween<A> output = this::raw;
     private Easing easing = Easing.CUBIC_IN_OUT;
 
     public Keyed(Lerp<A> lerper, A defaultValue) {
@@ -48,7 +50,7 @@ public class Keyed<A> {
     public Keyed<A> key(Frame f, TweenAt<A> tweenAt) {
         return key(Key.at(f), tweenAt);
     }
-    
+
     public Keyed<A> key(Key k, A value) {
         A v = copy(value);
         return key(k, new TweenAt<>(d -> v));
@@ -85,16 +87,20 @@ public class Keyed<A> {
     }
 
     public A value(float t) {
+        return output.value(t);
+    }
+
+    private A raw(float t) {
         sortKeys();
         int n = keys.size();
 
         if (n == 0) {
-            return applyEffects(copy(defaultValue), t);
+            return copy(defaultValue);
         }
 
         if (n == 1) {
             TweenAt<A> k = keys.get(0).tween;
-            return applyEffects(copy(k.tween().value(k.positionOr(0))), t);
+            return copy(k.tween().value(k.positionOr(0)));
         }
 
         // First key after t, limited to [1, n - 1] so t outside the keys uses the first or last segment.
@@ -120,20 +126,18 @@ public class Keyed<A> {
         Tween<A> w1 = e2.tween.tween();
         A v0 = w0.value(position);
         // Same tween at the same position gives the same value; blending it with itself is a copy.
-        A r = w0 == w1 ? copy(v0) : lerper.lerp(v0, w1.value(position), ease);
-        return applyEffects(r, t);
+        return w0 == w1 ? copy(v0) : lerper.lerp(v0, w1.value(position), ease);
     }
 
-    public Keyed<A> addEffect(Effect<A> effect) {
-        effects.add(effect);
+    public Keyed<A> addEffect(TimeEffect<A> effect) {
+        Tween<A> source = output;
+        output = s -> effect.apply(source, s);
         return this;
     }
 
-    public A applyEffects(A value, float t) {
-        for (Effect<A> effect : effects) {
-            value = effect.apply(value, t);
-        }
-        return value;
+    // More specific than the TimeEffect overload, so lambdas like (v, t) -> ... get a value, not a source.
+    public Keyed<A> addEffect(Effect<A> effect) {
+        return addEffect((TimeEffect<A>) effect);
     }
 
     // lerp(v, v, 0) returns a new value, so callers can't mutate stored keys through it.
