@@ -4,7 +4,7 @@ import processing.core.PVector;
 
 import static processing.core.PApplet.constrain;
 
-public class QuadraticBezier implements Tween<PVector> {
+public class QuadraticBezier implements Path {
     // Higher is more accurate.
     private static final int LUT_STEPS = 50;
 
@@ -45,12 +45,18 @@ public class QuadraticBezier implements Tween<PVector> {
         return this;
     }
 
+    @Override
     public QuadraticBezier slice(float t0, float t1) {
         QuadraticBezier bc = new QuadraticBezier(p0, p1, p2);
         bc.t0 = constrain(t0, 0, 1);
         bc.t1 = constrain(t1, 0, 1);
         bc.lut = lut;
         return bc;
+    }
+
+    @Override
+    public float length() {
+        return lut()[LUT_STEPS] * Math.abs(t1 - t0);
     }
 
     @Override
