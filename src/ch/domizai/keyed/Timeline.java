@@ -15,7 +15,12 @@ public class Timeline {
     private long lastNanos = -1;
     private boolean started = false;
 
+    // Follows real time if Keyed.init() was called; otherwise only moves via step() or to().
     public Timeline() {
+        PApplet sketch = Keyed.sketch();
+        if (sketch != null) {
+            sketch.registerMethod("pre", this);
+        }
     }
 
     public Timeline(PApplet sketch) {

@@ -29,8 +29,10 @@ public class Main extends PApplet {
 		fill(0, 75);
 		smooth();
 
+		Keyed.init(this);
+
 		// Timeline (seconds)
-		tm = new Timeline(this);
+		tm = new Timeline();
 		tm.setDuration(5);
 		for (int f = 0; f < 6; f++) frames.add(Pin.at(f));
 
@@ -41,7 +43,7 @@ public class Main extends PApplet {
 		rot.key(frames.get(0), 0f);
 		rot.key(frames.get(5), TWO_PI);
 
-		pos = new Keyed<>(new PVectorLerp(), new PVector(width/2, height/2));
+		pos = new Keyed<PVector>(new PVectorLerp(), new PVector(width/2, height/2));
 		pos.setTimeline(tm);
 
 		float off = 30f;
@@ -52,8 +54,9 @@ public class Main extends PApplet {
 			new PVector(width-off, off)
 		);
 
-		pos.key(Key.at(frames.get(2)).setEasing(Easing.QUAD_IN_OUT), path.at(0.0f));
-		// pos.key(frames.get(1), new PVector(width/2, height/2));
+		// TODO: Add setEasingIn and setEasingOut
+		pos.key(Key.at(frames.get(1)).setEasing(Easing.QUAD_IN_OUT), path.at(0.0f));
+		// pos.key(frames.get(2), new PVector(width/2, height/2));
 		pos.key(Key.at(frames.get(3)).setEasing(Easing.QUAD_IN_OUT), path.at(1.0f));
 
 		// pos.addEffect(Effect.WIGGLE(100f, 3f));

@@ -6,6 +6,8 @@ import ch.domizai.keyed.tween.Tween;
 import ch.domizai.keyed.tween.TweenAt;
 import ch.domizai.keyed.lerp.Lerp;
 
+import processing.core.PApplet;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +17,33 @@ import static processing.core.PApplet.map;
 
 
 public class Keyed<A> {
+    private static PApplet sketch;
+    private static Timeline defaultTimeline = new Timeline();
+
     private A defaultValue;
     private List<KeyEntry<A>> keys = new ArrayList<>();
-    private Timeline tm = new Timeline();
+    // null means defaultTimeline(), looked up on use so Keyeds created before init() still pick it up.
+    private Timeline tm;
     private Lerp<A> lerper;
     // raw() wrapped by each added effect in order; the outermost wrapper is the final value.
     private Tween<A> output = this::raw;
+
+    // Call in setup() so timelines follow real time without passing the sketch around.
+    public static Timeline init(PApplet sketch) {
+        Keyed.sketch = sketch;
+        defaultTimeline = new Timeline(sketch);
+        return defaultTimeline;
+    }
+
+    // null before init().
+    public static PApplet sketch() {
+        return sketch;
+    }
+
+    // Used by Keyed values without their own timeline; before init() it only moves via step() or to().
+    public static Timeline defaultTimeline() {
+        return defaultTimeline;
+    }
 
     public Keyed(Lerp<A> lerper, A defaultValue) {
         this.lerper = lerper;
@@ -65,7 +88,7 @@ public class Keyed<A> {
     }
 
     public A value() {
-        return value(tm.t());
+        return value(timeline().t());
     }
 
     public List<Key> keys() {
@@ -78,7 +101,7 @@ public class Keyed<A> {
     }
 
     public Timeline timeline() {
-        return tm;
+        return tm != null ? tm : defaultTimeline;
     }
 
     public A value(float t) {
