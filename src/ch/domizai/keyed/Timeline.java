@@ -64,6 +64,11 @@ public class Timeline {
         return t;
     }
 
+    // Time offset seconds from now (negative = past), wrapped or clamped like the timeline itself.
+    public float t(float offset) {
+        return fit(t + offset);
+    }
+
     public float duration() {
         return duration;
     }

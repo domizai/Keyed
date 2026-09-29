@@ -1,5 +1,6 @@
 import processing.core.*;
 import java.util.ArrayList;
+import java.util.List;
 import ch.domizai.keyed.*;
 import ch.domizai.keyed.effect.*;
 import ch.domizai.keyed.lerp.*;
@@ -63,16 +64,36 @@ public class Main extends PApplet {
 		// pos.addEffect(new Orbit(20f, 0.3f));
 		// pos.addEffect(new PixelSnap(10));
 		// pos.addEffect(new StopMotion<>(4f / fps));
-		// pos.addEffect(new Spring<>(new PVectorLerp(), 2f, 0.2f));  // 2 wobbles per second
+		// pos.addEffect(new Spring<>(new PVectorLerp(), 1.5f, 0.1f));
+		// pos.addEffect(Effect.SPRING(1.5f, 0.1f));  
 	}
+
 
 	public void draw() {
 		background(255);
+
+		pushStyle();
+		fill(255, 0, 0, 50);
+		List<PVector> trail = echo(pos, 50, 0.3f / fps);
+		for (int i = 0; i < trail.size(); i++) {
+			PVector q = trail.get(i);
+			pushMatrix();
+			translate(q.x, q.y);
+			scale(map(i, 0, trail.size(), 1f, 0.1f));
+			rotate(rot.value());
+			rect(0, 0, 13, 13);
+			popMatrix();
+		}
+		popStyle();
+
 		pushMatrix();
 		PVector p = pos.value();
 		translate(p.x, p.y);
 		rotate(rot.value());
+		pushStyle();
+		fill(0);
 		rect(0, 0, 15, 15);
+		popStyle();
 		popMatrix();
 	}
 
@@ -84,5 +105,14 @@ public class Main extends PApplet {
 		else {
 			PApplet.main(appletArgs);
 		}
+	}
+
+	// Negative delay sample past or future.
+	public <T> List<T> echo(Keyed<T> keyed, int samples, float delay) {
+		Timeline timeline = keyed.timeline();
+		List<T> values = new ArrayList<>();
+		for (int i = 0; i < samples; i++)
+			values.add(keyed.value(timeline.t(-delay * i)));
+		return values;
 	}
 }
