@@ -20,6 +20,8 @@ public class Main extends PApplet {
 	float GREEN = 1f/3f;
 	float BLUE = 2f/3f;
 
+	Spline spline;
+
 	public void settings() {
 		size(400, 400);
 	}
@@ -60,16 +62,23 @@ public class Main extends PApplet {
 			new PVector(width-off, off)
 		);
 
-		pos.key(Key.at(pins.get(1)).setEasing(1/3f), path.at(0.0f));
+		List<PVector> points = new ArrayList<>();
+		points.add(new PVector(off, height-off));
+		for (int i = 0; i < 5; i++)
+			points.add(new PVector(random(off, width-off), random(off, height-off)));
+		points.add(new PVector(width-off, off));
+		spline = new Spline(points).setTightness(0);
+
+		pos.key(Key.at(pins.get(1)).setEasing(1/3f), spline.at(0.0f));
 		// pos.key(pins.get(2), new PVector(width/2, height/2));
-		pos.key(Key.at(pins.get(3)).setEasing(1/3f), path.at(1.0f));
+		pos.key(Key.at(pins.get(3)).setEasing(1/3f), spline.at(1.0f));
 
 		// pos.addEffect(Effect.WIGGLE(100f, 3f));
 		// pos.addEffect(new Orbit(20f, 0.3f));
 		// pos.addEffect(new PixelSnap(20));
 		// pos.addEffect(new StopMotion<>(4f / fps));
 		// pos.addEffect(new Spring<>(new PVectorLerp(), 1.5f, 0.1f));
-		pos.addEffect(Effect.SPRING(1.5f, 0.05f));  
+		// pos.addEffect(Effect.SPRING(1.5f, 0.05f));  
 	}
 
 
