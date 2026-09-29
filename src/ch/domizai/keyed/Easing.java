@@ -6,10 +6,9 @@ import static processing.core.PApplet.constrain;
 public interface Easing {
     float apply(float d); 
 
-    public static final Easing LINEAR = d -> d;
     public static final Easing QUADRATIC_BEZIER = quadraticBezier(0, 0, 1);
+    public static final Easing CUBIC_BEZIER = cubicBezier(0, 0, 1, 1);
     public static final Easing SMOOTHSTEP = smoothstep(0, 1);
-    public static final Easing STEP = step(0.5f);
 
     public static final Easing QUAD_IN = powerIn(2);
     public static final Easing QUAD_OUT = powerOut(2);
@@ -44,14 +43,6 @@ public interface Easing {
             float x = constrain((d - edge0) / (edge1 - edge0), 0, 1);
             return x * x * x * (x * (6.0f * x - 15.0f) + 10.0f);
         };
-    }
-
-    public static Easing step(float threshold) {
-        return d -> d < threshold ? 0 : 1;
-    }
-
-    public static Easing staircase(int steps) {
-        return d -> (float) Math.round(d * steps) / steps;
     }
 
     // CSS cubic-bezier(x1, y1, x2, y2) from (0, 0) to (1, 1); y outside [0, 1] overshoots like CSS "back" easings.

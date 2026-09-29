@@ -5,8 +5,9 @@ import java.util.function.Consumer;
 
 public class Key implements Comparable<Key> {
     private Pin frame;
-    // Shapes the segment arriving at this key; unused on the first key.
-    private Easing easing = Easing.LINEAR;
+    // Handle influence in [0, 1] as a fraction of the segment, with zero speed at the key; 0 is linear, 1/3 is AE's Easy Ease.
+    private float easingIn = 0;
+    private float easingOut = 0;
     private ArrayList<Consumer<Pin>> listeners;
 
     public Key(Pin frame) {
@@ -35,8 +36,19 @@ public class Key implements Comparable<Key> {
         return frame;
     }
     
-    public Key setEasing(Easing easing) {
-        this.easing = easing;
+    public Key setEasing(float influence) {
+        return setEasingIn(influence).setEasingOut(influence);
+    }
+
+    // Shapes the segment arriving at this key.
+    public Key setEasingIn(float influence) {
+        easingIn = checkInfluence(influence);
+        return this;
+    }
+
+    // Shapes the segment leaving this key.
+    public Key setEasingOut(float influence) {
+        easingOut = checkInfluence(influence);
         return this;
     }
     
@@ -52,8 +64,19 @@ public class Key implements Comparable<Key> {
         return this;
     }
 
-    public Easing easing() {
-        return easing;
+    public float easingIn() {
+        return easingIn;
+    }
+
+    public float easingOut() {
+        return easingOut;
+    }
+
+    private static float checkInfluence(float influence) {
+        if (influence < 0 || influence > 1) {
+            throw new IllegalArgumentException("easing must be in [0, 1], was " + influence);
+        }
+        return influence;
     }
 
     private void notifyListeners() {

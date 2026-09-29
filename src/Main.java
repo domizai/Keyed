@@ -16,13 +16,18 @@ public class Main extends PApplet {
 	ArrayList<Pin> frames = new ArrayList<>();
 	BezierTween path;
 
+	float RED = 0;
+	float GREEN = 1f/3f;
+	float BLUE = 2f/3f;
+
 	public void settings() {
 		size(400, 400);
 	}
 
 	public void setup() {
-		background(255);
 		pixelDensity(displayDensity());
+		colorMode(HSB, 1, 1, 1, 1); // hue, saturation, brightness, alpha
+		background(1);
 		frameRate(fps);
 		rectMode(CENTER);
 		ellipseMode(CENTER);
@@ -47,7 +52,7 @@ public class Main extends PApplet {
 		pos = new Keyed<PVector>(new PVectorLerp(), new PVector(width/2, height/2));
 		pos.setTimeline(tm);
 
-		float off = 30f;
+		float off = 50f;
 		path = new BezierTween(
 			new PVector(off, height-off),
 			new PVector(width-off, height-off),
@@ -55,33 +60,33 @@ public class Main extends PApplet {
 			new PVector(width-off, off)
 		);
 
-		// TODO: Add setEasingIn and setEasingOut
-		pos.key(Key.at(frames.get(1)).setEasing(Easing.QUAD_IN_OUT), path.at(0.0f));
+		pos.key(Key.at(frames.get(1)).setEasing(1/3f), path.at(0.0f));
 		// pos.key(frames.get(2), new PVector(width/2, height/2));
-		pos.key(Key.at(frames.get(3)).setEasing(Easing.QUAD_IN_OUT), path.at(1.0f));
+		pos.key(Key.at(frames.get(3)).setEasing(1/3f), path.at(1.0f));
 
 		// pos.addEffect(Effect.WIGGLE(100f, 3f));
 		// pos.addEffect(new Orbit(20f, 0.3f));
-		// pos.addEffect(new PixelSnap(10));
+		// pos.addEffect(new PixelSnap(20));
 		// pos.addEffect(new StopMotion<>(4f / fps));
 		// pos.addEffect(new Spring<>(new PVectorLerp(), 1.5f, 0.1f));
-		// pos.addEffect(Effect.SPRING(1.5f, 0.1f));  
+		pos.addEffect(Effect.SPRING(1.5f, 0.05f));  
 	}
 
 
 	public void draw() {
-		background(255);
+		background(1);
 
 		pushStyle();
-		fill(255, 0, 0, 50);
 		List<PVector> trail = echo(pos, 50, 0.3f / fps);
 		for (int i = 0; i < trail.size(); i++) {
 			PVector q = trail.get(i);
 			pushMatrix();
 			translate(q.x, q.y);
-			scale(map(i, 0, trail.size(), 1f, 0.1f));
+			float d = map(i, 0, trail.size(), 1f, 0.1f);
+			fill(Easing.QUAD_IN_OUT.apply(d), 1, 1, 0.6f);
+			scale(d);
 			rotate(rot.value());
-			rect(0, 0, 13, 13);
+			rect(0, 0, 23, 23);
 			popMatrix();
 		}
 		popStyle();
@@ -92,7 +97,7 @@ public class Main extends PApplet {
 		rotate(rot.value());
 		pushStyle();
 		fill(0);
-		rect(0, 0, 15, 15);
+		rect(0, 0, 25, 25);
 		popStyle();
 		popMatrix();
 	}
