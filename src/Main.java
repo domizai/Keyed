@@ -13,8 +13,8 @@ public class Main extends PApplet {
 	Keyed<Float> rot;
 
 	float fps = 30f; 
-	ArrayList<Pin> frames = new ArrayList<>();
-	BezierTween path;
+	ArrayList<Pin> pins = new ArrayList<>();
+	CubicBezier path;
 
 	float RED = 0;
 	float GREEN = 1f/3f;
@@ -40,29 +40,29 @@ public class Main extends PApplet {
 		// Timeline (seconds)
 		tm = new Timeline();
 		tm.setDuration(5);
-		for (int f = 0; f < 6; f++) frames.add(Pin.at(f));
+		for (int f = 0; f < 6; f++) pins.add(Pin.at(f));
 
 		// Keyed values
 		rot = new Keyed<>(new FloatLerp(), 0f);
 		rot.setTimeline(tm);
 
-		rot.key(frames.get(0), 0f);
-		rot.key(frames.get(5), TWO_PI);
+		rot.key(pins.get(0), 0f);
+		rot.key(pins.get(5), TWO_PI);
 
 		pos = new Keyed<PVector>(new PVectorLerp(), new PVector(width/2, height/2));
 		pos.setTimeline(tm);
 
 		float off = 50f;
-		path = new BezierTween(
+		path = new CubicBezier(
 			new PVector(off, height-off),
 			new PVector(width-off, height-off),
 			new PVector(off, off),
 			new PVector(width-off, off)
 		);
 
-		pos.key(Key.at(frames.get(1)).setEasing(1/3f), path.at(0.0f));
-		// pos.key(frames.get(2), new PVector(width/2, height/2));
-		pos.key(Key.at(frames.get(3)).setEasing(1/3f), path.at(1.0f));
+		pos.key(Key.at(pins.get(1)).setEasing(1/3f), path.at(0.0f));
+		// pos.key(pins.get(2), new PVector(width/2, height/2));
+		pos.key(Key.at(pins.get(3)).setEasing(1/3f), path.at(1.0f));
 
 		// pos.addEffect(Effect.WIGGLE(100f, 3f));
 		// pos.addEffect(new Orbit(20f, 0.3f));
@@ -83,7 +83,7 @@ public class Main extends PApplet {
 			pushMatrix();
 			translate(q.x, q.y);
 			float d = map(i, 0, trail.size(), 1f, 0.1f);
-			fill(Easing.QUAD_IN_OUT.apply(d), 1, 1, 0.6f);
+			fill(d, 1, 1, 0.6f);
 			scale(d);
 			rotate(rot.value());
 			rect(0, 0, 23, 23);

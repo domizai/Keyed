@@ -4,7 +4,7 @@ import processing.core.PVector;
 
 import static processing.core.PApplet.constrain;
 
-public class BezierTween implements Tween<PVector> {
+public class CubicBezier implements Tween<PVector> {
     // Higher is more accurate.
     private static final int LUT_STEPS = 50;
 
@@ -13,38 +13,38 @@ public class BezierTween implements Tween<PVector> {
     // Rebuilt lazily after setters; mutating the PVectors directly won't invalidate it.
     private float[] lut;
 
-    public BezierTween(PVector p0, PVector p1, PVector p2, PVector p3) {
+    public CubicBezier(PVector p0, PVector p1, PVector p2, PVector p3) {
         this.p0 = p0;
         this.p1 = p1;
         this.p2 = p2;
         this.p3 = p3;
     }
     
-    public BezierTween setP0(PVector p0) {
+    public CubicBezier setP0(PVector p0) {
         this.p0 = p0;
         lut = null;
         return this;
     }
 
-    public BezierTween setP1(PVector p1) {
+    public CubicBezier setP1(PVector p1) {
         this.p1 = p1;
         lut = null;
         return this;
     }
 
-    public BezierTween setP2(PVector p2) {
+    public CubicBezier setP2(PVector p2) {
         this.p2 = p2;
         lut = null;
         return this;
     }
 
-    public BezierTween setP3(PVector p3) {
+    public CubicBezier setP3(PVector p3) {
         this.p3 = p3;
         lut = null;
         return this;
     }
 
-    public BezierTween setCurve(PVector p0, PVector p1, PVector p2, PVector p3) {
+    public CubicBezier setCurve(PVector p0, PVector p1, PVector p2, PVector p3) {
         this.p0 = p0;
         this.p1 = p1;
         this.p2 = p2;
@@ -53,10 +53,10 @@ public class BezierTween implements Tween<PVector> {
         return this;
     }
 
-    public BezierTween slice(float t0, float t1) {
-        t0 = t0 > 1 ? t0 = 1 : t0 < -1 ? t0 = -1 : t0;
-        t1 = t1 > 1 ? t1 = 1 : t1 < -1 ? t1 = -1 : t1;
-        BezierTween bc = new BezierTween(p0, p1, p2, p3);
+    public CubicBezier slice(float t0, float t1) {
+        t0 = constrain(t0, 0, 1);
+        t1 = constrain(t1, 0, 1);
+        CubicBezier bc = new CubicBezier(p0, p1, p2, p3);
         bc.t0 = t0;
         bc.t1 = t1;
         bc.lut = lut;
