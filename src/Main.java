@@ -84,6 +84,21 @@ public class Main extends PApplet {
 		// pos.addEffect(new StopMotion<>(4f / fps));
 		// pos.addEffect(new Spring<>(new PVectorLerp(), 1.5f, 0.1f));
 		// pos.addEffect(Effect.SPRING(1.5f, 0.05f));  
+		// pos.addEffect(new Lag<>(new PVectorLerp(), 0.5f, 10));
+		// pos.addEffect(Effect.LAG(0.5f, 10));
+		// Effect: only sees the value at the current time t.
+
+		// Custom effects
+		// pos.addEffect((PVector v, float t) -> new PVector(v.x, v.y + 10 * sin(t * TWO_PI)));
+
+		// TimeEffect: can sample the animation at any time; 
+		// Example: averaging the last 0.3s gives a lagging, smoothed motion.
+		pos.addEffect((Tween<PVector> source, float t) -> {
+			int n = 10;
+			PVector sum = new PVector();
+			for (int i = 0; i < n; i++) sum.add(source.value(t - 0.5f * i / n));
+			return sum.div(n);
+		});
 	}
 
 	PVector posPrev;

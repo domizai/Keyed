@@ -27,4 +27,8 @@ public interface Effect<T> extends TimeEffect<T> {
     public static TimeEffect<PVector> SPRING(float stiffness, float damping) {
         return new Spring<>(new PVectorLerp(), stiffness, damping);
     }
+
+    public static TimeEffect<PVector> LAG(float duration, int samples) {
+        return new Lag<>(new PVectorLerp(), duration, samples);
+    }
 }
