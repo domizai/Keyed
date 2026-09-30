@@ -112,4 +112,20 @@ public interface Easing {
     public static float quadInOut(float d) {
         return powerInOut(2).apply(d);
     }
+
+    public static float quadIn(float d) {
+        return powerIn(2).apply(d);
+    }
+
+    public static float quadIn(float d, int p) {
+        return powerIn(p).apply(d);
+    }
+
+    public static float quadOut(float d) {
+        return powerOut(2).apply(d);
+    }
+
+    public static float quadOut(float d, int p) {
+        return powerOut(p).apply(d);
+    }
 }

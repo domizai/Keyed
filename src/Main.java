@@ -1,4 +1,5 @@
 import processing.core.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import ch.domizai.keyed.*;
@@ -13,6 +14,9 @@ public class Main extends PApplet {
 	Keyed<Float> rot;
 	PVector vec = new PVector(10, 20);
 	Keyed<Float> vecK;
+	List<PVector> obstacles = new ArrayList<>();
+	float obstaclesRadius = 80;
+	int obstaclesCount = 4;
 
 	float fps = 30f; 
 	ArrayList<Pin> pins = new ArrayList<>();
@@ -24,6 +28,9 @@ public class Main extends PApplet {
 
 	List<PVector> points = new ArrayList<>();
 	Spline spline;
+
+	List<Component> components = new ArrayList<>();
+	List<MyComposition> compositions = new ArrayList<>();
 
 	float off = 30f;
 
@@ -49,15 +56,16 @@ public class Main extends PApplet {
 
 		// Timeline (seconds)
 		tm = new Timeline();
-		tm.setDuration(5);
-		for (int f = 0; f < 6; f++) pins.add(Pin.at(f));
+		int duration = 10; 
+		tm.setDuration(duration);
+		for (int f = 0; f < duration; f++) pins.add(Pin.at(f));
 
 		// Keyed values
 		rot = new Keyed<>(new FloatLerp(), 0f);
 		rot.setTimeline(tm);
 
 		rot.key(pins.get(0), 0f);
-		rot.key(pins.get(5), TWO_PI);
+		rot.key(pins.get(duration-1), TWO_PI);
 
 		pos = new Keyed<PVector>(new PVectorLerp(), new PVector(width/2, height/2));
 		pos.setTimeline(tm);
@@ -72,8 +80,8 @@ public class Main extends PApplet {
 		shoufflePoints();
 		spline = new Spline(points).setTightness(0);
 		pos.key(Key.at(pins.get(1)).setEasing(1/3f), spline.at(0.0f));
-		// pos.key(pins.get(2), new PVector(width/2, height/2));
-		pos.key(Key.at(pins.get(3)).setEasing(1/3f), spline.at(1.0f));
+		// pos.key(Key.at(pins.get(duration / 2)), new PVector(width/2, height/2));
+		pos.key(Key.at(pins.get((int)duration-1)).setEasing(1/3f), spline.at(1.0f));
 
 		Tween<Float> splineX = spline.x();
 		vecK = Keyed.bind(vec, "x")
@@ -89,19 +97,43 @@ public class Main extends PApplet {
 		// pos.addEffect(Effect.SPRING(1.5f, 0.05f));  
 		// pos.addEffect(new Lag<>(new PVectorLerp(), 0.5f, 10));
 		// pos.addEffect(Effect.LAG(0.5f, 10));
-		// Effect: only sees the value at the current time t.
 
 		// Custom effects
+		// Effect: only sees the value at the current time t.
 		// pos.addEffect((PVector v, float t) -> new PVector(v.x, v.y + 10 * sin(t * TWO_PI)));
 
 		// TimeEffect: can sample the animation at any time; 
 		// Example: averaging the last 0.3s gives a lagging, smoothed motion.
-		pos.addEffect((Tween<PVector> source, float t) -> {
-			int n = 10;
-			PVector sum = new PVector();
-			for (int i = 0; i < n; i++) sum.add(source.value(t - 0.5f * i / n));
-			return sum.div(n);
+		// pos.addEffect((Tween<PVector> source, float t) -> {
+		// 	int n = 10;
+		// 	PVector sum = new PVector();
+		// 	for (int i = 0; i < n; i++) sum.add(source.value(t - 0.5f * i / n));
+		// 	return sum.div(n);
+		// });
+
+		initObstacles();
+
+		pos.addEffect((PVector v, float t) -> {
+			PVector p = v.copy();
+			// Repeated so pushing out of one obstacle into an overlapping one still ends outside both.
+			for (int iter = 0; iter < obstacles.size(); iter++) {
+				boolean pushed = false;
+				for (PVector obstacle : obstacles) {
+					PVector away = PVector.sub(p, obstacle);
+					float d = away.mag();
+					if (d < obstaclesRadius - 0.001f) {
+						if (d == 0) away.set(1, 0);
+						p = PVector.add(obstacle, away.setMag(obstaclesRadius));
+						pushed = true;
+					}
+				}
+				if (!pushed) break;
+			}
+			return p;
 		});
+
+		components.add(new CircleComponent(5));
+		components.add(new SquareComponent(7));
 	}
 
 	PVector posPrev;
@@ -124,7 +156,7 @@ public class Main extends PApplet {
 		popStyle();
 
 		pushStyle();
-		List<PVector> trail = echo(pos, 50, 0.3f / fps);
+		List<PVector> trail = echo(pos, 100, 0.3f / fps);
 		for (int i = 0; i < trail.size(); i++) {
 			PVector q = trail.get(i);
 			pushMatrix();
@@ -141,7 +173,7 @@ public class Main extends PApplet {
 		pushMatrix();
 		PVector p = pos.value();
 		if (posPrev == null) posPrev = p.copy();
-		float delta = map(constrain(posPrev.dist(p), 0, 30), 0, 30, 51, 23);
+		float delta = map(constrain(posPrev.dist(p), 0, 30), 0, 30, 31, 11);
 		posPrev = p.copy();
 		translate(p.x, p.y);
 		rotate(rot.value());
@@ -152,6 +184,22 @@ public class Main extends PApplet {
 		popMatrix();
 
 		ellipse(vec.x, vec.y, 20, 20);
+
+		for (int i = compositions.size() - 1; i >= 0; i--) {
+			MyComposition c = compositions.get(i);
+			c.draw();
+			if (c.isFinished()) {
+				c.dispose();
+				compositions.remove(i);
+			}
+		}
+
+		pushStyle();
+		noFill();
+		stroke(255, 0, 0, 0.5f);
+		for (PVector obstacle : obstacles)
+			ellipse(obstacle.x, obstacle.y, obstaclesRadius * 2, obstaclesRadius * 2);
+		popStyle();
 	}
 
     static public void main(String[] passedArgs) {
@@ -179,8 +227,86 @@ public class Main extends PApplet {
 			points.add(new PVector(random(off, width-off), random(off, height-off)));
 	}
 
+	private void initObstacles() {
+		obstacles.clear();
+		for (int i = 0; i < obstaclesCount; i++)
+			obstacles.add(new PVector(random(0, width), random(0, height)));
+	}
+
 	public void mouseClicked() {
 		shoufflePoints();
+		initObstacles();
 		spline.setPoints(points);
+		compositions.add(new MyComposition(components, 20, new PVector(mouseX, mouseY)));
+	}
+
+	abstract class Component {
+		
+		int c = color(0);
+		
+		abstract void draw(PVector position);
+
+		public void setColor(int color) {
+			this.c = color;
+		}
+	}
+
+	class CircleComponent extends Component {
+		float radius;
+
+		public CircleComponent(float radius) {
+			this.radius = radius;
+		}
+
+		@Override
+		public void draw(PVector position) {
+			pushStyle();
+			fill(c);
+			ellipse(position.x, position.y, radius, radius);
+			popStyle();
+		}
+	}
+
+	class SquareComponent extends Component {
+		float size;
+
+		public SquareComponent(float size) {
+			this.size = size;
+		}
+
+		@Override
+		public void draw(PVector position) {
+			pushStyle();
+			fill(c);
+			rect(position.x, position.y, size, size);
+			popStyle();
+		}
+	}
+
+	class MyComposition extends Composition {
+		List<Component> used = new ArrayList<>();
+		List<Keyed<PVector>> pos = new ArrayList<>();
+		PVector origin;
+		final static float DURATION = 1;
+
+		public MyComposition(List<Component> components, int usedSize, PVector origin) {
+			super(DURATION);
+			this.origin = origin;
+			for (int i = 0; i < usedSize; i++) {
+				used.add(components.get(i % components.size()));
+				pos.add(keyed(new PVectorLerp(), new PVector())
+					.key(0, new PVector())
+					.key(Key.at(DURATION).setEasing(5/6f), new PVector(random(-50, 50), random(-50, 50))));
+			}
+		}
+
+		public void draw() {
+			float t = 1 - this.timeline().t() / DURATION; 
+			for (int i = 0; i < pos.size(); i++) {
+				Component c = used.get(i);
+				c.setColor(color(RED, 1, 1, Easing.quadOut(t)));
+				c.draw(pos.get(i).value().add(origin));
+			}
+		}
 	}
 }

@@ -16,17 +16,18 @@ public class Timeline {
     private boolean playing = true;
     private long lastNanos = -1;
     private boolean started = false;
+    private PApplet sketch;
 
     // Follows real time if Keyed.init() was called; otherwise only moves via step() or to().
     public Timeline() {
-        PApplet sketch = Keyed.sketch();
-        if (sketch != null) {
-            sketch.registerMethod("pre", this);
-        }
+        this(Keyed.sketch());
     }
 
     public Timeline(PApplet sketch) {
-        sketch.registerMethod("pre", this); // this will call the pre() method before each draw() in the sketch
+        this.sketch = sketch;
+        if (sketch != null) {
+            sketch.registerMethod("pre", this);
+        }
     }
 
     // Called by Processing before each draw(); public only so it can be registered. The first frame shows t = 0.
@@ -137,6 +138,19 @@ public class Timeline {
     public Timeline loop(boolean l) {
         loop = l;
         return this;
+    }
+
+    // True once a non-looping timeline has reached its duration.
+    public boolean isFinished() {
+        return !loop && duration > 0 && t >= duration;
+    }
+
+    // Stops advancing with the sketch; call when the timeline is no longer needed so it can be garbage collected.
+    public void dispose() {
+        if (sketch != null) {
+            sketch.unregisterMethod("pre", this);
+            sketch = null;
+        }
     }
 
     private float fit(float t) {

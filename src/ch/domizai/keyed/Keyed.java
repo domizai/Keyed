@@ -189,6 +189,18 @@ public class Keyed<A> {
         return key(Key.at(f), value);
     }
 
+    public Keyed<A> key(float t, Tween<A> tween) {
+        return key(Key.at(t), tween);
+    }
+
+    public Keyed<A> key(float t, TweenAt<A> tweenAt) {
+        return key(Key.at(t), tweenAt);
+    }
+
+    public Keyed<A> key(float t, A value) {
+        return key(Key.at(t), value);
+    }
+
     public Keyed<A> setTimeline(Timeline tm) {
         this.tm = tm;
         return this;
