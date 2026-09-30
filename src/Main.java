@@ -11,6 +11,8 @@ public class Main extends PApplet {
 	Timeline tm;
 	Keyed<PVector> pos;
 	Keyed<Float> rot;
+	PVector vec = new PVector(10, 20);
+	Keyed<Float> vecK;
 
 	float fps = 30f; 
 	ArrayList<Pin> pins = new ArrayList<>();
@@ -20,7 +22,10 @@ public class Main extends PApplet {
 	float GREEN = 1f/3f;
 	float BLUE = 2f/3f;
 
+	List<PVector> points = new ArrayList<>();
 	Spline spline;
+
+	float off = 30f;
 
 	public void settings() {
 		size(400, 400);
@@ -54,7 +59,6 @@ public class Main extends PApplet {
 		pos = new Keyed<PVector>(new PVectorLerp(), new PVector(width/2, height/2));
 		pos.setTimeline(tm);
 
-		float off = 50f;
 		path = new CubicBezier(
 			new PVector(off, height-off),
 			new PVector(width-off, height-off),
@@ -62,16 +66,17 @@ public class Main extends PApplet {
 			new PVector(width-off, off)
 		);
 
-		List<PVector> points = new ArrayList<>();
-		points.add(new PVector(off, height-off));
-		for (int i = 0; i < 5; i++)
-			points.add(new PVector(random(off, width-off), random(off, height-off)));
-		points.add(new PVector(width-off, off));
+		shoufflePoints();
 		spline = new Spline(points).setTightness(0);
-
 		pos.key(Key.at(pins.get(1)).setEasing(1/3f), spline.at(0.0f));
 		// pos.key(pins.get(2), new PVector(width/2, height/2));
 		pos.key(Key.at(pins.get(3)).setEasing(1/3f), spline.at(1.0f));
+
+		Tween<Float> splineX = spline.x();
+		vecK = Keyed.bind(vec, "x")
+			.setTimeline(tm)
+			.key(Key.at(pins.get(1)).setEasing(1/3f), splineX.at(0.0f))
+			.key(Key.at(pins.get(3)).setEasing(1/3f), splineX.at(1.0f));
 
 		// pos.addEffect(Effect.WIGGLE(100f, 3f));
 		// pos.addEffect(new Orbit(20f, 0.3f));
@@ -81,9 +86,24 @@ public class Main extends PApplet {
 		// pos.addEffect(Effect.SPRING(1.5f, 0.05f));  
 	}
 
+	PVector posPrev;
 
 	public void draw() {
 		background(1);
+
+		pushStyle();
+		int steps = 200;
+		for (int i = 0; i < points.size() * steps; i++) {
+			PVector pt = spline.value(i / (float)steps);
+			fill(0, 0, 0, 0.3f);
+			ellipse(pt.x, pt.y, 3, 3);
+		}
+		for (int i = 1; i < points.size() - 1; i++) {
+			PVector pt = points.get(i);
+			fill(0, 0, 0, 0.9f);
+			ellipse(pt.x, pt.y, 7, 7);
+		}
+		popStyle();
 
 		pushStyle();
 		List<PVector> trail = echo(pos, 50, 0.3f / fps);
@@ -102,13 +122,18 @@ public class Main extends PApplet {
 
 		pushMatrix();
 		PVector p = pos.value();
+		if (posPrev == null) posPrev = p.copy();
+		float delta = map(constrain(posPrev.dist(p), 0, 30), 0, 30, 51, 23);
+		posPrev = p.copy();
 		translate(p.x, p.y);
 		rotate(rot.value());
 		pushStyle();
 		fill(0);
-		rect(0, 0, 25, 25);
+		rect(0, 0, delta, delta);
 		popStyle();
 		popMatrix();
+
+		ellipse(vec.x, vec.y, 20, 20);
 	}
 
     static public void main(String[] passedArgs) {
@@ -128,5 +153,16 @@ public class Main extends PApplet {
 		for (int i = 0; i < samples; i++)
 			values.add(keyed.value(timeline.t(-delay * i)));
 		return values;
+	}
+
+	private void shoufflePoints() {
+		points.clear();
+		for (int i = 0; i < 10; i++)
+			points.add(new PVector(random(off, width-off), random(off, height-off)));
+	}
+
+	public void mouseClicked() {
+		shoufflePoints();
+		spline.setPoints(points);
 	}
 }

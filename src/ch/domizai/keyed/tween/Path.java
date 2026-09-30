@@ -11,4 +11,12 @@ public interface Path extends Tween<PVector> {
     default Curve add(Path next) {
         return new Curve(this, next);
     }
+
+    default Tween<Float> x() {
+        return map(p -> p.x);
+    }
+
+    default Tween<Float> y() {
+        return map(p -> p.y);
+    }
 }

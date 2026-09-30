@@ -6,10 +6,15 @@ import ch.domizai.keyed.tween.Tween;
 import ch.domizai.keyed.tween.TweenAt;
 import ch.domizai.keyed.lerp.Lerp;
 
+import ch.domizai.keyed.lerp.FloatLerp;
+
 import processing.core.PApplet;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.lerp;
@@ -19,6 +24,7 @@ import static processing.core.PApplet.map;
 public class Keyed<A> {
     private static PApplet sketch;
     private static Timeline defaultTimeline = new Timeline();
+    private static final Binder binder = new Binder();
 
     private A defaultValue;
     private List<KeyEntry<A>> keys = new ArrayList<>();
@@ -27,9 +33,13 @@ public class Keyed<A> {
     private Lerp<A> lerper;
     // raw() wrapped by each added effect in order; the outermost wrapper is the final value.
     private Tween<A> output = this::raw;
+    private Consumer<A> target;
 
     // Call in setup() so timelines follow real time without passing the sketch around.
     public static Timeline init(PApplet sketch) {
+        if (Keyed.sketch != sketch) {
+            sketch.registerMethod("pre", binder);
+        }
         Keyed.sketch = sketch;
         defaultTimeline = new Timeline(sketch);
         return defaultTimeline;
@@ -48,6 +58,64 @@ public class Keyed<A> {
     public Keyed(Lerp<A> lerper, A defaultValue) {
         this.lerper = lerper;
         this.defaultValue = copy(defaultValue);
+    }
+
+    // The setter receives value() before every draw() once init() has been called.
+    public static <A> Keyed<A> bind(Lerp<A> lerper, A defaultValue, Consumer<A> setter) {
+        return new Keyed<>(lerper, defaultValue).bind(setter);
+    }
+
+    // Binds a float or Float field by name; its current value becomes the default.
+    public static Keyed<Float> bind(Object target, String fieldName) {
+        Field field = findField(target.getClass(), fieldName);
+        Class<?> type = field.getType();
+        if (type != float.class && type != Float.class) {
+            throw new IllegalArgumentException("Field '" + fieldName + "' is " + type.getSimpleName() + ", only float can be bound");
+        }
+        if (Modifier.isFinal(field.getModifiers())) {
+            throw new IllegalArgumentException("Field '" + fieldName + "' is final");
+        }
+        field.setAccessible(true);
+        try {
+            Float current = (Float) field.get(target);
+            return bind(new FloatLerp(), current != null ? current : 0f, v -> {
+                try {
+                    field.set(target, v);
+                } catch (IllegalAccessException e) {
+                    throw new IllegalStateException(e);
+                }
+            });
+        } catch (IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public Keyed<A> bind(Consumer<A> setter) {
+        target = setter;
+        binder.add(this);
+        return this;
+    }
+
+    public Keyed<A> unbind() {
+        target = null;
+        binder.remove(this);
+        return this;
+    }
+
+    // Writes value() to the bound target now, e.g. in setup() before the first pre().
+    public Keyed<A> apply() {
+        if (target != null) target.accept(value());
+        return this;
+    }
+
+    private static Field findField(Class<?> type, String name) {
+        for (Class<?> c = type; c != null; c = c.getSuperclass()) {
+            try {
+                return c.getDeclaredField(name);
+            } catch (NoSuchFieldException ignored) {
+            }
+        }
+        throw new IllegalArgumentException("No field '" + name + "' on " + type.getName());
     }
 
     public Keyed<A> key(Key k, Tween<A> tween) {
