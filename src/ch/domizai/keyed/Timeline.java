@@ -4,8 +4,10 @@ import processing.core.PApplet;
 
 import static processing.core.PApplet.constrain;
 
-// Time is in seconds. Created with a sketch it advances by itself before every draw(); otherwise call step().
+// Time is in the timeline's Unit (seconds by default). Created with a sketch it advances by itself before every draw(); otherwise call step().
 public class Timeline {
+    private Unit unit = Keyed.unit();
+    private boolean synced = Keyed.isSynced();
     private boolean loop = true;
     private float duration = 0;
     private float t = 0;
@@ -37,18 +39,27 @@ public class Timeline {
         }
     }
 
-    // Advances by the real time since the previous call (or the fixed step, if set), times speed.
+    // Advances by the fixed step if set; otherwise by real time when synced, or by one frame when not; times speed.
     public Timeline step() {
         long now = System.nanoTime();
-        float dt = fixedStep > 0 ? fixedStep : lastNanos < 0 ? 0 : (now - lastNanos) / 1e9f;
+        float fps = Keyed.frameRate();
+        float dt;
+        if (fixedStep > 0) {
+            dt = fixedStep;
+        } else if (synced) {
+            float seconds = lastNanos < 0 ? 0 : (now - lastNanos) / 1e9f;
+            dt = unit == Unit.FRAME ? seconds * fps : seconds;
+        } else {
+            dt = unit == Unit.FRAME ? 1 : 1 / fps;
+        }
         lastNanos = now;
         return step(dt * speed);
     }
 
-    public Timeline step(float seconds) {
+    public Timeline step(float amount) {
         if (!playing)
             return this;
-        t = fit(t + seconds);
+        t = fit(t + amount);
         return this;
     }
     
@@ -64,9 +75,29 @@ public class Timeline {
         return t;
     }
 
-    // Time offset seconds from now (negative = past), wrapped or clamped like the timeline itself.
+    // Offset from now (negative = past), wrapped or clamped like the timeline itself.
     public float t(float offset) {
         return fit(t + offset);
+    }
+
+    public Unit unit() {
+        return unit;
+    }
+
+    // Only changes how step() advances; t, keys and duration are not converted.
+    public Timeline setUnit(Unit unit) {
+        this.unit = unit;
+        return this;
+    }
+
+    public boolean isSynced() {
+        return synced;
+    }
+
+    // true follows the real clock; false advances exactly one frame (Keyed.frameRate()) per step(), for deterministic exports.
+    public Timeline sync(boolean sync) {
+        this.synced = sync;
+        return this;
     }
 
     public float duration() {
@@ -78,12 +109,12 @@ public class Timeline {
         return this;
     }
 
-    // Seconds per step() regardless of real time, e.g. 1f / 30 for frame-exact saveFrame() exports; 0 uses real time.
-    public Timeline setFixedStep(float seconds) {
-        if (seconds < 0) {
-            throw new IllegalArgumentException("fixed step must be >= 0, was " + seconds);
+    // Units per step() regardless of real time, e.g. 1f / 30 seconds for frame-exact saveFrame() exports; 0 uses the unit's default.
+    public Timeline setFixedStep(float amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("fixed step must be >= 0, was " + amount);
         }
-        this.fixedStep = seconds;
+        this.fixedStep = amount;
         return this;
     }
 

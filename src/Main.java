@@ -35,14 +35,17 @@ public class Main extends PApplet {
 		pixelDensity(displayDensity());
 		colorMode(HSB, 1, 1, 1, 1); // hue, saturation, brightness, alpha
 		background(1);
-		frameRate(fps);
 		rectMode(CENTER);
 		ellipseMode(CENTER);
 		noStroke();
 		fill(0, 75);
 		smooth();
-
+		
+		frameRate(fps);
 		Keyed.init(this);
+		Keyed.setFrameRate(fps);
+		Keyed.sync(false);
+		Keyed.setUnit(Keyed.SECOND);
 
 		// Timeline (seconds)
 		tm = new Timeline();

@@ -22,7 +22,14 @@ import static processing.core.PApplet.map;
 
 
 public class Keyed<A> {
+    public static final Unit SECOND = Unit.SECOND;
+    public static final Unit FRAME = Unit.FRAME;
+
     private static PApplet sketch;
+    // Declared before defaultTimeline, which reads it while this class initializes.
+    private static Unit unit = Unit.SECOND;
+    private static boolean synced = true;
+    private static float frameRate = 60;
     private static Timeline defaultTimeline = new Timeline();
     private static final Binder binder = new Binder();
 
@@ -48,6 +55,38 @@ public class Keyed<A> {
     // null before init().
     public static PApplet sketch() {
         return sketch;
+    }
+
+    public static Unit unit() {
+        return unit;
+    }
+
+    // Sets the unit of the default timeline and of timelines created afterwards.
+    public static void setUnit(Unit unit) {
+        Keyed.unit = unit;
+        defaultTimeline.setUnit(unit);
+    }
+
+    public static boolean isSynced() {
+        return synced;
+    }
+
+    // Sets sync for the default timeline and timelines created afterwards; see Timeline.sync().
+    public static void sync(boolean sync) {
+        Keyed.synced = sync;
+        defaultTimeline.sync(sync);
+    }
+
+    public static float frameRate() {
+        return frameRate;
+    }
+
+    // Processing doesn't expose its target frame rate, so pass the same value as frameRate().
+    public static void setFrameRate(float fps) {
+        if (fps <= 0) {
+            throw new IllegalArgumentException("frame rate must be > 0, was " + fps);
+        }
+        Keyed.frameRate = fps;
     }
 
     // Used by Keyed values without their own timeline; before init() it only moves via step() or to().
