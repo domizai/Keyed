@@ -67,7 +67,7 @@ public class Main extends PApplet {
 		for (int f = 0; f < duration; f++) pins.add(Pin.at(f));
 
 		// Markers
-		tm.addMarker("start", 0, m -> println(m.name() + " at " + m.t()));
+		tm.addMarker("start", 0, this::onStart);
 		tm.addMarker("star", pins.get(4), m -> flash = 1);
 		tm.addMarker("triangle", pins.get(7), m -> flash = 1);
 		tm.onLoop(t -> println("loop"));
@@ -200,7 +200,7 @@ public class Main extends PApplet {
 		popStyle();
 
 		pushStyle();
-		List<PVector> trail = echo(pos, 100, 0.3f / fps);
+		List<PVector> trail = pos.echo(100, 0.3f / fps);
 		for (int i = 0; i < trail.size(); i++) {
 			PVector q = trail.get(i);
 			pushMatrix();
@@ -280,6 +280,10 @@ public class Main extends PApplet {
 		popStyle();
 	}
 
+	void onStart(Marker m) {
+		println(m.name() + " at " + m.t());
+	}
+
 	public void mouseMoved() {
 		if (!tm.isAutoplay())
 			tm.to(map(mouseX, 0, width, 0, tm.duration()), true);
@@ -293,15 +297,6 @@ public class Main extends PApplet {
 		else {
 			PApplet.main(appletArgs);
 		}
-	}
-
-	// Negative delay sample past or future.
-	public <T> List<T> echo(Keyed<T> keyed, int samples, float delay) {
-		Timeline timeline = keyed.timeline();
-		List<T> values = new ArrayList<>();
-		for (int i = 0; i < samples; i++)
-			values.add(keyed.value(timeline.t(-delay * i)));
-		return values;
 	}
 
 	// Alternates between the outer and inner radius; starts at the top so shapes line up when morphing.

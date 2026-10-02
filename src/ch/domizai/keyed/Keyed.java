@@ -340,4 +340,13 @@ public class Keyed<A> {
         }
         throw new IllegalArgumentException("No field '" + name + "' on " + type.getName());
     }
+
+    // Negative delay sample past or future.
+    public List<A> echo(int samples, float delay) {
+        Timeline timeline = timeline();
+        List<A> values = new ArrayList<>();
+        for (int i = 0; i < samples; i++)
+            values.add(value(timeline.t(-delay * i)));
+        return values;
+    }
 }
