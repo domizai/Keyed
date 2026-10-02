@@ -57,7 +57,7 @@ public class Main extends PApplet {
 		Keyed.setFrameRate(fps);
 		Keyed.sync(false);
 		Keyed.setUnit(Keyed.SECOND);
-		Keyed.autoplay(false);
+		Keyed.autoplay(true);
 		// order matters, always call settings before initializing timelines or keyed values.
 
 		// Timeline (seconds)
@@ -281,7 +281,8 @@ public class Main extends PApplet {
 	}
 
 	public void mouseMoved() {
-		tm.to(map(mouseX, 0, width, 0, tm.duration()), true);
+		if (!tm.isAutoplay())
+			tm.to(map(mouseX, 0, width, 0, tm.duration()), true);
 	}
 
     static public void main(String[] passedArgs) {
