@@ -1,6 +1,7 @@
 package ch.domizai.keyed;
 
 import processing.core.PApplet;
+import processing.core.PVector;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -9,6 +10,7 @@ import java.util.function.Consumer;
 import ch.domizai.keyed.types.FloatLerp;
 import ch.domizai.keyed.types.Lerp;
 import ch.domizai.keyed.types.Lerpable;
+import ch.domizai.keyed.types.PVectorLerp;
 
 // Library-wide settings, plus a keyed value for any type given its Lerp; see KeyedBase for the instance API.
 public class Keyed<A> extends KeyedBase<A, Keyed<A>> {
@@ -93,6 +95,14 @@ public class Keyed<A> extends KeyedBase<A, Keyed<A>> {
     // For types that know how to blend themselves, e.g. Keyed.of(new Transform(0, 0)).
     public static <A extends Lerpable<A>> Keyed<A> of(A defaultValue) {
         return new Keyed<>(A::lerp, defaultValue);
+    }
+
+    public static Keyed<Float> of(float defaultValue) {
+        return new Keyed<>(new FloatLerp(), defaultValue);
+    }
+
+    public static Keyed<PVector> of(PVector defaultValue) {
+        return new Keyed<>(new PVectorLerp(), defaultValue);
     }
 
     @Override

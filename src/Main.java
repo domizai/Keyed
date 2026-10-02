@@ -10,7 +10,7 @@ import ch.domizai.keyed.types.*;
 public class Main extends PApplet {
 
 	Timeline tm;
-	KVector pos;
+	Keyed<PVector> pos;
 	Keyed<Float> rot;
 	PVector vec = new PVector(10, 20);
 	Keyed<Float> vecK;
@@ -66,13 +66,13 @@ public class Main extends PApplet {
 		for (int f = 0; f < duration; f++) pins.add(Pin.at(f));
 
 		// Keyed values
-		rot = new Keyed<>(new FloatLerp(), 0f);
+		rot = Keyed.of(0f);
 		rot.setTimeline(tm);
 
 		rot.key(pins.get(0), 0f);
 		rot.key(pins.get(duration-1), TWO_PI);
 
-		pos = new KVector(new PVector(width/2, height/2));
+		pos = Keyed.of(new PVector(width/2, height/2));
 		pos.setTimeline(tm);
 
 		path = new CubicBezier(
