@@ -9,7 +9,7 @@ import java.util.List;
 // Extend it, create Keyed values with keyed() or add(), and dispose() once isFinished().
 public class Composition {
     private final Timeline timeline;
-    private final List<Keyed<?>> keyeds = new ArrayList<>();
+    private final List<KeyedBase<?, ?>> keyeds = new ArrayList<>();
 
     public Composition(float duration) {
         timeline = new Timeline().setDuration(duration, false);
@@ -19,8 +19,8 @@ public class Composition {
         return add(new Keyed<>(lerper, defaultValue));
     }
 
-    // Moves the Keyed onto this composition's timeline and unbinds it on dispose().
-    protected <A> Keyed<A> add(Keyed<A> keyed) {
+    // Moves the keyed value onto this composition's timeline and unbinds it on dispose().
+    protected <K extends KeyedBase<?, ?>> K add(K keyed) {
         keyed.setTimeline(timeline);
         keyeds.add(keyed);
         return keyed;
@@ -42,7 +42,7 @@ public class Composition {
 
     public void dispose() {
         timeline.dispose();
-        for (Keyed<?> k : keyeds) {
+        for (KeyedBase<?, ?> k : keyeds) {
             k.unbind();
         }
         keyeds.clear();

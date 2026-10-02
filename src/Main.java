@@ -10,7 +10,7 @@ import ch.domizai.keyed.tween.*;
 public class Main extends PApplet {
 
 	Timeline tm;
-	Keyed<PVector> pos;
+	KVector pos;
 	Keyed<Float> rot;
 	PVector vec = new PVector(10, 20);
 	Keyed<Float> vecK;
@@ -69,7 +69,7 @@ public class Main extends PApplet {
 		rot.key(pins.get(0), 0f);
 		rot.key(pins.get(duration-1), TWO_PI);
 
-		pos = new Keyed<PVector>(new PVectorLerp(), new PVector(width/2, height/2));
+		pos = new KVector(new PVector(width/2, height/2));
 		pos.setTimeline(tm);
 
 		path = new CubicBezier(
@@ -219,7 +219,7 @@ public class Main extends PApplet {
 	}
 
 	// Negative delay sample past or future.
-	public <T> List<T> echo(Keyed<T> keyed, int samples, float delay) {
+	public <T> List<T> echo(KeyedBase<T, ?> keyed, int samples, float delay) {
 		Timeline timeline = keyed.timeline();
 		List<T> values = new ArrayList<>();
 		for (int i = 0; i < samples; i++)
