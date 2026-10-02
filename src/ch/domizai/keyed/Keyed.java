@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 
 import ch.domizai.keyed.types.FloatLerp;
 import ch.domizai.keyed.types.Lerp;
+import ch.domizai.keyed.types.Lerpable;
 
 // Library-wide settings, plus a keyed value for any type given its Lerp; see KeyedBase for the instance API.
 public class Keyed<A> extends KeyedBase<A, Keyed<A>> {
@@ -87,6 +88,11 @@ public class Keyed<A> extends KeyedBase<A, Keyed<A>> {
 
     public Keyed(Lerp<A> lerper, A defaultValue) {
         super(lerper, defaultValue);
+    }
+
+    // For types that know how to blend themselves, e.g. Keyed.of(new Transform(0, 0)).
+    public static <A extends Lerpable<A>> Keyed<A> of(A defaultValue) {
+        return new Keyed<>(A::lerp, defaultValue);
     }
 
     @Override

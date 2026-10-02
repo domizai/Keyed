@@ -1,27 +1,40 @@
 package ch.domizai.keyed.types;
 
+import processing.core.PApplet;
 import processing.core.PVector;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// Morphs closed polygons point by point. Shapes with fewer points get extra points on their longest edges,
-// so the outline stays the same and corners stay sharp. Start both shapes at the same angle to avoid twisting.
-public class ShapeMorth implements Lerp<List<PVector>> {
-    public List<PVector> lerp(List<PVector> a, List<PVector> b, float d) {
-        if (a.isEmpty()) return copy(b);
-        if (b.isEmpty()) return copy(a);
+// A closed polygon that morphs point by point. The shape with fewer points gets extra points on its longest edges,
+// so its outline stays the same and corners stay sharp. Start both shapes at the same angle to avoid twisting.
+public class ShapeMorth implements Lerpable<ShapeMorth> {
+    public final List<PVector> points;
 
-        int n = Math.max(a.size(), b.size());
-        List<PVector> from = subdivide(a, n);
-        List<PVector> to = subdivide(b, n);
+    // Copies the points, so changing the list afterwards doesn't change this shape.
+    public ShapeMorth(List<PVector> points) {
+        this.points = copy(points);
+    }
 
-        // New PVectors, so callers can't mutate the stored keys.
+    @Override
+    public ShapeMorth lerp(ShapeMorth b, float d) {
+        if (points.isEmpty()) return new ShapeMorth(b.points);
+        if (b.points.isEmpty()) return new ShapeMorth(points);
+
+        int n = Math.max(points.size(), b.points.size());
+        List<PVector> from = subdivide(points, n);
+        List<PVector> to = subdivide(b.points, n);
+
         List<PVector> result = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             result.add(PVector.lerp(from.get(i), to.get(i), d));
         }
-        return result;
+        return new ShapeMorth(result);
+    }
+
+    // Wrap in beginShape()/endShape(CLOSE).
+    public void vertices(PApplet g) {
+        for (PVector p : points) g.vertex(p.x, p.y);
     }
 
     private static List<PVector> subdivide(List<PVector> shape, int n) {

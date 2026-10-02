@@ -14,8 +14,9 @@ public class Main extends PApplet {
 	Keyed<Float> rot;
 	PVector vec = new PVector(10, 20);
 	Keyed<Float> vecK;
-	Keyed<String> caption;
-	Keyed<List<PVector>> shape;
+	Keyed<Typewriter> caption;
+	Keyed<ShapeMorth> shape;
+	Keyed<Transform> transform;
 	List<PVector> obstacles = new ArrayList<>();
 	float obstaclesRadius = 80;
 	int obstaclesCount = 4;
@@ -93,24 +94,36 @@ public class Main extends PApplet {
 			.key(Key.at(pins.get(1)).setEasing(1/3f), splineX.at(0.0f))
 			.key(Key.at(pins.get(3)).setEasing(1/3f), splineX.at(1.0f));
 
-		caption = new Keyed<>(new Typewriter(), "")
+		Typewriter empty = new Typewriter("");
+		Typewriter hello = new Typewriter("Hello Keyed");
+		Typewriter world = new Typewriter("Hello World");
+		caption = Keyed.of(empty)
 			.setTimeline(tm)
-			.key(pins.get(0), "")
-			.key(pins.get(2), "Hello Keyed")
-			.key(pins.get(4), "Hello Keyed")
-			.key(pins.get(6), "Hello World")
-			.key(pins.get(8), "Hello World")
-			.key(pins.get(9), "");
+			.key(pins.get(0), empty)
+			.key(pins.get(2), hello)
+			.key(pins.get(4), hello)
+			.key(pins.get(6), world)
+			.key(pins.get(8), world)
+			.key(pins.get(9), empty);
 
-		List<PVector> circle = polygon(40, 30, 30);
-		List<PVector> star = polygon(10, 35, 15);
-		List<PVector> triangle = polygon(3, 35, 35);
-		shape = new Keyed<>(new ShapeMorth(), circle)
+		ShapeMorth circle = new ShapeMorth(polygon(40, 30, 30));
+		ShapeMorth star = new ShapeMorth(polygon(10, 35, 15));
+		ShapeMorth triangle = new ShapeMorth(polygon(3, 35, 35));
+		shape = Keyed.of(circle)
 			.setTimeline(tm)
 			.key(Key.at(pins.get(1)).setEasing(1/3f), circle)
 			.key(Key.at(pins.get(4)).setEasing(1/3f), star)
 			.key(Key.at(pins.get(7)).setEasing(1/3f), triangle)
 			.key(Key.at(pins.get(9)).setEasing(1/3f), circle);
+
+		float cx = width - 60, cy = height - 60;
+		transform = Keyed.of(new Transform(cx, cy))
+			.setTimeline(tm)
+			.key(Key.at(pins.get(1)).setEasing(1/3f), new Transform(cx, cy, 0, 1))
+			.key(Key.at(pins.get(4)).setEasing(1/3f), new Transform(cx - 40, cy, radians(170), 1.5f))
+			// From 170° to -170° turns 20° through 180°, not 340° back through 0°.
+			.key(Key.at(pins.get(6)).setEasing(1/3f), new Transform(cx - 40, cy - 40, radians(-170), 0.5f))
+			.key(Key.at(pins.get(9)).setEasing(1/3f), new Transform(cx, cy, 0, 1));
 
 		// pos.addEffect(Effect.WIGGLE(100f, 3f));
 		// pos.addEffect(new Orbit(20f, 0.3f));
@@ -212,15 +225,29 @@ public class Main extends PApplet {
 		fill(0);
 		textSize(16);
 		boolean cursorOn = frameCount / (int) (fps / 2) % 2 == 0;
-		text(caption.value() + (cursorOn ? "_" : ""), 20, height - 20);
+		text(caption.value().text + (cursorOn ? "_" : ""), 20, height - 20);
 		popStyle();
 
 		pushStyle();
 		fill(BLUE, 1, 1, 0.8f);
+		pushMatrix();
+		translate(width - 60, 60);
 		beginShape();
-		for (PVector v : shape.value()) vertex(width - 60 + v.x, 60 + v.y);
+		shape.value().vertices(this);
 		endShape(CLOSE);
+		popMatrix();
 		popStyle();
+
+		pushMatrix();
+		pushStyle();
+		transform.value().apply(this);
+		fill(GREEN, 1, 0.8f, 0.8f);
+		rect(0, 0, 30, 30);
+		// Marks the top edge so the rotation direction is visible.
+		fill(0);
+		rect(0, -12, 30, 6);
+		popStyle();
+		popMatrix();
 
 		for (int i = compositions.size() - 1; i >= 0; i--) {
 			MyComposition c = compositions.get(i);
