@@ -14,6 +14,7 @@ public class Main extends PApplet {
 	Keyed<Float> rot;
 	PVector vec = new PVector(10, 20);
 	Keyed<Float> vecK;
+	Keyed<String> caption;
 	List<PVector> obstacles = new ArrayList<>();
 	float obstaclesRadius = 80;
 	int obstaclesCount = 4;
@@ -90,6 +91,15 @@ public class Main extends PApplet {
 			.setTimeline(tm)
 			.key(Key.at(pins.get(1)).setEasing(1/3f), splineX.at(0.0f))
 			.key(Key.at(pins.get(3)).setEasing(1/3f), splineX.at(1.0f));
+
+		caption = new Keyed<>(new Typewriter(), "")
+			.setTimeline(tm)
+			.key(pins.get(0), "")
+			.key(pins.get(2), "Hello Keyed")
+			.key(pins.get(4), "Hello Keyed")
+			.key(pins.get(6), "Hello World")
+			.key(pins.get(8), "Hello World")
+			.key(pins.get(9), "");
 
 		// pos.addEffect(Effect.WIGGLE(100f, 3f));
 		// pos.addEffect(new Orbit(20f, 0.3f));
@@ -186,6 +196,13 @@ public class Main extends PApplet {
 		popMatrix();
 
 		ellipse(vec.x, vec.y, 20, 20);
+
+		pushStyle();
+		fill(0);
+		textSize(16);
+		boolean cursorOn = frameCount / (int) (fps / 2) % 2 == 0;
+		text(caption.value() + (cursorOn ? "_" : ""), 20, height - 20);
+		popStyle();
 
 		for (int i = compositions.size() - 1; i >= 0; i--) {
 			MyComposition c = compositions.get(i);
