@@ -5,21 +5,21 @@ import java.util.List;
 
 // Public only because Processing invokes pre() reflectively; not meant to be used directly.
 public final class Binder {
-    private final List<KeyedBase<?, ?>> bound = new ArrayList<>();
+    private final List<Keyed<?>> bound = new ArrayList<>();
 
     Binder() {}
 
-    void add(KeyedBase<?, ?> keyed) {
+    void add(Keyed<?> keyed) {
         if (!bound.contains(keyed)) bound.add(keyed);
     }
 
-    void remove(KeyedBase<?, ?> keyed) {
+    void remove(Keyed<?> keyed) {
         bound.remove(keyed);
     }
 
     public void pre() {
         // Copy so setters may bind or unbind while applying.
-        for (KeyedBase<?, ?> k : new ArrayList<>(bound)) {
+        for (Keyed<?> k : new ArrayList<>(bound)) {
             k.apply();
         }
     }

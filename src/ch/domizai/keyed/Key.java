@@ -1,41 +1,37 @@
 package ch.domizai.keyed;
 
-import java.util.ArrayList;
-import java.util.function.Consumer;
-
 public class Key implements Comparable<Key> {
-    private Pin frame;
+    private Pin pin;
     // Handle influence in [0, 1] as a fraction of the segment, with zero speed at the key; 0 is linear, 1/3 is AE's Easy Ease.
     private float easingIn = 0;
     private float easingOut = 0;
     // Replaces the influence curve on the segment leaving this key when set.
     private Easing easing;
-    private ArrayList<Consumer<Pin>> listeners;
 
-    public Key(Pin frame) {
-        this.frame = frame;
+    public Key(Pin pin) {
+        this.pin = pin;
     }
 
     public Key(float t) {
         this(new Pin(t));
     }
 
-    public static Key at(Pin frame) {
-        return new Key(frame); 
+    public static Key at(Pin pin) {
+        return new Key(pin); 
     }
     
     public static Key at(float t) {
         return new Key(t);
     }
 
+    // Moves the pin, so every key sharing it moves too.
     public Key to(float t) {
-        frame.to(t);
-        notifyListeners();
+        pin.to(t);
         return this;
     }
 
-    public Pin getFrame() {
-        return frame;
+    public Pin pin() {
+        return pin;
     }
     
     public Key setEasing(float influence) {
@@ -67,15 +63,7 @@ public class Key implements Comparable<Key> {
     }
     
     public float t() {
-        return frame.t();
-    }
-
-    public Key addListener(Consumer<Pin> listener) {
-        if (listeners == null) {
-            listeners = new ArrayList<>();
-        }
-        listeners.add(listener);
-        return this;
+        return pin.t();
     }
 
     public float easingIn() {
@@ -98,15 +86,8 @@ public class Key implements Comparable<Key> {
         return influence;
     }
 
-    private void notifyListeners() {
-        if (listeners == null) return;
-        for (Consumer<Pin> listener : listeners) {
-            listener.accept(frame);
-        }
-    }
-
     @Override
     public int compareTo(Key o) {
-        return frame.compareTo(o.getFrame());
+        return pin.compareTo(o.pin);
     }
 }

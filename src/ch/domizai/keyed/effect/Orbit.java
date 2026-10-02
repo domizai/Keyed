@@ -15,6 +15,6 @@ public class Orbit implements Effect<PVector> {
     @Override
     public PVector apply(PVector p, float t) {
         float a = t * frequency * PConstants.TWO_PI;
-        return new PVector(p.x + PApplet.cos(a) * radius, p.y + PApplet.sin(a) * radius);
+        return new PVector(p.x + PApplet.cos(a) * radius, p.y + PApplet.sin(a) * radius, p.z);
     }
 }

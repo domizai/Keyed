@@ -8,18 +8,18 @@ import java.util.List;
 
 // A closed polygon that morphs point by point. The shape with fewer points gets extra points on its longest edges,
 // so its outline stays the same and corners stay sharp. Start both shapes at the same angle to avoid twisting.
-public class ShapeMorth implements Lerpable<ShapeMorth> {
+public class ShapeMorph implements Lerpable<ShapeMorph> {
     public final List<PVector> points;
 
     // Copies the points, so changing the list afterwards doesn't change this shape.
-    public ShapeMorth(List<PVector> points) {
+    public ShapeMorph(List<PVector> points) {
         this.points = copy(points);
     }
 
     @Override
-    public ShapeMorth lerp(ShapeMorth b, float d) {
-        if (points.isEmpty()) return new ShapeMorth(b.points);
-        if (b.points.isEmpty()) return new ShapeMorth(points);
+    public ShapeMorph lerp(ShapeMorph b, float d) {
+        if (points.isEmpty()) return new ShapeMorph(b.points);
+        if (b.points.isEmpty()) return new ShapeMorph(points);
 
         int n = Math.max(points.size(), b.points.size());
         List<PVector> from = subdivide(points, n);
@@ -29,7 +29,7 @@ public class ShapeMorth implements Lerpable<ShapeMorth> {
         for (int i = 0; i < n; i++) {
             result.add(PVector.lerp(from.get(i), to.get(i), d));
         }
-        return new ShapeMorth(result);
+        return new ShapeMorph(result);
     }
 
     // Wrap in beginShape()/endShape(CLOSE).

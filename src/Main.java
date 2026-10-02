@@ -15,7 +15,7 @@ public class Main extends PApplet {
 	PVector vec = new PVector(10, 20);
 	Keyed<Float> vecK;
 	Keyed<Typewriter> caption;
-	Keyed<ShapeMorth> shape;
+	Keyed<ShapeMorph> shape;
 	Keyed<Transform> transform;
 	List<PVector> obstacles = new ArrayList<>();
 	float obstaclesRadius = 80;
@@ -106,9 +106,9 @@ public class Main extends PApplet {
 			.key(pins.get(8), world)
 			.key(pins.get(9), empty);
 
-		ShapeMorth circle = new ShapeMorth(polygon(40, 30, 30));
-		ShapeMorth star = new ShapeMorth(polygon(10, 35, 15));
-		ShapeMorth triangle = new ShapeMorth(polygon(3, 35, 35));
+		ShapeMorph circle = new ShapeMorph(polygon(40, 30, 30));
+		ShapeMorph star = new ShapeMorph(polygon(10, 35, 15));
+		ShapeMorph triangle = new ShapeMorph(polygon(3, 35, 35));
 		shape = Keyed.of(circle)
 			.setTimeline(tm)
 			.key(Key.at(pins.get(1)).setEasing(1/3f), circle)
@@ -125,14 +125,14 @@ public class Main extends PApplet {
 			.key(Key.at(pins.get(6)).setEasingIn(1/3f).hold(), new Transform(cx - 40, cy - 40, radians(-170), 0.5f))
 			.key(Key.at(pins.get(9)).setEasing(1/3f), new Transform(cx, cy, 0, 1));
 
-		// pos.addEffect(Effect.WIGGLE(100f, 3f));
+		// pos.addEffect(Effect.wiggle(30f, 3f));
 		// pos.addEffect(new Orbit(20f, 0.3f));
 		// pos.addEffect(new PixelSnap(20));
 		// pos.addEffect(new StopMotion<>(4f / fps));
 		// pos.addEffect(new Spring<>(new PVectorLerp(), 1.5f, 0.1f));
-		// pos.addEffect(Effect.SPRING(1.5f, 0.05f));  
+		// pos.addEffect(Effect.spring(1.5f, 0.05f));  
 		// pos.addEffect(new Lag<>(new PVectorLerp(), 0.5f, 10));
-		// pos.addEffect(Effect.LAG(0.5f, 10));
+		// pos.addEffect(Effect.lag(0.5f, 10));
 
 		// Custom effects
 		// Effect: only sees the value at the current time t.
@@ -287,7 +287,7 @@ public class Main extends PApplet {
 	}
 
 	// Negative delay sample past or future.
-	public <T> List<T> echo(KeyedBase<T, ?> keyed, int samples, float delay) {
+	public <T> List<T> echo(Keyed<T> keyed, int samples, float delay) {
 		Timeline timeline = keyed.timeline();
 		List<T> values = new ArrayList<>();
 		for (int i = 0; i < samples; i++)

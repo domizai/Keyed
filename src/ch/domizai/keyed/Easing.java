@@ -107,27 +107,16 @@ public interface Easing {
         };
     }
 
-    public static float quadInOut(float d, int p) {
-        return powerInOut(p).apply(d);
-    }
-
-    public static float quadInOut(float d) {
-        return powerInOut(2).apply(d);
-    }
-
+    // Plain-number shortcuts, e.g. alpha = Easing.quadOut(t); for other powers use powerIn(p).apply(d).
     public static float quadIn(float d) {
-        return powerIn(2).apply(d);
-    }
-
-    public static float quadIn(float d, int p) {
-        return powerIn(p).apply(d);
+        return QUAD_IN.apply(d);
     }
 
     public static float quadOut(float d) {
-        return powerOut(2).apply(d);
+        return QUAD_OUT.apply(d);
     }
 
-    public static float quadOut(float d, int p) {
-        return powerOut(p).apply(d);
+    public static float quadInOut(float d) {
+        return QUAD_IN_OUT.apply(d);
     }
 }

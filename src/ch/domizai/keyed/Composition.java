@@ -9,7 +9,7 @@ import ch.domizai.keyed.types.Lerp;
 // Extend it, create Keyed values with keyed() or add(), and dispose() once isFinished().
 public class Composition {
     private final Timeline timeline;
-    private final List<KeyedBase<?, ?>> keyeds = new ArrayList<>();
+    private final List<Keyed<?>> keyeds = new ArrayList<>();
 
     public Composition(float duration) {
         timeline = new Timeline().setDuration(duration, false);
@@ -20,7 +20,7 @@ public class Composition {
     }
 
     // Moves the keyed value onto this composition's timeline and unbinds it on dispose().
-    protected <K extends KeyedBase<?, ?>> K add(K keyed) {
+    protected <A> Keyed<A> add(Keyed<A> keyed) {
         keyed.setTimeline(timeline);
         keyeds.add(keyed);
         return keyed;
@@ -42,7 +42,7 @@ public class Composition {
 
     public void dispose() {
         timeline.dispose();
-        for (KeyedBase<?, ?> k : keyeds) {
+        for (Keyed<?> k : keyeds) {
             k.unbind();
         }
         keyeds.clear();
