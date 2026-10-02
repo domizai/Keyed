@@ -36,6 +36,7 @@ public class Main extends PApplet {
 	List<MyComposition> compositions = new ArrayList<>();
 
 	float off = 30f;
+	float flash = 0;
 
 	public void settings() {
 		size(400, 400);
@@ -64,6 +65,12 @@ public class Main extends PApplet {
 		int duration = 10; 
 		tm.setDuration(duration);
 		for (int f = 0; f < duration; f++) pins.add(Pin.at(f));
+
+		// Markers
+		tm.addMarker("start", 0, m -> println(m.name() + " at " + m.t()));
+		tm.addMarker("star", pins.get(4), m -> flash = 1);
+		tm.addMarker("triangle", pins.get(7), m -> flash = 1);
+		tm.onLoop(t -> println("loop"));
 
 		// Keyed values
 		rot = Keyed.of(0f);
@@ -175,7 +182,8 @@ public class Main extends PApplet {
 	PVector posPrev;
 
 	public void draw() {
-		background(1);
+		background(BLUE, 0.3f * flash, 1);
+		flash *= 0.85f;
 
 		pushStyle();
 		int steps = 200;
@@ -273,7 +281,7 @@ public class Main extends PApplet {
 	}
 
 	public void mouseMoved() {
-		tm.to(map(mouseX, 0, width, 0, tm.duration()));
+		tm.to(map(mouseX, 0, width, 0, tm.duration()), true);
 	}
 
     static public void main(String[] passedArgs) {

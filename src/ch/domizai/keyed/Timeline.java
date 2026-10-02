@@ -2,10 +2,19 @@ package ch.domizai.keyed;
 
 import processing.core.PApplet;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Consumer;
+
 import static processing.core.PApplet.constrain;
 
 // Time is in the timeline's Unit (seconds by default). Created with a sketch it advances by itself before every draw(); otherwise call step().
 public class Timeline {
+    // Caps callbacks when one jump spans many loops.
+    private static final int MAX_WRAPS = 100;
+    private static final Comparator<Marker> BY_TIME = Comparator.comparingDouble(Marker::t);
+
     private Unit unit = Keyed.unit();
     private boolean synced = Keyed.isSynced();
     private boolean autoplay = Keyed.isAutoplay();
@@ -18,6 +27,13 @@ public class Timeline {
     private long lastNanos = -1;
     private boolean started = false;
     private PApplet sketch;
+    private final List<Marker> markers = new ArrayList<>();
+    private final List<Consumer<Timeline>> loopListeners = new ArrayList<>();
+    private final List<Consumer<Timeline>> finishListeners = new ArrayList<>();
+    // Set by moves that fire nothing, so a marker exactly at the new t still fires on the next step.
+    private boolean arrivedSilently = true;
+    // Bumped on every move; a change during a callback means it moved the timeline, so the rest is skipped.
+    private int moveId = 0;
 
     // Follows real time if Keyed.init() was called; otherwise only moves via step() or to().
     public Timeline() {
@@ -63,10 +79,11 @@ public class Timeline {
         return step(dt * speed);
     }
 
+    // Fires markers, onLoop and onFinish callbacks passed on the way.
     public Timeline step(float amount) {
         if (!playing)
             return this;
-        t = fit(t + amount);
+        move(t + amount, true);
         return this;
     }
     
@@ -135,8 +152,70 @@ public class Timeline {
         return this;
     }
 
+    // Jumps without firing markers or callbacks.
     public Timeline to(float t) {
-        this.t = fit(t);
+        return to(t, false);
+    }
+
+    // fire = true treats the jump like playback, e.g. when scrubbing with the mouse.
+    public Timeline to(float t, boolean fire) {
+        move(t, fire);
+        return this;
+    }
+
+    public Marker addMarker(Pin pin, Consumer<Marker> callback) {
+        return addMarker(null, pin, callback);
+    }
+
+    public Marker addMarker(float t, Consumer<Marker> callback) {
+        return addMarker(null, Pin.at(t), callback);
+    }
+
+    public Marker addMarker(String name, float t, Consumer<Marker> callback) {
+        return addMarker(name, Pin.at(t), callback);
+    }
+
+    public Marker addMarker(String name, Pin pin, Consumer<Marker> callback) {
+        Marker m = new Marker(this, name, pin, callback);
+        markers.add(m);
+        return m;
+    }
+
+    public Timeline removeMarker(Marker marker) {
+        markers.remove(marker);
+        return this;
+    }
+
+    // First marker with this name, or null.
+    public Marker marker(String name) {
+        for (Marker m : markers) {
+            if (name.equals(m.name())) return m;
+        }
+        return null;
+    }
+
+    public List<Marker> markers() {
+        List<Marker> list = new ArrayList<>(markers);
+        list.sort(BY_TIME);
+        return list;
+    }
+
+    // Called each time a looping timeline wraps around, in either direction.
+    public Timeline onLoop(Consumer<Timeline> callback) {
+        loopListeners.add(callback);
+        return this;
+    }
+
+    // Called once when a non-looping timeline reaches its duration.
+    public Timeline onFinish(Consumer<Timeline> callback) {
+        finishListeners.add(callback);
+        return this;
+    }
+
+    // Removes a callback added with onLoop() or onFinish().
+    public Timeline removeListener(Consumer<Timeline> callback) {
+        loopListeners.remove(callback);
+        finishListeners.remove(callback);
         return this;
     }
 
@@ -173,6 +252,79 @@ public class Timeline {
         if (duration <= 0)
             return t;
         return loop ? remEuclid(t, duration) : constrain(t, 0, duration);
+    }
+
+    private void move(float target, boolean fire) {
+        int id = ++moveId;
+        float from = t;
+        boolean wasFinished = isFinished();
+        boolean includeStart = arrivedSilently;
+        t = fit(target);
+        arrivedSilently = !fire;
+        if (!fire) return;
+
+        if (!crossMarkers(from, target - from, includeStart, id)) return;
+        if (!wasFinished && isFinished()) {
+            callListeners(finishListeners, id);
+        }
+    }
+
+    // Walks from `from` by delta, wrapping like fit(); false if a callback moved the timeline.
+    private boolean crossMarkers(float from, float delta, boolean includeStart, int id) {
+        boolean wraps = loop && duration > 0;
+        boolean forward = delta >= 0;
+        float pos = from;
+        float remaining = Math.abs(delta);
+        boolean inclusive = includeStart;
+        for (int i = 0; i <= MAX_WRAPS; i++) {
+            if (forward) {
+                float end = pos + remaining;
+                if (!wraps || end < duration) {
+                    return fireMarkers(pos, wraps ? end : t, inclusive, true, true, id);
+                }
+                if (!fireMarkers(pos, duration, inclusive, true, true, id)) return false;
+                remaining = end - duration;
+                pos = 0;
+            } else {
+                float end = pos - remaining;
+                if (!wraps || end >= 0) {
+                    return fireMarkers(wraps ? end : t, pos, true, inclusive, false, id);
+                }
+                if (!fireMarkers(0, pos, true, inclusive, false, id)) return false;
+                remaining = -end;
+                pos = duration;
+            }
+            inclusive = true;
+            if (!callListeners(loopListeners, id)) return false;
+        }
+        return true;
+    }
+
+    // Fires markers in [lo, hi] (ends included as given) in playback order.
+    private boolean fireMarkers(float lo, float hi, boolean includeLo, boolean includeHi, boolean forward, int id) {
+        List<Marker> crossed = new ArrayList<>();
+        for (Marker m : markers) {
+            float mt = m.t();
+            if ((mt > lo || includeLo && mt == lo) && (mt < hi || includeHi && mt == hi)) {
+                crossed.add(m);
+            }
+        }
+        crossed.sort(forward ? BY_TIME : BY_TIME.reversed());
+        for (Marker m : crossed) {
+            // Skips markers removed by an earlier callback in this step.
+            if (!markers.contains(m)) continue;
+            m.fire();
+            if (moveId != id) return false;
+        }
+        return true;
+    }
+
+    private boolean callListeners(List<Consumer<Timeline>> listeners, int id) {
+        for (Consumer<Timeline> l : new ArrayList<>(listeners)) {
+            l.accept(this);
+            if (moveId != id) return false;
+        }
+        return true;
     }
 
     private float remEuclid(float a, float b) {
