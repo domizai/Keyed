@@ -150,7 +150,10 @@ public abstract class KeyedBase<A, S extends KeyedBase<A, S>> {
         float from = e1.key.t();
         float to = e2.key.t();
         float d = to > from ? map(constrain(t, from, to), from, to, 0f, 1f) : (t < to ? 0f : 1f);
-        float ease = Easing.cubicBezier(e1.key.easingOut(), 0, 1 - e2.key.easingIn(), 1).apply(d);
+        Easing preset = e1.key.easing();
+        float ease = preset != null
+            ? preset.apply(d)
+            : Easing.cubicBezier(e1.key.easingOut(), 0, 1 - e2.key.easingIn(), 1).apply(d);
         float position = lerp(e1.tween.positionOr(0), e2.tween.positionOr(1), ease);
         Tween<A> w0 = e1.tween.tween();
         Tween<A> w1 = e2.tween.tween();

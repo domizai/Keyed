@@ -69,7 +69,7 @@ public class Main extends PApplet {
 		rot = Keyed.of(0f);
 		rot.setTimeline(tm);
 
-		rot.key(pins.get(0), 0f);
+		rot.key(Key.at(pins.get(0)).setEasing(Easing.CUBIC_IN_OUT), 0f);
 		rot.key(pins.get(duration-1), TWO_PI);
 
 		pos = Keyed.of(new PVector(width/2, height/2));
@@ -121,8 +121,8 @@ public class Main extends PApplet {
 			.setTimeline(tm)
 			.key(Key.at(pins.get(1)).setEasing(1/3f), new Transform(cx, cy, 0, 1))
 			.key(Key.at(pins.get(4)).setEasing(1/3f), new Transform(cx - 40, cy, radians(170), 1.5f))
-			// From 170° to -170° turns 20° through 180°, not 340° back through 0°.
-			.key(Key.at(pins.get(6)).setEasing(1/3f), new Transform(cx - 40, cy - 40, radians(-170), 0.5f))
+			// hold will keep the value until the next key, ignoring easing out.
+			.key(Key.at(pins.get(6)).setEasingIn(1/3f).hold(), new Transform(cx - 40, cy - 40, radians(-170), 0.5f))
 			.key(Key.at(pins.get(9)).setEasing(1/3f), new Transform(cx, cy, 0, 1));
 
 		// pos.addEffect(Effect.WIGGLE(100f, 3f));
@@ -246,7 +246,7 @@ public class Main extends PApplet {
 		translate(t.x, t.y);
 		rotate(t.rotation);
 		scale(t.scale);
-		
+
 		fill(GREEN, 1, 0.8f, 0.8f);
 		rect(0, 0, 30, 30);
 		// Marks the top edge so the rotation direction is visible.

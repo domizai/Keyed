@@ -9,6 +9,8 @@ public interface Easing {
     public static final Easing QUADRATIC_BEZIER = quadraticBezier(0, 0, 1);
     public static final Easing CUBIC_BEZIER = cubicBezier(0, 0, 1, 1);
     public static final Easing SMOOTHSTEP = smoothstep(0, 1);
+    // Stays at the start value until the next key, then jumps.
+    public static final Easing HOLD = d -> d < 1 ? 0 : 1;
 
     public static final Easing QUAD_IN = powerIn(2);
     public static final Easing QUAD_OUT = powerOut(2);
