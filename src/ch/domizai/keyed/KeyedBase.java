@@ -2,9 +2,9 @@ package ch.domizai.keyed;
 
 import ch.domizai.keyed.effect.Effect;
 import ch.domizai.keyed.effect.TimeEffect;
-import ch.domizai.keyed.lerp.Lerp;
 import ch.domizai.keyed.tween.Tween;
 import ch.domizai.keyed.tween.TweenAt;
+import ch.domizai.keyed.types.Lerp;
 
 import java.util.ArrayList;
 import java.util.List;

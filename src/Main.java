@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import ch.domizai.keyed.*;
 import ch.domizai.keyed.effect.*;
-import ch.domizai.keyed.lerp.*;
 import ch.domizai.keyed.tween.*;
+import ch.domizai.keyed.types.*;
 
 public class Main extends PApplet {
 

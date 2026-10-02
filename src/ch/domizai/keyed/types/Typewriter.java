@@ -1,4 +1,4 @@
-package ch.domizai.keyed.lerp;
+package ch.domizai.keyed.types;
 
 import static java.lang.Math.min;
 import static java.lang.Math.round;

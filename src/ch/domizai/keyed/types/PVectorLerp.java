@@ -1,4 +1,4 @@
-package ch.domizai.keyed.lerp;
+package ch.domizai.keyed.types;
 
 import processing.core.PVector;
 

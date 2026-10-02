@@ -1,13 +1,13 @@
 package ch.domizai.keyed;
 
-import ch.domizai.keyed.lerp.Lerp;
-import ch.domizai.keyed.lerp.FloatLerp;
-
 import processing.core.PApplet;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.function.Consumer;
+
+import ch.domizai.keyed.types.FloatLerp;
+import ch.domizai.keyed.types.Lerp;
 
 // Library-wide settings, plus a keyed value for any type given its Lerp; see KeyedBase for the instance API.
 public class Keyed<A> extends KeyedBase<A, Keyed<A>> {

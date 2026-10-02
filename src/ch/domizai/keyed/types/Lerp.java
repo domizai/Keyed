@@ -1,4 +1,4 @@
-package ch.domizai.keyed.lerp;
+package ch.domizai.keyed.types;
 
 @FunctionalInterface
 public interface Lerp<T> {

@@ -1,6 +1,6 @@
 package ch.domizai.keyed;
 
-import ch.domizai.keyed.lerp.PVectorLerp;
+import ch.domizai.keyed.types.PVectorLerp;
 import processing.core.PVector;
 
 public class KVector extends KeyedBase<PVector, KVector> {

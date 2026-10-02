@@ -1,4 +1,4 @@
-package ch.domizai.keyed.lerp;
+package ch.domizai.keyed.types;
 import java.util.function.Function;
 
 public class IntLerp implements Lerp<Integer> {
