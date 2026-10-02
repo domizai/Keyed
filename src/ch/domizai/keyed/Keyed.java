@@ -29,9 +29,10 @@ public class Keyed<A> {
     // Declared before defaultTimeline, which reads it while this class initializes.
     private static Unit unit = Unit.SECOND;
     private static boolean synced = true;
+    private static boolean autoplay = true;
     private static float frameRate = 60;
     private static Timeline defaultTimeline = new Timeline();
-    private static final Binder binder = new Binder();
+    private static final Binder binder = new Binder(); // Used to register the pre() method with the Processing sketch.
 
     private A defaultValue;
     private List<KeyEntry<A>> keys = new ArrayList<>();
@@ -75,6 +76,16 @@ public class Keyed<A> {
     public static void sync(boolean sync) {
         Keyed.synced = sync;
         defaultTimeline.sync(sync);
+    }
+
+    public static boolean isAutoplay() {
+        return autoplay;
+    }
+
+    // Sets autoplay for the default timeline and timelines created afterwards; see Timeline.autoplay().
+    public static void autoplay(boolean autoplay) {
+        Keyed.autoplay = autoplay;
+        defaultTimeline.autoplay(autoplay);
     }
 
     public static float frameRate() {

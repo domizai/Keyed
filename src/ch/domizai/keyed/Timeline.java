@@ -8,6 +8,7 @@ import static processing.core.PApplet.constrain;
 public class Timeline {
     private Unit unit = Keyed.unit();
     private boolean synced = Keyed.isSynced();
+    private boolean autoplay = Keyed.isAutoplay();
     private boolean loop = true;
     private float duration = 0;
     private float t = 0;
@@ -32,6 +33,11 @@ public class Timeline {
 
     // Called by Processing before each draw(); public only so it can be registered. The first frame shows t = 0.
     public void pre() {
+        if (!autoplay) {
+            // Re-enabling autoplay starts a fresh clock instead of jumping by the paused gap.
+            started = false;
+            return;
+        }
         if (started) {
             step();
         } else {
@@ -98,6 +104,16 @@ public class Timeline {
     // true follows the real clock; false advances exactly one frame (Keyed.frameRate()) per step(), for deterministic exports.
     public Timeline sync(boolean sync) {
         this.synced = sync;
+        return this;
+    }
+
+    public boolean isAutoplay() {
+        return autoplay;
+    }
+
+    // false stops the automatic step() before each draw(), so step() can be called manually; sync still applies.
+    public Timeline autoplay(boolean autoplay) {
+        this.autoplay = autoplay;
         return this;
     }
 

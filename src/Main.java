@@ -53,6 +53,8 @@ public class Main extends PApplet {
 		Keyed.setFrameRate(fps);
 		Keyed.sync(false);
 		Keyed.setUnit(Keyed.SECOND);
+		Keyed.autoplay(false);
+		// order matters, always call settings before initializing timelines or keyed values.
 
 		// Timeline (seconds)
 		tm = new Timeline();
@@ -202,6 +204,10 @@ public class Main extends PApplet {
 		popStyle();
 	}
 
+	public void mouseMoved() {
+		tm.to(map(mouseX, 0, width, 0, tm.duration()));
+	}
+
     static public void main(String[] passedArgs) {
 		String[] appletArgs = new String[] { "Main" };
 		if (passedArgs != null) {
@@ -237,7 +243,9 @@ public class Main extends PApplet {
 		shoufflePoints();
 		initObstacles();
 		spline.setPoints(points);
-		compositions.add(new MyComposition(components, 20, new PVector(mouseX, mouseY)));
+		var comp = new MyComposition(components, 20, new PVector(mouseX, mouseY));
+		comp.timeline().autoplay(true);
+		compositions.add(comp);
 	}
 
 	abstract class Component {
