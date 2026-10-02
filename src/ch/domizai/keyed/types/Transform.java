@@ -31,7 +31,8 @@ public class Transform implements Lerpable<Transform> {
             PApplet.lerp(scale, b.scale, d));
     }
 
-    // Wrap in pushMatrix()/popMatrix().
+    // Optionally apply this transform inside pushMatrix()/popMatrix() matrix stack before drawing.
+    // Call it like `transform.value().apply(this);`
     public void apply(PApplet g) {
         g.translate(x, y);
         g.rotate(rotation);

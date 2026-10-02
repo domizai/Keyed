@@ -240,7 +240,13 @@ public class Main extends PApplet {
 
 		pushMatrix();
 		pushStyle();
-		transform.value().apply(this);
+		// transform.value().apply(this);
+		// or
+		Transform t = transform.value();
+		translate(t.x, t.y);
+		rotate(t.rotation);
+		scale(t.scale);
+		
 		fill(GREEN, 1, 0.8f, 0.8f);
 		rect(0, 0, 30, 30);
 		// Marks the top edge so the rotation direction is visible.
