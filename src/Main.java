@@ -15,6 +15,7 @@ public class Main extends PApplet {
 	PVector vec = new PVector(10, 20);
 	Keyed<Float> vecK;
 	Keyed<String> caption;
+	Keyed<List<PVector>> shape;
 	List<PVector> obstacles = new ArrayList<>();
 	float obstaclesRadius = 80;
 	int obstaclesCount = 4;
@@ -100,6 +101,16 @@ public class Main extends PApplet {
 			.key(pins.get(6), "Hello World")
 			.key(pins.get(8), "Hello World")
 			.key(pins.get(9), "");
+
+		List<PVector> circle = polygon(40, 30, 30);
+		List<PVector> star = polygon(10, 35, 15);
+		List<PVector> triangle = polygon(3, 35, 35);
+		shape = new Keyed<>(new ShapeMorth(), circle)
+			.setTimeline(tm)
+			.key(Key.at(pins.get(1)).setEasing(1/3f), circle)
+			.key(Key.at(pins.get(4)).setEasing(1/3f), star)
+			.key(Key.at(pins.get(7)).setEasing(1/3f), triangle)
+			.key(Key.at(pins.get(9)).setEasing(1/3f), circle);
 
 		// pos.addEffect(Effect.WIGGLE(100f, 3f));
 		// pos.addEffect(new Orbit(20f, 0.3f));
@@ -204,6 +215,13 @@ public class Main extends PApplet {
 		text(caption.value() + (cursorOn ? "_" : ""), 20, height - 20);
 		popStyle();
 
+		pushStyle();
+		fill(BLUE, 1, 1, 0.8f);
+		beginShape();
+		for (PVector v : shape.value()) vertex(width - 60 + v.x, 60 + v.y);
+		endShape(CLOSE);
+		popStyle();
+
 		for (int i = compositions.size() - 1; i >= 0; i--) {
 			MyComposition c = compositions.get(i);
 			c.draw();
@@ -242,6 +260,17 @@ public class Main extends PApplet {
 		for (int i = 0; i < samples; i++)
 			values.add(keyed.value(timeline.t(-delay * i)));
 		return values;
+	}
+
+	// Alternates between the outer and inner radius; starts at the top so shapes line up when morphing.
+	private List<PVector> polygon(int count, float outer, float inner) {
+		List<PVector> pts = new ArrayList<>();
+		for (int i = 0; i < count; i++) {
+			float a = -HALF_PI + TWO_PI * i / count;
+			float r = i % 2 == 0 ? outer : inner;
+			pts.add(new PVector(cos(a) * r, sin(a) * r));
+		}
+		return pts;
 	}
 
 	private void shoufflePoints() {
