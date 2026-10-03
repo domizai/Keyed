@@ -71,6 +71,7 @@ public class Timeline {
         long now = System.nanoTime();
         float fps = Keyed.frameRate();
         float dt;
+        boolean exact = fixedStep > 0 || !synced;
         if (fixedStep > 0) {
             dt = fixedStep;
         } else if (synced) {
@@ -80,7 +81,30 @@ public class Timeline {
             dt = unit == Unit.FRAME ? 1 : 1 / fps;
         }
         lastNanos = now;
-        return step(dt * speed);
+        return exact ? stepExact(dt * speed) : step(dt * speed);
+    }
+
+    // Adding a step like 1/30 again and again drifts in float (90 steps give 2.9999943, not 3), so a loop
+    // would wrap one step late; snapping back onto the step grid and the loop boundaries keeps t exact.
+    private Timeline stepExact(float amount) {
+        if (!playing || amount == 0) {
+            return step(amount);
+        }
+        double grid = Math.abs((double) amount);
+        double target = (double) t + amount;
+        double tolerance = grid * 1e-3;
+        long k = Math.round(target / grid);
+        if (Math.abs(target - k * grid) < tolerance) {
+            target = k * grid;
+        }
+        if (duration > 0) {
+            long m = Math.round(target / duration);
+            if (Math.abs(target - (double) m * duration) < tolerance) {
+                target = (double) m * duration;
+            }
+        }
+        move((float) target, true);
+        return this;
     }
 
     /** Advances by amount while playing; fires markers, onLoop and onFinish callbacks passed on the way. */
