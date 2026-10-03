@@ -7,7 +7,7 @@ public interface Path extends Tween<PVector> {
     /** Arc length. */
     float length();
 
-    /** New path between normalized distances t0 and t1 (0..1); t1 < t0 reverses it. */
+    /** New path between normalized distances t0 and t1 (0..1); {@code t1 < t0} reverses it. */
     Path slice(float t0, float t1);
 
     /** Curve playing this path, then next. */

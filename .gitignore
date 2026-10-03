@@ -2,5 +2,16 @@
 bin/
 *.class
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 .vscode/
-test/
+/test/
+/release/
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
+
+# Ignore Kotlin plugin data
+.kotlin
