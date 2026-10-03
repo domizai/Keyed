@@ -8,7 +8,6 @@ import ch.domizai.keyed.examples.customtypes.Transform;
 import ch.domizai.keyed.lerps.*;
 import ch.domizai.keyed.tween.*;
 import ch.domizai.keyed.types.ShapeMorph;
-import ch.domizai.keyed.types.Typewriter;
 
 public class Main extends PApplet {
 
@@ -17,7 +16,6 @@ public class Main extends PApplet {
 	Keyed<Float> rot;
 	PVector vec = new PVector(10, 20);
 	Keyed<Float> vecK;
-	Keyed<Typewriter> caption;
 	Keyed<String> text;
 	Keyed<ShapeMorph> shape;
 	Keyed<Transform> transform;
@@ -104,18 +102,6 @@ public class Main extends PApplet {
 			.setTimeline(tm)
 			.key(Key.at(pins.get(1)).setEasing(1/3f), splineX.at(0.0f))
 			.key(Key.at(pins.get(3)).setEasing(1/3f), splineX.at(1.0f));
-
-		Typewriter empty = new Typewriter("");
-		Typewriter hello = new Typewriter("Hello Keyed");
-		Typewriter world = new Typewriter("Hello World");
-		caption = Keyed.of(empty)
-			.setTimeline(tm)
-			.key(pins.get(0), empty)
-			.key(pins.get(2), hello)
-			.key(pins.get(4), hello)
-			.key(pins.get(6), world)
-			.key(pins.get(8), world)
-			.key(pins.get(9), empty);
 
 		text = Keyed.of("")
 			.setTimeline(tm)
@@ -246,13 +232,7 @@ public class Main extends PApplet {
 		fill(0);
 		textSize(16);
 		boolean cursorOn = frameCount / (int) (fps / 2) % 2 == 0;
-		text(caption.value().text + (cursorOn ? "_" : ""), 20, height - 20);
-		popStyle();
-
-		pushStyle();
-		fill(0);
-		textSize(16);
-		text(text.value() + (cursorOn ? "_" : ""), 20, height - 50);
+		text(text.value() + (cursorOn ? "_" : ""), 20, height - 20);
 		popStyle();
 
 		pushStyle();
