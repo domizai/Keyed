@@ -12,7 +12,9 @@ import java.util.function.Consumer;
 import ch.domizai.keyed.effect.Effect;
 import ch.domizai.keyed.effect.TimeEffect;
 import ch.domizai.keyed.lerps.BooleanLerp;
+import ch.domizai.keyed.lerps.ColorLerp;
 import ch.domizai.keyed.lerps.FloatLerp;
+import ch.domizai.keyed.lerps.IntLerp;
 import ch.domizai.keyed.lerps.Lerp;
 import ch.domizai.keyed.lerps.PVectorLerp;
 import ch.domizai.keyed.lerps.StringLerp;
@@ -133,6 +135,15 @@ public class Keyed<A> {
 
     public static Keyed<Boolean> of(boolean defaultValue) {
         return new Keyed<>(new BooleanLerp(), defaultValue);
+    }
+
+    // Named methods because of(int) would clash with of(float) and colors are ints too.
+    public static Keyed<Integer> ofInt(int defaultValue) {
+        return new Keyed<>(new IntLerp(), defaultValue);
+    }
+
+    public static Keyed<Integer> ofColor(int defaultValue) {
+        return new Keyed<>(new ColorLerp(), defaultValue);
     }
 
     // The setter receives value() before every draw() once init() has been called.
