@@ -26,7 +26,7 @@ import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.lerp;
 import static processing.core.PApplet.map;
 
-// A value animated between keys, plus the library-wide settings as static methods.
+/** A value animated between keys, plus the library-wide settings as static methods. */
 public class Keyed<A> {
     public static final Unit SECOND = Unit.SECOND;
     public static final Unit FRAME = Unit.FRAME;

@@ -2,7 +2,7 @@ package ch.domizai.keyed.effect;
 
 import processing.core.PVector;
 
-// Smooth random offset, like After Effects' wiggle(); the offset per axis stays within ±amplitude.
+/** Smooth random offset, like After Effects' wiggle(); the offset per axis stays within ±amplitude. */
 public class Wiggle implements Effect<PVector> {
     private static long nextSeed = 1;
 

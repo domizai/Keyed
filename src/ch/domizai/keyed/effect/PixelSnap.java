@@ -2,6 +2,7 @@ package ch.domizai.keyed.effect;
 
 import processing.core.PVector;
 
+/** Snaps x and y to a grid. */
 public class PixelSnap implements Effect<PVector> {
     private final float size;
 

@@ -1,5 +1,6 @@
 package ch.domizai.keyed;
 
+/** A keyframe time, with easing for the segments around it. */
 public class Key implements Comparable<Key> {
     private Pin pin;
     // Handle influence in [0, 1] as a fraction of the segment, with zero speed at the key; 0 is linear, 1/3 is AE's Easy Ease.

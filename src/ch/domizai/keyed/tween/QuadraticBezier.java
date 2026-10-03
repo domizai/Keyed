@@ -4,6 +4,7 @@ import processing.core.PVector;
 
 import static processing.core.PApplet.constrain;
 
+/** Quadratic Bézier path, traversed at constant speed. */
 public class QuadraticBezier implements Path {
     // Higher is more accurate.
     private static final int LUT_STEPS = 50;

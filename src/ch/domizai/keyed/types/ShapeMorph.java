@@ -7,8 +7,10 @@ import processing.core.PVector;
 import java.util.ArrayList;
 import java.util.List;
 
-// A closed polygon that morphs point by point. The shape with fewer points gets extra points on its longest edges,
-// so its outline stays the same and corners stay sharp. Start both shapes at the same angle to avoid twisting.
+/**
+ * A closed polygon that morphs point by point. The shape with fewer points gets extra points on its longest edges,
+ * so its outline stays the same and corners stay sharp. Start both shapes at the same angle to avoid twisting.
+ */
 public class ShapeMorph implements Lerpable<ShapeMorph> {
     public final List<PVector> points;
 

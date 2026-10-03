@@ -2,7 +2,7 @@ package ch.domizai.keyed.tween;
 
 import processing.core.PVector;
 
-// A Tween<PVector> with a known arc length, so paths can be chained into a Curve at even speed.
+/** A {@code Tween<PVector>} with a known arc length, so paths can be chained into a Curve at even speed. */
 public interface Path extends Tween<PVector> {
     /** Arc length. */
     float length();

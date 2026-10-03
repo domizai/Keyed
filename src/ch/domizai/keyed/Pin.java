@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-// A point in time that several keys can share; moving it moves all of them.
+/** A point in time that several keys can share; moving it moves all of them. */
 public class Pin implements Comparable<Pin> {
     private float t;
     private List<Consumer<Pin>> listeners;

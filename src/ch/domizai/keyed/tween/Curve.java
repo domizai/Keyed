@@ -8,7 +8,7 @@ import java.util.List;
 
 import static processing.core.PApplet.constrain;
 
-// Paths played one after another at even speed; gaps between a path's end and the next start are jumped.
+/** Paths played one after another at even speed; gaps between a path's end and the next start are jumped. */
 public class Curve implements Path {
     private final List<Path> paths;
     private float t0 = 0, t1 = 1;

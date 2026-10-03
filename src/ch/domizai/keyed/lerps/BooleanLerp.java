@@ -1,6 +1,6 @@
 package ch.domizai.keyed.lerps;
 
-// A StepLerp for booleans.
+/** A StepLerp for booleans. */
 public class BooleanLerp extends StepLerp<Boolean> {
     /** Switches exactly at the next key. */
     public BooleanLerp() {

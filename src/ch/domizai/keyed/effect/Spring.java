@@ -3,8 +3,10 @@ package ch.domizai.keyed.effect;
 import ch.domizai.keyed.lerps.Lerp;
 import ch.domizai.keyed.tween.Tween;
 
-// Damped spring following the value: lags while it moves, overshoots and settles when it stops.
-// Needs a Lerp that extrapolates beyond [0, 1] (PVectorLerp, FloatLerp); ColorLerp clamps, so no overshoot.
+/**
+ * Damped spring following the value: lags while it moves, overshoots and settles when it stops.
+ * Needs a Lerp that extrapolates beyond [0, 1] (PVectorLerp, FloatLerp); ColorLerp clamps, so no overshoot.
+ */
 public class Spring<T> implements TimeEffect<T> {
     private static final int SAMPLES_PER_PERIOD = 16;
     // The response is cut off once the oscillation envelope falls below this.

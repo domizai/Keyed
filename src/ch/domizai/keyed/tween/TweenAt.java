@@ -1,5 +1,6 @@
 package ch.domizai.keyed.tween;
 
+/** A Tween with an optional fixed position at which a key samples it. */
 public final class TweenAt<T> {
     private final Tween<T> tween;
     private final Float position;

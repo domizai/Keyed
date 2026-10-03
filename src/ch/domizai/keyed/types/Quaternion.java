@@ -4,7 +4,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
-// An immutable 3D rotation. Blends with slerp along the shortest arc, without gimbal lock.
+/** An immutable 3D rotation. Blends with slerp along the shortest arc, without gimbal lock. */
 public final class Quaternion implements Lerpable<Quaternion> {
     public final float w, x, y, z;
 

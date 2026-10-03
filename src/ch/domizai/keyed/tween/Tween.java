@@ -2,6 +2,7 @@ package ch.domizai.keyed.tween;
 
 import java.util.function.Function;
 
+/** A value as a function of position, normally 0..1. */
 @FunctionalInterface
 public interface Tween<T> {
     /** Value at position d, normally 0..1. */

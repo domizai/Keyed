@@ -2,7 +2,7 @@ package ch.domizai.keyed;
 
 import java.util.function.Consumer;
 
-// A point on a Timeline that calls back when playback crosses it; create with Timeline.addMarker().
+/** A point on a Timeline that calls back when playback crosses it; create with Timeline.addMarker(). */
 public class Marker {
     private final Timeline timeline;
     private final String name;

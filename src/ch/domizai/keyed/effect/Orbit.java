@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
 
+/** Adds circular motion around an axis. */
 public class Orbit implements Effect<PVector> {
     private final float radius, frequency; // frequency in cycles per second
     // Orthonormal basis of the orbit plane.

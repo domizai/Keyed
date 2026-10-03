@@ -1,7 +1,9 @@
 package ch.domizai.keyed.lerps;
 
-// Holds a until the blend reaches the threshold, then jumps to b; for values that can't blend.
-// Returns the keys themselves, so only use it with immutable values (enums, Integer, String, ...).
+/**
+ * Holds a until the blend reaches the threshold, then jumps to b; for values that can't blend.
+ * Returns the keys themselves, so only use it with immutable values (enums, Integer, String, ...).
+ */
 public class StepLerp<T> implements Lerp<T> {
     private final float threshold;
 

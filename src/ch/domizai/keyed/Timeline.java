@@ -9,7 +9,10 @@ import java.util.function.Consumer;
 
 import static processing.core.PApplet.constrain;
 
-// Time is in the timeline's Unit (seconds by default). Created with a sketch it advances by itself before every draw(); otherwise call step().
+/**
+ * Playback clock for Keyed values and markers, in its Unit (seconds by default).
+ * Created with a sketch it advances by itself before every draw(); otherwise call step().
+ */
 public class Timeline {
     // Caps callbacks when one jump spans many loops.
     private static final int MAX_WRAPS = 100;

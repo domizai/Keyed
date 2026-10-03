@@ -2,6 +2,7 @@ package ch.domizai.keyed;
 
 import static processing.core.PApplet.constrain;
 
+/** Maps linear progress in [0, 1] to eased progress. */
 @FunctionalInterface
 public interface Easing {
     /** Maps progress d in [0, 1] to eased progress. */

@@ -3,7 +3,7 @@ package ch.domizai.keyed.effect;
 import ch.domizai.keyed.lerps.Lerp;
 import ch.domizai.keyed.tween.Tween;
 
-// Averages the value over the last `duration` seconds: trails behind and smooths out sharp moves, without overshoot.
+/** Averages the value over the last {@code duration} seconds: trails behind and smooths out sharp moves, without overshoot. */
 public class Lag<T> implements TimeEffect<T> {
     private final Lerp<T> lerper;
     private final float duration;

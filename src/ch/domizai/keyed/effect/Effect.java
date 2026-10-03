@@ -4,6 +4,7 @@ import ch.domizai.keyed.lerps.PVectorLerp;
 import ch.domizai.keyed.tween.Tween;
 import processing.core.PVector;
 
+/** A TimeEffect that only needs the current value and time. */
 public interface Effect<T> extends TimeEffect<T> {
     /** Modifies value at timeline time t. */
     T apply(T value, float t);

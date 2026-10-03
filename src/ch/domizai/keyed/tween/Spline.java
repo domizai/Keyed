@@ -6,7 +6,7 @@ import java.util.List;
 
 import static processing.core.PApplet.constrain;
 
-// Like Processing's curveVertex(): passes through every point except the first and last, which only shape the ends.
+/** Like Processing's curveVertex(): passes through every point except the first and last, which only shape the ends. */
 public class Spline implements Path {
     // Samples per segment; higher is more accurate.
     private static final int LUT_STEPS = 50;

@@ -2,7 +2,7 @@ package ch.domizai.keyed.lerps;
 
 import java.util.Arrays;
 
-// Morphs a into b with the fewest single-character edits (Levenshtein), applied left to right.
+/** Morphs a into b with the fewest single-character edits (Levenshtein), applied left to right. */
 public class StringLerp implements Lerp<String> {
     private static final byte KEEP = 0, SUB = 1, INS = 2, DEL = 3;
 

@@ -7,7 +7,7 @@ import static processing.core.PConstants.TWO_PI;
 
 import ch.domizai.keyed.types.Lerpable;
 
-// Immutable position, rotation and scale, so lerp() can safely share instances.
+/** Immutable position, rotation and scale, so lerp() can safely share instances. */
 public class Transform implements Lerpable<Transform> {
     public final float x, y, rotation, scale;
 

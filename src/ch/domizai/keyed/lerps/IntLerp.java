@@ -1,6 +1,7 @@
 package ch.domizai.keyed.lerps;
 import java.util.function.Function;
 
+/** Linear blend for integers. */
 public class IntLerp implements Lerp<Integer> {
     /** Rounds to the nearest integer. */
     public Integer lerp(Integer a, Integer b, float d) {
