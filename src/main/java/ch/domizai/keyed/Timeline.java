@@ -91,6 +91,11 @@ public class Timeline {
         return this;
     }
     
+    /** Whether the timeline is playing; see play(). */
+    public boolean isPlaying() {
+        return playing;
+    }
+
     /** Resumes or pauses; while paused step() does nothing. */
     public Timeline play(boolean p) {
         if (p && !playing) {
@@ -148,10 +153,20 @@ public class Timeline {
         return duration;
     }
 
+    /** Multiplier for step(); see setSpeed(). */
+    public float speed() {
+        return speed;
+    }
+
     /** Multiplier for step(); negative plays backwards. */
     public Timeline setSpeed(float speed) {
         this.speed = speed;
         return this;
+    }
+
+    /** Units per step() set with setFixedStep(); 0 when disabled. */
+    public float fixedStep() {
+        return fixedStep;
     }
 
     /** Units per step() regardless of real time, e.g. 1f / 30 seconds for frame-exact saveFrame() exports; 0 disables it. */
@@ -247,6 +262,11 @@ public class Timeline {
         this.loop = loop;
         t = fit(t);
         return this;
+    }
+
+    /** Whether the timeline wraps at its duration; see loop(). */
+    public boolean isLooping() {
+        return loop;
     }
 
     /** true wraps at the duration; false stops there. */
