@@ -1,5 +1,8 @@
 package ch.domizai.keyed.effect;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.domizai.keyed.lerps.Lerp;
 import ch.domizai.keyed.tween.Tween;
 
@@ -22,11 +25,25 @@ public class Lag<T> implements TimeEffect<T> {
         this.samples = samples;
     }
 
+    // Samples sit on a fixed grid of times and the output blends the averages at the grid points
+    // before and after t, so it moves smoothly even when the source jumps (e.g. hold keys).
     @Override
     public T apply(Tween<T> source, float t) {
-        T r = source.value(t);
+        double step = (double) duration / samples;
+        double g = Math.floor(t / step);
+        float f = (float) (t / step - g);
+        List<T> values = new ArrayList<>(samples + 1);
+        for (int k = 0; k <= samples; k++) {
+            values.add(source.value((float) ((g - k) * step)));
+        }
+        return lerper.lerp(average(values, 1), average(values, 0), f);
+    }
+
+    // Average of samples values, starting offset grid steps back.
+    private T average(List<T> values, int offset) {
+        T r = values.get(offset);
         for (int i = 1; i < samples; i++) {
-            r = lerper.lerp(r, source.value(t - duration * i / samples), 1f / (i + 1));
+            r = lerper.lerp(r, values.get(i + offset), 1f / (i + 1));
         }
         return r;
     }
