@@ -19,6 +19,7 @@ public class Main extends PApplet {
 	Keyed<String> text;
 	Keyed<ShapeMorph> shape;
 	Keyed<Transform> transform;
+	Keyed<Integer> squareColor;
 	List<PVector> obstacles = new ArrayList<>();
 	float obstaclesRadius = 80;
 	int obstaclesCount = 4;
@@ -131,6 +132,14 @@ public class Main extends PApplet {
 			.key(Key.at(pins.get(6)).setEasingIn(1/3f).hold(), new Transform(cx - 40, cy - 40, radians(-170), 0.5f))
 			.key(Key.at(pins.get(9)).setEasing(1/3f), new Transform(cx, cy, 0, 1));
 
+		// Jumps between colors at each key instead of blending.
+		squareColor = new Keyed<>(new StepLerp<Integer>(), color(0))
+			.setTimeline(tm)
+			.key(pins.get(0), color(0))
+			.key(pins.get(3), color(RED, 1, 1))
+			.key(pins.get(5), color(GREEN, 1, 0.8f))
+			.key(pins.get(7), color(0));
+
 		// pos.addEffect(Effect.wiggle(30f, 3f));
 		// pos.addEffect(new Orbit(20f, 0.3f));
 		// pos.addEffect(new PixelSnap(20));
@@ -221,7 +230,7 @@ public class Main extends PApplet {
 		translate(p.x, p.y);
 		rotate(rot.value());
 		pushStyle();
-		fill(0);
+		fill(squareColor.value());
 		rect(0, 0, delta, delta);
 		popStyle();
 		popMatrix();
