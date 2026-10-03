@@ -1,0 +1,67 @@
+import ch.domizai.keyed.*;
+
+float duration = 3;
+Pin arrive;
+Keyed<Float> x, size;
+Keyed<Integer> col;
+
+float barX0 = 40, barX1 = 360, barY = 340;
+
+void settings() {
+    size(400, 400);
+}
+
+void setup() {
+    Keyed.init(this).setDuration(duration);
+    textFont(createFont("Courier", 14));
+    textAlign(CENTER, CENTER);
+
+    // A Pin is a point in time that several keys can share.
+    arrive = Pin.at(1);
+
+    // Pass the pin instead of a time. Key.at(pin) adds easing as usual.
+    x = Keyed.of(0f)
+        .key(Key.at(0).setEasing(1 / 3f), 60f)
+        .key(Key.at(arrive).setEasing(1 / 3f), 340f)
+        .key(Key.at(duration).setEasing(1 / 3f), 60f);
+
+    size = Keyed.of(0f)
+        .key(0, 20f)
+        .key(arrive, 80f)
+        .key(duration, 20f);
+
+    col = Keyed.ofColor(color(0))
+        .key(0, color(0))
+        .key(arrive, color(230, 60, 60))
+        .key(duration, color(0));
+}
+
+void draw() {
+    background(255);
+
+    if (mousePressed) {
+        // Moving the pin moves its key in all three values at once.
+        float t = map(mouseX, barX0, barX1, 0, duration);
+        arrive.to(constrain(t, 0.2f, duration - 0.2f));
+    }
+
+    noStroke();
+    fill(col.value());
+    circle(x.value(), 170, size.value());
+
+    // The bar, with the pin and the playhead.
+    stroke(220);
+    line(barX0, barY, barX1, barY);
+    float px = map(arrive.t(), 0, duration, barX0, barX1);
+    noStroke();
+    fill(230, 60, 60);
+    triangle(px - 7, barY - 18, px + 7, barY - 18, px, barY - 6);
+    stroke(0);
+    float head = map(Keyed.defaultTimeline().t(), 0, duration, barX0, barX1);
+    line(head, barY - 12, head, barY + 12);
+
+    noStroke();
+    fill(150);
+    text("arrive = " + nf(arrive.t(), 1, 2) + " s", width / 2, barY - 40);
+    text("drag to move the pin", width / 2, barY + 30);
+}
