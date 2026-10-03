@@ -5,7 +5,7 @@ import java.util.List;
 import ch.domizai.keyed.*;
 import ch.domizai.keyed.effect.*;
 import ch.domizai.keyed.tween.*;
-import ch.domizai.keyed.types.*;
+import ch.domizai.keyed.types.ShapeMorph;
 
 public class Main3d extends PApplet {
 

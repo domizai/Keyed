@@ -1,7 +1,7 @@
 package ch.domizai.keyed.effect;
 
+import ch.domizai.keyed.lerps.Lerp;
 import ch.domizai.keyed.tween.Tween;
-import ch.domizai.keyed.types.Lerp;
 
 // Damped spring following the value: lags while it moves, overshoots and settles when it stops.
 // Needs a Lerp that extrapolates beyond [0, 1] (PVectorLerp, FloatLerp); ColorLerp clamps, so no overshoot.

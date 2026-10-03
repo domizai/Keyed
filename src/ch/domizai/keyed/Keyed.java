@@ -11,12 +11,13 @@ import java.util.function.Consumer;
 
 import ch.domizai.keyed.effect.Effect;
 import ch.domizai.keyed.effect.TimeEffect;
+import ch.domizai.keyed.lerps.FloatLerp;
+import ch.domizai.keyed.lerps.Lerp;
+import ch.domizai.keyed.lerps.PVectorLerp;
+import ch.domizai.keyed.lerps.StringLerp;
 import ch.domizai.keyed.tween.Tween;
 import ch.domizai.keyed.tween.TweenAt;
-import ch.domizai.keyed.types.FloatLerp;
-import ch.domizai.keyed.types.Lerp;
 import ch.domizai.keyed.types.Lerpable;
-import ch.domizai.keyed.types.PVectorLerp;
 
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.lerp;
@@ -123,6 +124,10 @@ public class Keyed<A> {
 
     public static Keyed<PVector> of(PVector defaultValue) {
         return new Keyed<>(new PVectorLerp(), defaultValue);
+    }
+
+    public static Keyed<String> of(String defaultValue) {
+        return new Keyed<>(new StringLerp(), defaultValue);
     }
 
     // The setter receives value() before every draw() once init() has been called.

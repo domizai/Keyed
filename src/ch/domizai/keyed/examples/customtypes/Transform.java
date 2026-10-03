@@ -1,9 +1,11 @@
-package ch.domizai.keyed.types;
+package ch.domizai.keyed.examples.customtypes;
 
 import processing.core.PApplet;
 
 import static processing.core.PConstants.PI;
 import static processing.core.PConstants.TWO_PI;
+
+import ch.domizai.keyed.types.Lerpable;
 
 // Immutable position, rotation and scale, so lerp() can safely share instances.
 public class Transform implements Lerpable<Transform> {

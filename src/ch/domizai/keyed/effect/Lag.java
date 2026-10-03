@@ -1,7 +1,7 @@
 package ch.domizai.keyed.effect;
 
+import ch.domizai.keyed.lerps.Lerp;
 import ch.domizai.keyed.tween.Tween;
-import ch.domizai.keyed.types.Lerp;
 
 // Averages the value over the last `duration` seconds: trails behind and smooths out sharp moves, without overshoot.
 public class Lag<T> implements TimeEffect<T> {

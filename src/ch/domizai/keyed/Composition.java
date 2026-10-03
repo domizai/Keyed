@@ -3,7 +3,7 @@ package ch.domizai.keyed;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.domizai.keyed.types.Lerp;
+import ch.domizai.keyed.lerps.Lerp;
 
 // Reusable animation with its own non-looping timeline; key times are local, 0 is when the instance starts.
 // Extend it, create Keyed values with keyed() or add(), and dispose() once isFinished().

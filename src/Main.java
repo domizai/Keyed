@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import ch.domizai.keyed.*;
 import ch.domizai.keyed.effect.*;
+import ch.domizai.keyed.examples.customtypes.Transform;
+import ch.domizai.keyed.lerps.*;
 import ch.domizai.keyed.tween.*;
-import ch.domizai.keyed.types.*;
+import ch.domizai.keyed.types.ShapeMorph;
+import ch.domizai.keyed.types.Typewriter;
 
 public class Main extends PApplet {
 
@@ -15,6 +18,7 @@ public class Main extends PApplet {
 	PVector vec = new PVector(10, 20);
 	Keyed<Float> vecK;
 	Keyed<Typewriter> caption;
+	Keyed<String> text;
 	Keyed<ShapeMorph> shape;
 	Keyed<Transform> transform;
 	List<PVector> obstacles = new ArrayList<>();
@@ -112,6 +116,15 @@ public class Main extends PApplet {
 			.key(pins.get(6), world)
 			.key(pins.get(8), world)
 			.key(pins.get(9), empty);
+
+		text = Keyed.of("")
+			.setTimeline(tm)
+			.key(pins.get(0), "")
+			.key(pins.get(2), "Hello Keyed")
+			.key(pins.get(4), "Hello Keyed")
+			.key(pins.get(6), "Hello World")
+			.key(pins.get(8), "Hello World")
+			.key(pins.get(9), "");
 
 		ShapeMorph circle = new ShapeMorph(polygon(40, 30, 30));
 		ShapeMorph star = new ShapeMorph(polygon(10, 35, 15));
@@ -234,6 +247,12 @@ public class Main extends PApplet {
 		textSize(16);
 		boolean cursorOn = frameCount / (int) (fps / 2) % 2 == 0;
 		text(caption.value().text + (cursorOn ? "_" : ""), 20, height - 20);
+		popStyle();
+
+		pushStyle();
+		fill(0);
+		textSize(16);
+		text(text.value() + (cursorOn ? "_" : ""), 20, height - 50);
 		popStyle();
 
 		pushStyle();

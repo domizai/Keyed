@@ -1,7 +1,7 @@
 package ch.domizai.keyed.effect;
 
+import ch.domizai.keyed.lerps.PVectorLerp;
 import ch.domizai.keyed.tween.Tween;
-import ch.domizai.keyed.types.PVectorLerp;
 import processing.core.PVector;
 
 public interface Effect<T> extends TimeEffect<T> {

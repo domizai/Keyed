@@ -1,4 +1,4 @@
-package ch.domizai.keyed.types;
+package ch.domizai.keyed.lerps;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
