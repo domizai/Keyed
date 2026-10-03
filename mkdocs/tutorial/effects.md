@@ -6,28 +6,6 @@ Effects change a value **on top of** its keys: shake it, circle it, snap it to a
 import ch.domizai.keyed.effect.*;
 ```
 
-## Echo
-
-![Echo](../assets/gifs/Echo.gif){ .sketch }
-
-Before the effects proper, a related tool: `echo(samples, delay)` returns the value now, `delay` seconds ago, `2 * delay` seconds ago, and so on. That's a ready-made motion trail:
-
-```java
-List<PVector> trail = pos.echo(12, 0.04f);
-
-for (int i = trail.size() - 1; i >= 0; i--) {
-    PVector p = trail.get(i);
-    fill(0, map(i, 0, trail.size(), 255, 20));
-    circle(p.x, p.y, 40 - i * 2);
-}
-```
-
-Drawing oldest first puts the current position on top. A negative delay samples the future instead.
-
-??? example "Full sketch: Echo"
-    ```java
-    --8<-- "07_Effects/Echo/Echo.pde"
-    ```
 
 ## Wiggle
 
@@ -61,7 +39,7 @@ Every `Wiggle` moves differently. Pass a seed as a third argument, and wiggles w
 ball = motion().addEffect(new Orbit(30, 2));
 ```
 
-2 circles per second in a 4 second loop is a whole number of circles, so the loop is seamless. The trail comes from `echo()`.
+2 circles per second in a 4 second loop is a whole number of circles, so the loop is seamless. The trail comes from `echo()`, see [Echo](#echo) at the end of this chapter.
 
 ??? example "Full sketch: OrbitEffect"
     ```java
@@ -185,6 +163,29 @@ Declaring the type tells Java which kind of effect the lambda is. Both can also 
 ??? example "Full sketch: CustomEffect"
     ```java
     --8<-- "07_Effects/CustomEffect/CustomEffect.pde"
+    ```
+
+## Echo (motion trails) { #echo }
+
+![Echo](../assets/gifs/Echo.gif){ .sketch }
+
+Not an effect per se, but a related tool: `echo(samples, delay)` returns the value now, `delay` seconds ago, `2 * delay` seconds ago, and so on. That's a ready-made motion trail:
+
+```java
+List<PVector> trail = pos.echo(12, 0.04f);
+
+for (int i = trail.size() - 1; i >= 0; i--) {
+    PVector p = trail.get(i);
+    fill(0, map(i, 0, trail.size(), 255, 20));
+    circle(p.x, p.y, 40 - i * 2);
+}
+```
+
+Drawing oldest first puts the current position on top. A negative delay samples the future instead.
+
+??? example "Full sketch: Echo"
+    ```java
+    --8<-- "07_Effects/Echo/Echo.pde"
     ```
 
 Next: [Types](types.md).
