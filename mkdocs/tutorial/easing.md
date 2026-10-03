@@ -22,7 +22,7 @@ easy = Keyed.of(0f)
 
 ??? example "Full sketch: Influence"
     ```java
-    --8<-- "Easing/Influence/Influence.pde"
+    --8<-- "02_Easing/Influence/Influence.pde"
     ```
 
 ## Presets
@@ -47,7 +47,7 @@ An `Easing` is just a function from linear progress to eased progress, both from
 
 ??? example "Full sketch: Presets"
     ```java
-    --8<-- "Easing/Presets/Presets.pde"
+    --8<-- "02_Easing/Presets/Presets.pde"
     ```
 
 ## Custom curves
@@ -81,7 +81,7 @@ There are also `Easing.powerIn(p)`, `powerOut(p)` and `powerInOut(p)` for any po
 
 ??? example "Full sketch: CustomBezier"
     ```java
-    --8<-- "Easing/CustomBezier/CustomBezier.pde"
+    --8<-- "02_Easing/CustomBezier/CustomBezier.pde"
     ```
 
 ## Hold
@@ -108,7 +108,7 @@ Without `hold()`, the lamp index would be blended and rounded, switching halfway
 
 ??? example "Full sketch: Hold"
     ```java
-    --8<-- "Easing/Hold/Hold.pde"
+    --8<-- "02_Easing/Hold/Hold.pde"
     ```
 
 Next: [Timelines](timeline.md).

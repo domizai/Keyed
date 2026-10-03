@@ -57,7 +57,7 @@ Anything drawn after `saveFrame()` doesn't end up in the frames, which is handy 
 
 ??? example "Full sketch: SaveFrames"
     ```java
-    --8<-- "Export/SaveFrames/SaveFrames.pde"
+    --8<-- "10_Export/SaveFrames/SaveFrames.pde"
     ```
 
 That's the end of the tutorial. For a compact summary of everything, see the [API Overview](../api.md).

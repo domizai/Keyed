@@ -40,7 +40,7 @@ Markers can be looked up with `marker(name)` or `markers()`, and removed with `r
 
 ??? example "Full sketch: Markers"
     ```java
-    --8<-- "Events/Markers/Markers.pde"
+    --8<-- "04_Events/Markers/Markers.pde"
     ```
 
 ## Loop and finish
@@ -63,7 +63,7 @@ After restarting with `once.to(0)`, `onFinish()` fires again at the end. To stop
 
 ??? example "Full sketch: LoopFinish"
     ```java
-    --8<-- "Events/LoopFinish/LoopFinish.pde"
+    --8<-- "04_Events/LoopFinish/LoopFinish.pde"
     ```
 
 Next: [Binding](binding.md).

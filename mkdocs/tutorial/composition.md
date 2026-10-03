@@ -65,11 +65,11 @@ The sketch also spawns a burst every 0.6 seconds with `onLoop()`, so there is so
 ??? example "Full sketch: ClickBurst"
     === "ClickBurst.pde"
         ```java
-        --8<-- "Composition/ClickBurst/ClickBurst.pde"
+        --8<-- "09_Composition/ClickBurst/ClickBurst.pde"
         ```
     === "Burst.pde"
         ```java
-        --8<-- "Composition/ClickBurst/Burst.pde"
+        --8<-- "09_Composition/ClickBurst/Burst.pde"
         ```
 
 Next: [Export](export.md).

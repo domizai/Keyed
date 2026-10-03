@@ -2,7 +2,7 @@
 
 **Keyframe animation for Processing.**
 
-Keyed is a keyframe animation library for Processing, inspired by After Effects. Set a value at a few points in time, and Keyed blends everything in between, with easing, paths, effects and events.
+Keyed brings keyframes to your sketches. Set a value at a few points in time, and Keyed blends everything in between, with easing, paths, effects and events.
 
 ![Morphing](assets/gifs/Morphing.gif){ .sketch }
 

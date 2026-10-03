@@ -38,7 +38,7 @@ A path is a `Tween<PVector>`: `value(d)` is the point at `d`, from 0 to 1. Paths
 
 ??? example "Full sketch: Bezier"
     ```java
-    --8<-- "Paths/Bezier/Bezier.pde"
+    --8<-- "06_Paths/Bezier/Bezier.pde"
     ```
 
 ## Splines
@@ -59,7 +59,7 @@ pos = Keyed.of(new PVector())
 
 ??? example "Full sketch: SplinePath"
     ```java
-    --8<-- "Paths/SplinePath/SplinePath.pde"
+    --8<-- "06_Paths/SplinePath/SplinePath.pde"
     ```
 
 ## Chaining and slicing
@@ -85,7 +85,7 @@ back = Keyed.of(new PVector())
 
 ??? example "Full sketch: CurveSlice"
     ```java
-    --8<-- "Paths/CurveSlice/CurveSlice.pde"
+    --8<-- "06_Paths/CurveSlice/CurveSlice.pde"
     ```
 
 ## Tweens
@@ -117,7 +117,7 @@ squash = Keyed.of(1f)
 
 ??? example "Full sketch: TweenMap"
     ```java
-    --8<-- "Paths/TweenMap/TweenMap.pde"
+    --8<-- "06_Paths/TweenMap/TweenMap.pde"
     ```
 
 ## Paths in 3D
@@ -133,7 +133,7 @@ shadowPath = track.map(p -> new PVector(p.x, ground, p.z));
 
 ??? example "Full sketch: Path3D"
     ```java
-    --8<-- "Paths/Path3D/Path3D.pde"
+    --8<-- "06_Paths/Path3D/Path3D.pde"
     ```
 
 Next: [Effects](effects.md).

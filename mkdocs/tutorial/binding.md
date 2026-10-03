@@ -36,7 +36,7 @@ No `value()` calls: `x` and `diameter` are plain floats, already up to date.
 
 ??? example "Full sketch: FieldBinding"
     ```java
-    --8<-- "Binding/FieldBinding/FieldBinding.pde"
+    --8<-- "05_Binding/FieldBinding/FieldBinding.pde"
     ```
 
 ## Setter binding
@@ -70,7 +70,7 @@ void showScore(int v) {
 
 ??? example "Full sketch: SetterBinding"
     ```java
-    --8<-- "Binding/SetterBinding/SetterBinding.pde"
+    --8<-- "05_Binding/SetterBinding/SetterBinding.pde"
     ```
 
 ## Binding objects
@@ -102,11 +102,11 @@ The balls are always up to date and simply draw themselves.
 ??? example "Full sketch: ObjectBinding"
     === "ObjectBinding.pde"
         ```java
-        --8<-- "Binding/ObjectBinding/ObjectBinding.pde"
+        --8<-- "05_Binding/ObjectBinding/ObjectBinding.pde"
         ```
     === "Ball.pde"
         ```java
-        --8<-- "Binding/ObjectBinding/Ball.pde"
+        --8<-- "05_Binding/ObjectBinding/Ball.pde"
         ```
 
 Next: [Paths](paths.md).

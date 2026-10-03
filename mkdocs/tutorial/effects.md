@@ -26,7 +26,7 @@ Drawing oldest first puts the current position on top. A negative delay samples 
 
 ??? example "Full sketch: Echo"
     ```java
-    --8<-- "Effects/Echo/Echo.pde"
+    --8<-- "07_Effects/Echo/Echo.pde"
     ```
 
 ## Wiggle
@@ -48,7 +48,7 @@ Every `Wiggle` moves differently. Pass a seed as a third argument, and wiggles w
 
 ??? example "Full sketch: WiggleEffect"
     ```java
-    --8<-- "Effects/WiggleEffect/WiggleEffect.pde"
+    --8<-- "07_Effects/WiggleEffect/WiggleEffect.pde"
     ```
 
 ## Orbit
@@ -65,7 +65,7 @@ ball = motion().addEffect(new Orbit(30, 2));
 
 ??? example "Full sketch: OrbitEffect"
     ```java
-    --8<-- "Effects/OrbitEffect/OrbitEffect.pde"
+    --8<-- "07_Effects/OrbitEffect/OrbitEffect.pde"
     ```
 
 ## Grid snap
@@ -81,7 +81,7 @@ snappedX = motion().addEffect(new GridSnap(grid, 0));
 
 ??? example "Full sketch: GridSnapEffect"
     ```java
-    --8<-- "Effects/GridSnapEffect/GridSnapEffect.pde"
+    --8<-- "07_Effects/GridSnapEffect/GridSnapEffect.pde"
     ```
 
 ## Spring
@@ -99,7 +99,7 @@ Spring needs a `Lerp` to work with any type. For `PVector`s there is a shortcut:
 
 ??? example "Full sketch: SpringEffect"
     ```java
-    --8<-- "Effects/SpringEffect/SpringEffect.pde"
+    --8<-- "07_Effects/SpringEffect/SpringEffect.pde"
     ```
 
 ## Lag
@@ -117,7 +117,7 @@ longLag = square().addEffect(Effect.lag(1, 30));
 
 ??? example "Full sketch: LagEffect"
     ```java
-    --8<-- "Effects/LagEffect/LagEffect.pde"
+    --8<-- "07_Effects/LagEffect/LagEffect.pde"
     ```
 
 ## Stop motion
@@ -135,7 +135,7 @@ Unlike `Key.hold()`, which holds single keys, `StopMotion` samples the whole ani
 
 ??? example "Full sketch: StopMotionEffect"
     ```java
-    --8<-- "Effects/StopMotionEffect/StopMotionEffect.pde"
+    --8<-- "07_Effects/StopMotionEffect/StopMotionEffect.pde"
     ```
 
 ## Stacking effects
@@ -158,7 +158,7 @@ snapFirst = motion(290)
 
 ??? example "Full sketch: Stacking"
     ```java
-    --8<-- "Effects/Stacking/Stacking.pde"
+    --8<-- "07_Effects/Stacking/Stacking.pde"
     ```
 
 ## Custom effects
@@ -184,7 +184,7 @@ Declaring the type tells Java which kind of effect the lambda is. Both can also 
 
 ??? example "Full sketch: CustomEffect"
     ```java
-    --8<-- "Effects/CustomEffect/CustomEffect.pde"
+    --8<-- "07_Effects/CustomEffect/CustomEffect.pde"
     ```
 
 Next: [Types](types.md).

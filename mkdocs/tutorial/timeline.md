@@ -38,7 +38,7 @@ In the GIF, the timeline is paused with ++space++, then played backwards at spee
 
 ??? example "Full sketch: Controls"
     ```java
-    --8<-- "Timeline/Controls/Controls.pde"
+    --8<-- "03_Timeline/Controls/Controls.pde"
     ```
 
 ## Scrubbing
@@ -67,7 +67,7 @@ void mouseReleased() {
 
 ??? example "Full sketch: Scrubbing"
     ```java
-    --8<-- "Timeline/Scrubbing/Scrubbing.pde"
+    --8<-- "03_Timeline/Scrubbing/Scrubbing.pde"
     ```
 
 ## Multiple timelines
@@ -89,7 +89,7 @@ Clicking calls `intro.to(0)`, which replays the intro without affecting the spin
 
 ??? example "Full sketch: Multiple"
     ```java
-    --8<-- "Timeline/Multiple/Multiple.pde"
+    --8<-- "03_Timeline/Multiple/Multiple.pde"
     ```
 
 ## Pins
@@ -116,7 +116,7 @@ Now `arrive.to(t)` moves the key in all values at once. Drag the pin in the sket
 
 ??? example "Full sketch: Pins"
     ```java
-    --8<-- "Timeline/Pins/Pins.pde"
+    --8<-- "03_Timeline/Pins/Pins.pde"
     ```
 
 ## Frames instead of seconds
@@ -143,7 +143,7 @@ In the GIF, `draw()` is slowed down for a moment: the top ball jumps ahead while
 
 ??? example "Full sketch: FrameUnit"
     ```java
-    --8<-- "Timeline/FrameUnit/FrameUnit.pde"
+    --8<-- "03_Timeline/FrameUnit/FrameUnit.pde"
     ```
 
 Next: [Events](events.md).

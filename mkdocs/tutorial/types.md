@@ -38,7 +38,7 @@ hsb = new Keyed<>(hsbLerp, 0)
 
 ??? example "Full sketch: Lerps"
     ```java
-    --8<-- "Types/Lerps/Lerps.pde"
+    --8<-- "08_Types/Lerps/Lerps.pde"
     ```
 
 ## Your own types
@@ -78,11 +78,11 @@ transform = Keyed.of(new Transform(200, 200))
 ??? example "Full sketch: CustomType"
     === "CustomType.pde"
         ```java
-        --8<-- "Types/CustomType/CustomType.pde"
+        --8<-- "08_Types/CustomType/CustomType.pde"
         ```
     === "Transform.pde"
         ```java
-        --8<-- "Types/CustomType/Transform.pde"
+        --8<-- "08_Types/CustomType/Transform.pde"
         ```
 
 ## Shape morphing
@@ -113,7 +113,7 @@ endShape(CLOSE);
 
 ??? example "Full sketch: Morphing"
     ```java
-    --8<-- "Types/Morphing/Morphing.pde"
+    --8<-- "08_Types/Morphing/Morphing.pde"
     ```
 
 ## Shape morphing in 3D
@@ -124,7 +124,7 @@ endShape(CLOSE);
 
 ??? example "Full sketch: Morphing3D"
     ```java
-    --8<-- "Types/Morphing3D/Morphing3D.pde"
+    --8<-- "08_Types/Morphing3D/Morphing3D.pde"
     ```
 
 ## 3D rotation
@@ -148,7 +148,7 @@ quat.value().apply(this);
 
 ??? example "Full sketch: Rotation3D"
     ```java
-    --8<-- "Types/Rotation3D/Rotation3D.pde"
+    --8<-- "08_Types/Rotation3D/Rotation3D.pde"
     ```
 
 Next: [Composition](composition.md).

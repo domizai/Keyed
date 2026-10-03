@@ -35,7 +35,7 @@ That's all there is to it. The rest of this tutorial adds to this pattern.
 
 ??? example "Full sketch: FirstKey"
     ```java
-    --8<-- "Basics/FirstKey/FirstKey.pde"
+    --8<-- "01_Basics/FirstKey/FirstKey.pde"
     ```
 
 ## Vectors
@@ -55,7 +55,7 @@ Keys store a **copy** of the vector you pass, so changing `corners` later won't 
 
 ??? example "Full sketch: Vectors"
     ```java
-    --8<-- "Basics/Vectors/Vectors.pde"
+    --8<-- "01_Basics/Vectors/Vectors.pde"
     ```
 
 ## Value types
@@ -91,7 +91,7 @@ Want to blend something else? See [Types](types.md).
 
 ??? example "Full sketch: ValueTypes"
     ```java
-    --8<-- "Basics/ValueTypes/ValueTypes.pde"
+    --8<-- "01_Basics/ValueTypes/ValueTypes.pde"
     ```
 
 ## Any time
@@ -121,7 +121,7 @@ The current time of the default timeline is `Keyed.defaultTimeline().t()`. Hover
 
 ??? example "Full sketch: AnyTime"
     ```java
-    --8<-- "Basics/AnyTime/AnyTime.pde"
+    --8<-- "01_Basics/AnyTime/AnyTime.pde"
     ```
 
 Next: [Easing](easing.md).
