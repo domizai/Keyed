@@ -125,7 +125,7 @@ void setup() {
   // Built-in effects; try one at a time.
   // pos.addEffect(Effect.wiggle(30f, 3f));
   // pos.addEffect(Effect.orbit(20f, 0.3f));
-  // pos.addEffect(Effect.pixelSnap(20));
+  // pos.addEffect(Effect.gridSnap(20));
   // pos.addEffect(new StopMotion<>(4f / fps));
   // pos.addEffect(Effect.spring(1.5f, 0.05f));
   // pos.addEffect(Effect.lag(0.5f, 10));

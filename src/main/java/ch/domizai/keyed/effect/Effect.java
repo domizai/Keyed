@@ -31,9 +31,14 @@ public interface Effect<T> extends TimeEffect<T> {
         return new Orbit(radius, frequency, axis);
     }
 
-    /** Snaps x and y to a grid of gridSize. */
-    public static Effect<PVector> pixelSnap(float gridSize) {
-        return new PixelSnap(gridSize);
+    /** Snaps x and y to multiples of size. */
+    public static Effect<PVector> gridSnap(float size) {
+        return new GridSnap(size);
+    }
+
+    /** Snaps x and y to multiples of sizeX and sizeY; 0 leaves that axis untouched. */
+    public static Effect<PVector> gridSnap(float sizeX, float sizeY) {
+        return new GridSnap(sizeX, sizeY);
     }
 
     /** Damped spring; frequency in oscillations per second, damping in (0, 1). */
