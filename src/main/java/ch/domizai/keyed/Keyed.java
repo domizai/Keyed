@@ -308,16 +308,28 @@ public class Keyed<A> {
         return tm != null ? tm : defaultTimeline;
     }
 
-    /** Wraps the current output; effects apply in the order added. */
+    /** Wraps the current output; effects apply in the order added. On a looping timeline, times they sample outside the duration wrap around. */
     public Keyed<A> addEffect(TimeEffect<A> effect) {
         Tween<A> source = output;
-        output = s -> effect.apply(source, s);
+        Tween<A> wrapped = s -> source.value(wrap(s));
+        output = s -> effect.apply(wrapped, s);
         return this;
     }
 
     /** More specific than the TimeEffect overload, so lambdas like (v, t) -&gt; ... get a value, not a source. */
     public Keyed<A> addEffect(Effect<A> effect) {
         return addEffect((TimeEffect<A>) effect);
+    }
+
+    // On a looping timeline, times an effect samples outside [0, duration] wrap around like playback,
+    // so effects looking into the past (Spring, Lag) continue seamlessly across the loop.
+    private float wrap(float s) {
+        Timeline tm = timeline();
+        float d = tm.duration();
+        if (!tm.isLooping() || d <= 0 || (s >= 0 && s <= d)) {
+            return s;
+        }
+        return (s % d + d) % d;
     }
 
     private A raw(float t) {
