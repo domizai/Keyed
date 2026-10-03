@@ -21,6 +21,10 @@ public interface Effect<T> extends TimeEffect<T> {
         return new Orbit(radius, frequency);
     }
 
+    public static Effect<PVector> orbit(float radius, float frequency, PVector axis) {
+        return new Orbit(radius, frequency, axis);
+    }
+
     public static Effect<PVector> pixelSnap(float gridSize) {
         return new PixelSnap(gridSize);
     }

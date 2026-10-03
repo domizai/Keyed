@@ -289,16 +289,6 @@ public class Main extends PApplet {
 			tm.to(map(mouseX, 0, width, 0, tm.duration()), true);
 	}
 
-    static public void main(String[] passedArgs) {
-		String[] appletArgs = new String[] { "Main" };
-		if (passedArgs != null) {
-			PApplet.main(concat(appletArgs, passedArgs));
-		} 
-		else {
-			PApplet.main(appletArgs);
-		}
-	}
-
 	// Alternates between the outer and inner radius; starts at the top so shapes line up when morphing.
 	private List<PVector> polygon(int count, float outer, float inner) {
 		List<PVector> pts = new ArrayList<>();
@@ -398,6 +388,16 @@ public class Main extends PApplet {
 				c.setColor(color(RED, 1, 1, Easing.quadOut(t)));
 				c.draw(pos.get(i).value().add(origin));
 			}
+		}
+	}
+
+	static public void main(String[] passedArgs) {
+		String[] appletArgs = new String[] { "Main" };
+		if (passedArgs != null) {
+			PApplet.main(concat(appletArgs, passedArgs));
+		} 
+		else {
+			PApplet.main(appletArgs);
 		}
 	}
 }

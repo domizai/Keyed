@@ -71,7 +71,8 @@ public class QuadraticBezier implements Path {
         float b2 = t * t;
         return new PVector(
             b0 * p0.x + b1 * p1.x + b2 * p2.x,
-            b0 * p0.y + b1 * p1.y + b2 * p2.y);
+            b0 * p0.y + b1 * p1.y + b2 * p2.y,
+            b0 * p0.z + b1 * p1.z + b2 * p2.z);
     }
 
     // Cumulative distances between LUT_STEPS + 1 evenly spaced samples of t.

@@ -84,7 +84,8 @@ public class Spline implements Path {
         float h11 = t3 - t2;
         return new PVector(
             h00 * p1.x + h10 * k * (p2.x - p0.x) + h01 * p2.x + h11 * k * (p3.x - p1.x),
-            h00 * p1.y + h10 * k * (p2.y - p0.y) + h01 * p2.y + h11 * k * (p3.y - p1.y));
+            h00 * p1.y + h10 * k * (p2.y - p0.y) + h01 * p2.y + h11 * k * (p3.y - p1.y),
+            h00 * p1.z + h10 * k * (p2.z - p0.z) + h01 * p2.z + h11 * k * (p3.z - p1.z));
     }
 
     // Cumulative distances between evenly spaced samples of u.

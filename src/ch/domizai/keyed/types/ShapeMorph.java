@@ -1,6 +1,7 @@
 package ch.domizai.keyed.types;
 
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import processing.core.PVector;
 
 import java.util.ArrayList;
@@ -32,9 +33,17 @@ public class ShapeMorph implements Lerpable<ShapeMorph> {
         return new ShapeMorph(result);
     }
 
-    // Wrap in beginShape()/endShape(CLOSE).
+    // Wrap in beginShape()/endShape(CLOSE). Uses z with a 3D renderer (P3D).
     public void vertices(PApplet g) {
-        for (PVector p : points) g.vertex(p.x, p.y);
+        vertices(g.g);
+    }
+
+    public void vertices(PGraphics g) {
+        if (g.is3D()) {
+            for (PVector p : points) g.vertex(p.x, p.y, p.z);
+        } else {
+            for (PVector p : points) g.vertex(p.x, p.y);
+        }
     }
 
     private static List<PVector> subdivide(List<PVector> shape, int n) {
