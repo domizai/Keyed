@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 
 import ch.domizai.keyed.effect.Effect;
 import ch.domizai.keyed.effect.TimeEffect;
+import ch.domizai.keyed.lerps.BooleanLerp;
 import ch.domizai.keyed.lerps.FloatLerp;
 import ch.domizai.keyed.lerps.Lerp;
 import ch.domizai.keyed.lerps.PVectorLerp;
@@ -128,6 +129,10 @@ public class Keyed<A> {
 
     public static Keyed<String> of(String defaultValue) {
         return new Keyed<>(new StringLerp(), defaultValue);
+    }
+
+    public static Keyed<Boolean> of(boolean defaultValue) {
+        return new Keyed<>(new BooleanLerp(), defaultValue);
     }
 
     // The setter receives value() before every draw() once init() has been called.
