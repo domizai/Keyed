@@ -5,6 +5,7 @@ import java.util.List;
 import ch.domizai.keyed.*;
 import ch.domizai.keyed.effect.*;
 import ch.domizai.keyed.tween.*;
+import ch.domizai.keyed.types.Quaternion;
 import ch.domizai.keyed.types.ShapeMorph;
 
 public class Main3d extends PApplet {
@@ -15,6 +16,7 @@ public class Main3d extends PApplet {
 	CubicBezier path;
 	Keyed<PVector> pos;
 	Keyed<ShapeMorph> shape;
+	Keyed<Quaternion> orientation;
 
 	public void settings() {
 		size(400, 400, P3D);
@@ -63,6 +65,19 @@ public class Main3d extends PApplet {
 			.key(Key.at(pins.get(1)).setEasing(1/3f), ring)
 			.key(Key.at(pins.get(5)).setEasing(1/3f), crown)
 			.key(Key.at(pins.get(9)).setEasing(1/3f), ring);
+
+		// Rotations around different axes; slerp blends them along the shortest arc.
+		Quaternion flat = Quaternion.identity();
+		Quaternion tipped = Quaternion.fromAxisAngle(new PVector(1, 0, 0), HALF_PI);
+		Quaternion flipped = Quaternion.fromAxisAngle(new PVector(0, 1, 1), PI);
+		Quaternion twisted = Quaternion.fromAxisAngle(new PVector(1, 1, 1), TWO_PI / 3);
+		orientation = Keyed.of(flat)
+			.setTimeline(tm)
+			.key(Key.at(pins.get(0)).setEasing(1/3f), flat)
+			.key(Key.at(pins.get(3)).setEasing(1/3f), tipped)
+			.key(Key.at(pins.get(5)).setEasing(1/3f), flipped)
+			.key(Key.at(pins.get(7)).setEasing(1/3f), twisted)
+			.key(Key.at(pins.get(9)).setEasing(1/3f), flat);
 	}
 
 	public void draw() {
@@ -86,8 +101,10 @@ public class Main3d extends PApplet {
 		PVector p = pos.value();
 		pushMatrix();
 		translate(p.x, p.y, p.z);
+		Quaternion q = orientation.value();
+		rotate(q.angle(), q.axis().x, q.axis().y, q.axis().z);
 		fill(2/3f, 1, 1);
-		box(20);
+		box(40, 20, 8);
 		popMatrix();
 
 		pushStyle();
