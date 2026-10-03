@@ -35,11 +35,12 @@ public class Timeline {
     // Bumped on every move; a change during a callback means it moved the timeline, so the rest is skipped.
     private int moveId = 0;
 
-    // Follows real time if Keyed.init() was called; otherwise only moves via step() or to().
+    /** Follows real time if Keyed.init() was called; otherwise only moves via step() or to(). */
     public Timeline() {
         this(Keyed.sketch());
     }
 
+    /** Advances before every draw() of sketch; null only moves via step() or to(). */
     public Timeline(PApplet sketch) {
         this.sketch = sketch;
         if (sketch != null) {
@@ -47,7 +48,7 @@ public class Timeline {
         }
     }
 
-    // Called by Processing before each draw(); public only so it can be registered. The first frame shows t = 0.
+    /** Called by Processing before each draw(); public only so it can be registered. The first frame shows t = 0. */
     public void pre() {
         if (!autoplay) {
             // Re-enabling autoplay starts a fresh clock instead of jumping by the paused gap.
@@ -62,7 +63,7 @@ public class Timeline {
         }
     }
 
-    // Advances by the fixed step if set; otherwise by real time when synced, or by one frame when not; times speed.
+    /** Advances by the fixed step if set; otherwise by real time when synced, or by one frame when not; times speed. */
     public Timeline step() {
         long now = System.nanoTime();
         float fps = Keyed.frameRate();
@@ -79,7 +80,7 @@ public class Timeline {
         return step(dt * speed);
     }
 
-    // Fires markers, onLoop and onFinish callbacks passed on the way.
+    /** Advances by amount while playing; fires markers, onLoop and onFinish callbacks passed on the way. */
     public Timeline step(float amount) {
         if (!playing)
             return this;
@@ -87,6 +88,7 @@ public class Timeline {
         return this;
     }
     
+    /** Resumes or pauses; while paused step() does nothing. */
     public Timeline play(boolean p) {
         if (p && !playing) {
             lastNanos = -1;
@@ -95,55 +97,61 @@ public class Timeline {
         return this;
     }
 
+    /** Current time. */
     public float t() {
         return t;
     }
 
-    // Offset from now (negative = past), wrapped or clamped like the timeline itself.
+    /** Time at offset from now (negative = past), wrapped or clamped like the timeline itself. */
     public float t(float offset) {
         return fit(t + offset);
     }
 
+    /** Unit of t, duration and step amounts. */
     public Unit unit() {
         return unit;
     }
 
-    // Only changes how step() advances; t, keys and duration are not converted.
+    /** Only changes how step() advances; t, keys and duration are not converted. */
     public Timeline setUnit(Unit unit) {
         this.unit = unit;
         return this;
     }
 
+    /** Whether step() follows the real clock; see sync(). */
     public boolean isSynced() {
         return synced;
     }
 
-    // true follows the real clock; false advances exactly one frame (Keyed.frameRate()) per step(), for deterministic exports.
+    /** true follows the real clock; false advances exactly one frame (Keyed.frameRate()) per step(), for deterministic exports. */
     public Timeline sync(boolean sync) {
         this.synced = sync;
         return this;
     }
 
+    /** Whether step() runs automatically before each draw(); see autoplay(). */
     public boolean isAutoplay() {
         return autoplay;
     }
 
-    // false stops the automatic step() before each draw(), so step() can be called manually; sync still applies.
+    /** false stops the automatic step() before each draw(), so step() can be called manually; sync still applies. */
     public Timeline autoplay(boolean autoplay) {
         this.autoplay = autoplay;
         return this;
     }
 
+    /** Duration; 0 means unbounded. */
     public float duration() {
         return duration;
     }
 
+    /** Multiplier for step(); negative plays backwards. */
     public Timeline setSpeed(float speed) {
         this.speed = speed;
         return this;
     }
 
-    // Units per step() regardless of real time, e.g. 1f / 30 seconds for frame-exact saveFrame() exports; 0 uses the unit's default.
+    /** Units per step() regardless of real time, e.g. 1f / 30 seconds for frame-exact saveFrame() exports; 0 disables it. */
     public Timeline setFixedStep(float amount) {
         if (amount < 0) {
             throw new IllegalArgumentException("fixed step must be >= 0, was " + amount);
@@ -152,41 +160,46 @@ public class Timeline {
         return this;
     }
 
-    // Jumps without firing markers or callbacks.
+    /** Jumps without firing markers or callbacks. */
     public Timeline to(float t) {
         return to(t, false);
     }
 
-    // fire = true treats the jump like playback, e.g. when scrubbing with the mouse.
+    /** Jumps to t; fire = true treats the jump like playback, e.g. when scrubbing with the mouse. */
     public Timeline to(float t, boolean fire) {
         move(t, fire);
         return this;
     }
 
+    /** Calls callback whenever playback crosses pin. */
     public Marker addMarker(Pin pin, Consumer<Marker> callback) {
         return addMarker(null, pin, callback);
     }
 
+    /** Calls callback whenever playback crosses t. */
     public Marker addMarker(float t, Consumer<Marker> callback) {
         return addMarker(null, Pin.at(t), callback);
     }
 
+    /** Named marker at t; name may be null. */
     public Marker addMarker(String name, float t, Consumer<Marker> callback) {
         return addMarker(name, Pin.at(t), callback);
     }
 
+    /** Named marker on pin; name may be null. */
     public Marker addMarker(String name, Pin pin, Consumer<Marker> callback) {
         Marker m = new Marker(this, name, pin, callback);
         markers.add(m);
         return m;
     }
 
+    /** Removes a marker; safe to call from a marker callback. */
     public Timeline removeMarker(Marker marker) {
         markers.remove(marker);
         return this;
     }
 
-    // First marker with this name, or null.
+    /** First marker with this name, or null. */
     public Marker marker(String name) {
         for (Marker m : markers) {
             if (name.equals(m.name())) return m;
@@ -194,35 +207,38 @@ public class Timeline {
         return null;
     }
 
+    /** Markers sorted by time. */
     public List<Marker> markers() {
         List<Marker> list = new ArrayList<>(markers);
         list.sort(BY_TIME);
         return list;
     }
 
-    // Called each time a looping timeline wraps around, in either direction.
+    /** Called each time a looping timeline wraps around, in either direction. */
     public Timeline onLoop(Consumer<Timeline> callback) {
         loopListeners.add(callback);
         return this;
     }
 
-    // Called once when a non-looping timeline reaches its duration.
+    /** Called once when a non-looping timeline reaches its duration. */
     public Timeline onFinish(Consumer<Timeline> callback) {
         finishListeners.add(callback);
         return this;
     }
 
-    // Removes a callback added with onLoop() or onFinish().
+    /** Removes a callback added with onLoop() or onFinish(). */
     public Timeline removeListener(Consumer<Timeline> callback) {
         loopListeners.remove(callback);
         finishListeners.remove(callback);
         return this;
     }
 
+    /** Sets the duration and enables looping. */
     public Timeline setDuration(float duration) {
         return setDuration(duration, true);
     }
 
+    /** Sets the duration (0 = unbounded) and looping; t is wrapped or clamped to fit. */
     public Timeline setDuration(float duration, boolean loop) {
         this.duration = duration;
         this.loop = loop;
@@ -230,17 +246,18 @@ public class Timeline {
         return this;
     }
 
+    /** true wraps at the duration; false stops there. */
     public Timeline loop(boolean l) {
         loop = l;
         return this;
     }
 
-    // True once a non-looping timeline has reached its duration.
+    /** True once a non-looping timeline has reached its duration. */
     public boolean isFinished() {
         return !loop && duration > 0 && t >= duration;
     }
 
-    // Stops advancing with the sketch; call when the timeline is no longer needed so it can be garbage collected.
+    /** Stops advancing with the sketch; call when the timeline is no longer needed so it can be garbage collected. */
     public void dispose() {
         if (sketch != null) {
             sketch.unregisterMethod("pre", this);

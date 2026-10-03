@@ -49,7 +49,7 @@ public class Keyed<A> {
     private Tween<A> output = this::raw;
     private Consumer<A> target;
 
-    // Call in setup() so timelines follow real time without passing the sketch around.
+    /** Call in setup() so timelines follow real time without passing the sketch around. */
     public static Timeline init(PApplet sketch) {
         if (Keyed.sketch != sketch) {
             sketch.registerMethod("pre", binder);
@@ -59,46 +59,50 @@ public class Keyed<A> {
         return defaultTimeline;
     }
 
-    // null before init().
+    /** Sketch passed to init(); null before. */
     public static PApplet sketch() {
         return sketch;
     }
 
+    /** Unit for the default timeline and new timelines. */
     public static Unit unit() {
         return unit;
     }
 
-    // Sets the unit of the default timeline and of timelines created afterwards.
+    /** Sets the unit of the default timeline and of timelines created afterwards. */
     public static void setUnit(Unit unit) {
         Keyed.unit = unit;
         defaultTimeline.setUnit(unit);
     }
 
+    /** Sync setting for new timelines. */
     public static boolean isSynced() {
         return synced;
     }
 
-    // Sets sync for the default timeline and timelines created afterwards; see Timeline.sync().
+    /** Sets sync for the default timeline and timelines created afterwards; see Timeline.sync(). */
     public static void sync(boolean sync) {
         Keyed.synced = sync;
         defaultTimeline.sync(sync);
     }
 
+    /** Autoplay setting for new timelines. */
     public static boolean isAutoplay() {
         return autoplay;
     }
 
-    // Sets autoplay for the default timeline and timelines created afterwards; see Timeline.autoplay().
+    /** Sets autoplay for the default timeline and timelines created afterwards; see Timeline.autoplay(). */
     public static void autoplay(boolean autoplay) {
         Keyed.autoplay = autoplay;
         defaultTimeline.autoplay(autoplay);
     }
 
+    /** Frame rate used to convert between frames and seconds. */
     public static float frameRate() {
         return frameRate;
     }
 
-    // Processing doesn't expose its target frame rate, so pass the same value as frameRate().
+    /** Must be &gt; 0; pass the same value as Processing's frameRate(), which isn't exposed. */
     public static void setFrameRate(float fps) {
         if (fps <= 0) {
             throw new IllegalArgumentException("frame rate must be > 0, was " + fps);
@@ -106,52 +110,58 @@ public class Keyed<A> {
         Keyed.frameRate = fps;
     }
 
-    // Used by Keyed values without their own timeline; before init() it only moves via step() or to().
+    /** Used by Keyed values without their own timeline; before init() it only moves via step() or to(). */
     public static Timeline defaultTimeline() {
         return defaultTimeline;
     }
 
+    /** Blends keys with lerper; defaultValue is used while there are no keys. */
     public Keyed(Lerp<A> lerper, A defaultValue) {
         this.lerper = lerper;
         this.defaultValue = copy(defaultValue);
     }
 
-    // For types that know how to blend themselves, e.g. Keyed.of(new Transform(0, 0)).
+    /** For types that know how to blend themselves, e.g. Keyed.of(new Transform(0, 0)). */
     public static <A extends Lerpable<A>> Keyed<A> of(A defaultValue) {
         return new Keyed<>(A::lerp, defaultValue);
     }
 
+    /** Animated float. */
     public static Keyed<Float> of(float defaultValue) {
         return new Keyed<>(new FloatLerp(), defaultValue);
     }
 
+    /** Animated PVector. */
     public static Keyed<PVector> of(PVector defaultValue) {
         return new Keyed<>(new PVectorLerp(), defaultValue);
     }
 
+    /** Animated String. */
     public static Keyed<String> of(String defaultValue) {
         return new Keyed<>(new StringLerp(), defaultValue);
     }
 
+    /** Animated boolean. */
     public static Keyed<Boolean> of(boolean defaultValue) {
         return new Keyed<>(new BooleanLerp(), defaultValue);
     }
 
-    // Named methods because of(int) would clash with of(float) and colors are ints too.
+    /** Animated int; named because of(int) would clash with of(float). */
     public static Keyed<Integer> ofInt(int defaultValue) {
         return new Keyed<>(new IntLerp(), defaultValue);
     }
 
+    /** Animated color; colors are ints too, hence the name. */
     public static Keyed<Integer> ofColor(int defaultValue) {
         return new Keyed<>(new ColorLerp(), defaultValue);
     }
 
-    // The setter receives value() before every draw() once init() has been called.
+    /** The setter receives value() before every draw() once init() has been called. */
     public static <A> Keyed<A> bind(Lerp<A> lerper, A defaultValue, Consumer<A> setter) {
         return new Keyed<>(lerper, defaultValue).bind(setter);
     }
 
-    // Binds a float or Float field by name; its current value becomes the default.
+    /** Binds a float or Float field by name; its current value becomes the default. */
     public static Keyed<Float> bind(Object target, String fieldName) {
         Field field = findField(target.getClass(), fieldName);
         Class<?> type = field.getType();
@@ -176,32 +186,37 @@ public class Keyed<A> {
         }
     }
 
+    /** The setter receives value() before every draw() once init() has been called; replaces any previous one. */
     public Keyed<A> bind(Consumer<A> setter) {
         target = setter;
         binder.add(this);
         return this;
     }
 
+    /** Stops updating the bound setter. */
     public Keyed<A> unbind() {
         target = null;
         binder.remove(this);
         return this;
     }
 
-    // Writes value() to the bound target now, e.g. in setup() before the first pre().
+    /** Writes value() to the bound target now, e.g. in setup() before the first pre(). */
     public Keyed<A> apply() {
         if (target != null) target.accept(value());
         return this;
     }
 
+    /** Adds key k whose value follows tween. */
     public Keyed<A> key(Key k, Tween<A> tween) {
         return key(k, new TweenAt<>(tween));
     }
 
+    /** Adds a key on pin p whose value follows tween. */
     public Keyed<A> key(Pin p, Tween<A> tween) {
         return key(Key.at(p), tween);
     }
 
+    /** Adds key k, or replaces its tween if k was already added. */
     public Keyed<A> key(Key k, TweenAt<A> tweenAt) {
         for (KeyEntry<A> e : keys) {
             if (e.key == k) {
@@ -213,60 +228,72 @@ public class Keyed<A> {
         return this;
     }
 
+    /** Adds a key on pin p. */
     public Keyed<A> key(Pin p, TweenAt<A> tweenAt) {
         return key(Key.at(p), tweenAt);
     }
 
+    /** Adds key k holding a copy of value. */
     public Keyed<A> key(Key k, A value) {
         A v = copy(value);
         return key(k, new TweenAt<>(d -> v));
     }
 
+    /** Adds a key on pin p holding a copy of value. */
     public Keyed<A> key(Pin p, A value) {
         return key(Key.at(p), value);
     }
 
+    /** Adds a key at time t whose value follows tween. */
     public Keyed<A> key(float t, Tween<A> tween) {
         return key(Key.at(t), tween);
     }
 
+    /** Adds a key at time t. */
     public Keyed<A> key(float t, TweenAt<A> tweenAt) {
         return key(Key.at(t), tweenAt);
     }
 
+    /** Adds a key at time t holding a copy of value. */
     public Keyed<A> key(float t, A value) {
         return key(Key.at(t), value);
     }
 
+    /** Removes key k. */
     public Keyed<A> removeKey(Key k) {
         keys.removeIf(e -> e.key == k);
         return this;
     }
 
-    // Removes every key placed on this pin.
+    /** Removes every key placed on this pin. */
     public Keyed<A> removeKey(Pin p) {
         keys.removeIf(e -> e.key.pin() == p);
         return this;
     }
 
+    /** Removes all keys. */
     public Keyed<A> clearKeys() {
         keys.clear();
         return this;
     }
 
+    /** Follows tm instead of the default timeline; null reverts to the default. */
     public Keyed<A> setTimeline(Timeline tm) {
         this.tm = tm;
         return this;
     }
 
+    /** Value at the timeline's current time, with effects applied. */
     public A value() {
         return value(timeline().t());
     }
 
+    /** Value at time t, with effects applied. */
     public A value(float t) {
         return output.value(t);
     }
 
+    /** Keys sorted by time. */
     public List<Key> keys() {
         sortKeys();
         List<Key> list = new ArrayList<>(keys.size());
@@ -276,17 +303,19 @@ public class Keyed<A> {
         return list;
     }
 
+    /** Timeline set with setTimeline(), otherwise the default timeline. */
     public Timeline timeline() {
         return tm != null ? tm : defaultTimeline;
     }
 
+    /** Wraps the current output; effects apply in the order added. */
     public Keyed<A> addEffect(TimeEffect<A> effect) {
         Tween<A> source = output;
         output = s -> effect.apply(source, s);
         return this;
     }
 
-    // More specific than the TimeEffect overload, so lambdas like (v, t) -> ... get a value, not a source.
+    /** More specific than the TimeEffect overload, so lambdas like (v, t) -&gt; ... get a value, not a source. */
     public Keyed<A> addEffect(Effect<A> effect) {
         return addEffect((TimeEffect<A>) effect);
     }
@@ -362,7 +391,7 @@ public class Keyed<A> {
         throw new IllegalArgumentException("No field '" + name + "' on " + type.getName());
     }
 
-    // Negative delay sample past or future.
+    /** Values at now, now - delay, now - 2 * delay, ...; a negative delay samples the future. */
     public List<A> echo(int samples, float delay) {
         Timeline timeline = timeline();
         List<A> values = new ArrayList<>();

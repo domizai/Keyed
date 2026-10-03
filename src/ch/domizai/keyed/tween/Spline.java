@@ -17,18 +17,22 @@ public class Spline implements Path {
     // Rebuilt lazily after setters; mutating the PVectors directly won't invalidate it.
     private float[] lut;
 
+    /** Needs at least 4 points. */
     public Spline(PVector... points) {
         setPoints(points);
     }
 
+    /** Needs at least 4 points. */
     public Spline(List<PVector> points) {
         setPoints(points);
     }
 
+    /** Replaces the points; needs at least 4. */
     public Spline setPoints(List<PVector> points) {
         return setPoints(points.toArray(new PVector[0]));
     }
 
+    /** Replaces the points; needs at least 4. */
     public Spline setPoints(PVector... points) {
         if (points.length < 4) {
             throw new IllegalArgumentException("a spline needs at least 4 points, got " + points.length);
@@ -38,7 +42,7 @@ public class Spline implements Path {
         return this;
     }
 
-    // Same as Processing's curveTightness(): 0 is Catmull-Rom, 1 gives straight lines.
+    /** Same as Processing's curveTightness(): 0 is Catmull-Rom, 1 gives straight lines. */
     public Spline setTightness(float tightness) {
         this.tightness = tightness;
         lut = null;

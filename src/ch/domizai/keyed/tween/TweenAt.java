@@ -4,10 +4,12 @@ public final class TweenAt<T> {
     private final Tween<T> tween;
     private final Float position;
 
+    /** No fixed position: sampled at 0 leaving the key and at 1 arriving at it. */
     public TweenAt(Tween<T> tween) {
         this(tween, null);
     }
 
+    /** Sampled at position at this key. */
     public TweenAt(Tween<T> tween, float position) {
         this(tween, Float.valueOf(position));
     }
@@ -17,10 +19,12 @@ public final class TweenAt<T> {
         this.position = position;
     }
 
+    /** The wrapped tween. */
     public Tween<T> tween() {
         return tween;
     }
 
+    /** The fixed position, or fallback if none. */
     public float positionOr(float fallback) {
         return position != null ? position : fallback;
     }

@@ -13,6 +13,7 @@ public class Curve implements Path {
     private final List<Path> paths;
     private float t0 = 0, t1 = 1;
 
+    /** Plays paths in order; needs at least one. */
     public Curve(Path... paths) {
         this(Arrays.asList(paths));
     }
@@ -24,7 +25,7 @@ public class Curve implements Path {
         this.paths = new ArrayList<>(paths);
     }
 
-    // Returns a new curve; this one is unchanged.
+    /** Returns a new curve; this one is unchanged. */
     @Override
     public Curve add(Path next) {
         if (t0 != 0 || t1 != 1) {

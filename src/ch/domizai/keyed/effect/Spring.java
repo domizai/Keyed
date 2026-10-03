@@ -13,8 +13,10 @@ public class Spring<T> implements TimeEffect<T> {
     private final Lerp<T> lerper;
     private final float[] delays, weights;
 
-    // frequency: oscillations per second; keep it below half the frame rate or the wobble can't be seen.
-    // damping: ratio in (0, 1); lower wobbles longer and costs more samples.
+    /**
+     * frequency: oscillations per second; keep it below half the frame rate or the wobble can't be seen.
+     * damping: ratio in (0, 1); lower wobbles longer and costs more samples.
+     */
     public Spring(Lerp<T> lerper, float frequency, float damping) {
         if (frequency <= 0) {
             throw new IllegalArgumentException("frequency must be > 0, was " + frequency);

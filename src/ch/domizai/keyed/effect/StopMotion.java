@@ -6,6 +6,7 @@ import ch.domizai.keyed.tween.Tween;
 public class StopMotion<T> implements TimeEffect<T> {
     private final float step;
 
+    /** step: hold duration in seconds. */
     public StopMotion(float step) {
         if (step <= 0) {
             throw new IllegalArgumentException("step must be > 0, was " + step);

@@ -4,6 +4,7 @@ import static processing.core.PApplet.constrain;
 
 @FunctionalInterface
 public interface Easing {
+    /** Maps progress d in [0, 1] to eased progress. */
     float apply(float d); 
 
     public static final Easing QUADRATIC_BEZIER = quadraticBezier(0, 0, 1);
@@ -28,18 +29,22 @@ public interface Easing {
     public static final Easing QUINT_OUT = powerOut(5);
     public static final Easing QUINT_IN_OUT = powerInOut(5);
 
+    /** Accelerating curve d^p. */
     public static Easing powerIn(int p) {
         return d -> (float) Math.pow(d, p);
     }
 
+    /** Decelerating curve 1 - (1 - d)^p. */
     public static Easing powerOut(int p) {
         return d -> (float) (1 - Math.pow(1 - d, p));
     }
 
+    /** Accelerates to the midpoint, then decelerates, with power p. */
     public static Easing powerInOut(int p) {
         return d -> (float) (d < 0.5f ? 0.5 * Math.pow(2 * d, p) : 1 - 0.5 * Math.pow(2 - 2 * d, p));
     }
 
+    /** Smootherstep between edge0 and edge1; 0 before edge0, 1 after edge1. */
     public static Easing smoothstep(float edge0, float edge1) {
         return d -> {
             float x = constrain((d - edge0) / (edge1 - edge0), 0, 1);
@@ -47,7 +52,7 @@ public interface Easing {
         };
     }
 
-    // CSS cubic-bezier(x1, y1, x2, y2) from (0, 0) to (1, 1); y outside [0, 1] overshoots like CSS "back" easings.
+    /** CSS cubic-bezier(x1, y1, x2, y2) from (0, 0) to (1, 1); x must be in [0, 1], y outside [0, 1] overshoots like CSS "back" easings. */
     public static Easing cubicBezier(float x1, float y1, float x2, float y2) {
         if (x1 < 0 || x1 > 1 || x2 < 0 || x2 > 1) {
             throw new IllegalArgumentException("x1 and x2 must be in [0, 1], were " + x1 + ", " + x2);
@@ -100,6 +105,7 @@ public interface Easing {
         return s;
     }
 
+    /** Quadratic Bezier through values p0 (at d = 0), control p1, and p2 (at d = 1). */
     public static Easing quadraticBezier(float p0, float p1, float p2) {
         return d -> {
             float a = 1 - d;
@@ -107,15 +113,17 @@ public interface Easing {
         };
     }
 
-    // Plain-number shortcuts, e.g. alpha = Easing.quadOut(t); for other powers use powerIn(p).apply(d).
+    /** Applies QUAD_IN to a plain number, e.g. alpha = Easing.quadIn(t); for other powers use powerIn(p).apply(d). */
     public static float quadIn(float d) {
         return QUAD_IN.apply(d);
     }
 
+    /** Applies QUAD_OUT to a plain number. */
     public static float quadOut(float d) {
         return QUAD_OUT.apply(d);
     }
 
+    /** Applies QUAD_IN_OUT to a plain number. */
     public static float quadInOut(float d) {
         return QUAD_IN_OUT.apply(d);
     }

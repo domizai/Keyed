@@ -8,73 +8,82 @@ public class Key implements Comparable<Key> {
     // Replaces the influence curve on the segment leaving this key when set.
     private Easing easing;
 
+    /** Key at a shared pin. */
     public Key(Pin pin) {
         this.pin = pin;
     }
 
+    /** Key at time t with its own pin. */
     public Key(float t) {
         this(new Pin(t));
     }
 
+    /** Key at a shared pin. */
     public static Key at(Pin pin) {
         return new Key(pin); 
     }
     
+    /** Key at time t with its own pin. */
     public static Key at(float t) {
         return new Key(t);
     }
 
-    // Moves the pin, so every key sharing it moves too.
+    /** Moves the pin, so every key sharing it moves too. */
     public Key to(float t) {
         pin.to(t);
         return this;
     }
 
+    /** Pin holding this key's time. */
     public Pin pin() {
         return pin;
     }
     
+    /** Sets both easingIn and easingOut influence, in [0, 1]. */
     public Key setEasing(float influence) {
         return setEasingIn(influence).setEasingOut(influence);
     }
 
-    // Curve for the whole segment from this key to the next, e.g. Easing.QUAD_OUT; ignores the next key's easingIn.
+    /** Curve for the whole segment from this key to the next, e.g. Easing.QUAD_OUT; ignores the next key's easingIn. */
     public Key setEasing(Easing easing) {
         this.easing = easing;
         return this;
     }
 
-    // Keeps this key's value until the next key, for stepped or stop-motion animation.
+    /** Keeps this key's value until the next key, for stepped or stop-motion animation. */
     public Key hold() {
         return setEasing(Easing.HOLD);
     }
 
-    // Shapes the segment arriving at this key.
+    /** Shapes the segment arriving at this key; influence in [0, 1]. */
     public Key setEasingIn(float influence) {
         easingIn = checkInfluence(influence);
         return this;
     }
 
-    // Shapes the segment leaving this key; clears an Easing set with setEasing(Easing).
+    /** Shapes the segment leaving this key; clears an Easing set with setEasing(Easing). */
     public Key setEasingOut(float influence) {
         easingOut = checkInfluence(influence);
         easing = null;
         return this;
     }
     
+    /** Time of this key's pin. */
     public float t() {
         return pin.t();
     }
 
+    /** Influence of the arriving segment, in [0, 1]. */
     public float easingIn() {
         return easingIn;
     }
 
+    /** Influence of the leaving segment, in [0, 1]. */
     public float easingOut() {
         return easingOut;
     }
 
-    // null when the segment uses the easingOut/easingIn influence curve.
+    /** Curve of the leaving segment; null when it uses the easingOut/easingIn influence curve. */
     public Easing easing() {
         return easing;
     }

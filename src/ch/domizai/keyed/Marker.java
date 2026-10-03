@@ -16,20 +16,22 @@ public class Marker {
         this.callback = callback;
     }
 
-    // null if unnamed.
+    /** Marker name; null if unnamed. */
     public String name() {
         return name;
     }
 
-    // Follows the pin, so moving the pin moves the marker.
+    /** Marker time; follows the pin, so moving the pin moves the marker. */
     public float t() {
         return pin.t();
     }
 
+    /** Pin holding this marker's time. */
     public Pin pin() {
         return pin;
     }
 
+    /** Timeline this marker belongs to. */
     public Timeline timeline() {
         return timeline;
     }

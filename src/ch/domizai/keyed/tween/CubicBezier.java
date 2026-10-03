@@ -13,6 +13,7 @@ public class CubicBezier implements Path {
     // Rebuilt lazily after setters; mutating the PVectors directly won't invalidate it.
     private float[] lut;
 
+    /** From p0 to p3 with control points p1 and p2. */
     public CubicBezier(PVector p0, PVector p1, PVector p2, PVector p3) {
         this.p0 = p0;
         this.p1 = p1;
@@ -20,30 +21,35 @@ public class CubicBezier implements Path {
         this.p3 = p3;
     }
     
+    /** Sets the start point. */
     public CubicBezier setP0(PVector p0) {
         this.p0 = p0;
         lut = null;
         return this;
     }
 
+    /** Sets the first control point. */
     public CubicBezier setP1(PVector p1) {
         this.p1 = p1;
         lut = null;
         return this;
     }
 
+    /** Sets the second control point. */
     public CubicBezier setP2(PVector p2) {
         this.p2 = p2;
         lut = null;
         return this;
     }
 
+    /** Sets the end point. */
     public CubicBezier setP3(PVector p3) {
         this.p3 = p3;
         lut = null;
         return this;
     }
 
+    /** Sets all four points. */
     public CubicBezier setCurve(PVector p0, PVector p1, PVector p2, PVector p3) {
         this.p0 = p0;
         this.p1 = p1;

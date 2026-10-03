@@ -9,12 +9,12 @@ public class Orbit implements Effect<PVector> {
     // Orthonormal basis of the orbit plane.
     private final PVector u, v;
 
-    // Orbits in the XY plane.
+    /** Orbits in the XY plane; frequency in cycles per second. */
     public Orbit(float radius, float frequency) {
         this(radius, frequency, new PVector(0, 0, 1));
     }
 
-    // Orbits in the plane perpendicular to axis; the direction follows the right-hand rule.
+    /** Orbits in the plane perpendicular to axis; the direction follows the right-hand rule. */
     public Orbit(float radius, float frequency, PVector axis) {
         this.radius = radius;
         this.frequency = frequency;

@@ -12,7 +12,7 @@ import java.util.List;
 public class ShapeMorph implements Lerpable<ShapeMorph> {
     public final List<PVector> points;
 
-    // Copies the points, so changing the list afterwards doesn't change this shape.
+    /** Copies the points, so changing the list afterwards doesn't change this shape. */
     public ShapeMorph(List<PVector> points) {
         this.points = copy(points);
     }
@@ -33,11 +33,12 @@ public class ShapeMorph implements Lerpable<ShapeMorph> {
         return new ShapeMorph(result);
     }
 
-    // Wrap in beginShape()/endShape(CLOSE). Uses z with a 3D renderer (P3D).
+    /** Emits the points as vertex() calls; wrap in beginShape()/endShape(CLOSE). Uses z with a 3D renderer (P3D). */
     public void vertices(PApplet g) {
         vertices(g.g);
     }
 
+    /** Emits the points as vertex() calls on g; uses z if g is 3D. */
     public void vertices(PGraphics g) {
         if (g.is3D()) {
             for (PVector p : points) g.vertex(p.x, p.y, p.z);

@@ -10,17 +10,17 @@ public class Wiggle implements Effect<PVector> {
     private final float frequency;
     private final long seed;
 
-    // Wiggles x and y only.
+    /** Wiggles x and y only; frequency in wiggles per second. */
     public Wiggle(float amplitude, float frequency) {
         this(new PVector(amplitude, amplitude, 0), frequency);
     }
 
-    // Amplitude per axis; set z to wiggle in 3D.
+    /** Amplitude per axis; set z to wiggle in 3D. */
     public Wiggle(PVector amplitude, float frequency) {
         this(amplitude, frequency, nextSeed++);
     }
 
-    // The same seed and settings always give the same motion; without one, each Wiggle gets its own.
+    /** The same seed and settings always give the same motion; without one, each Wiggle gets its own. */
     public Wiggle(PVector amplitude, float frequency, long seed) {
         this.amplitude = amplitude.copy();
         this.frequency = frequency;

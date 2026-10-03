@@ -17,6 +17,7 @@ public final class Binder {
         bound.remove(keyed);
     }
 
+    /** Applies all bound values; called by Processing before each draw(). */
     public void pre() {
         // Copy so setters may bind or unbind while applying.
         for (Keyed<?> k : new ArrayList<>(bound)) {

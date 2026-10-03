@@ -5,12 +5,12 @@ package ch.domizai.keyed.lerps;
 public class StepLerp<T> implements Lerp<T> {
     private final float threshold;
 
-    // Switches exactly at the next key.
+    /** Switches exactly at the next key. */
     public StepLerp() {
         this(1);
     }
 
-    // E.g. 0.5 switches halfway between keys; easing shifts when that happens.
+    /** E.g. 0.5 switches halfway between keys; easing shifts when that happens. */
     public StepLerp(float threshold) {
         this.threshold = threshold;
     }

@@ -9,7 +9,7 @@ public class Lag<T> implements TimeEffect<T> {
     private final float duration;
     private final int samples;
 
-    // samples: more is smoother but costs one source evaluation each.
+    /** duration in seconds; more samples is smoother but costs one source evaluation each. */
     public Lag(Lerp<T> lerper, float duration, int samples) {
         if (duration <= 0) {
             throw new IllegalArgumentException("duration must be > 0, was " + duration);

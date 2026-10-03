@@ -13,30 +13,35 @@ public class QuadraticBezier implements Path {
     // Rebuilt lazily after setters; mutating the PVectors directly won't invalidate it.
     private float[] lut;
 
+    /** From p0 to p2 with control point p1. */
     public QuadraticBezier(PVector p0, PVector p1, PVector p2) {
         this.p0 = p0;
         this.p1 = p1;
         this.p2 = p2;
     }
 
+    /** Sets the start point. */
     public QuadraticBezier setP0(PVector p0) {
         this.p0 = p0;
         lut = null;
         return this;
     }
 
+    /** Sets the control point. */
     public QuadraticBezier setP1(PVector p1) {
         this.p1 = p1;
         lut = null;
         return this;
     }
 
+    /** Sets the end point. */
     public QuadraticBezier setP2(PVector p2) {
         this.p2 = p2;
         lut = null;
         return this;
     }
 
+    /** Sets all three points. */
     public QuadraticBezier setCurve(PVector p0, PVector p1, PVector p2) {
         this.p0 = p0;
         this.p1 = p1;
