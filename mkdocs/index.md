@@ -4,7 +4,7 @@
 
 Keyed brings keyframes to your sketches. Set a value at a few points in time, and Keyed blends everything in between, with easing, paths, effects and events.
 
-![Morphing](assets/gifs/Morphing.gif){ .sketch }
+![Morphing](assets/gifs/Showcase.gif){ .sketch }
 
 ```java
 import ch.domizai.keyed.*;
