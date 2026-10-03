@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import ch.domizai.keyed.*;
 
 ArrayList<Burst> bursts = new ArrayList<>();
+int[] colors;
 
 void settings() {
     size(400, 400);
@@ -11,15 +12,31 @@ void settings() {
 void setup() {
     textFont(createFont("Courier", 14));
 
-    // Starts a burst every 0.6 seconds, so there is something to see.
+    colors = new int[] {
+        color(230, 60, 60),
+        color(240, 190, 40),
+        color(60, 120, 230),
+        color(60, 180, 90)
+    };
+
+    // Starts a burst every 0.4 seconds, so there is something to see.
     Keyed.init(this)
-        .setDuration(0.6f)
-        .onLoop(tm -> bursts.add(new Burst(this, random(60, 340), random(60, 320))));
+        .setDuration(0.4f)
+        .onLoop(tm -> spawn(random(60, 340), random(60, 320)));
 }
 
 void mousePressed() {
-    // Each Burst plays on its own, starting right away.
-    bursts.add(new Burst(this, mouseX, mouseY));
+    spawn(mouseX, mouseY);
+}
+
+// The same Burst every time, but each one gets its own size, color and duration.
+// Each one plays on its own, starting right away.
+void spawn(float x, float y) {
+    float size = random(0.4f, 1.6f);
+    int col = colors[(int) random(colors.length)];
+    // Bigger bursts take longer.
+    float duration = 0.4f + 0.5f * size;
+    bursts.add(new Burst(this, x, y, size, col, duration));
 }
 
 void draw() {
