@@ -53,6 +53,14 @@ public interface Easing {
         };
     }
 
+    /** n equal jumps like CSS steps(n): holds each level, reaching 1 at the end; steps(1) is HOLD. */
+    public static Easing steps(int n) {
+        if (n < 1) {
+            throw new IllegalArgumentException("steps must be >= 1, was " + n);
+        }
+        return d -> (float) Math.floor(d * n) / n;
+    }
+
     /** CSS cubic-bezier(x1, y1, x2, y2) from (0, 0) to (1, 1); x must be in [0, 1], y outside [0, 1] overshoots like CSS "back" easings. */
     public static Easing cubicBezier(float x1, float y1, float x2, float y2) {
         if (x1 < 0 || x1 > 1 || x2 < 0 || x2 > 1) {
