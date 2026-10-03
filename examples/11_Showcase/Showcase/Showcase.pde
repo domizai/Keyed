@@ -8,13 +8,7 @@ import ch.domizai.keyed.tween.*;
 import ch.domizai.keyed.types.*;
 
 /**
- * A 12 second loop in four scenes. It starts flat like a 2D sketch, and the
- * first impact tilts the camera to reveal that everything was 3D all along.
- *
- * Every scene starts on a Pin. Keys, markers and the HUD all hang off them,
- * so moving a pin retimes the whole piece.
- *
- * Drag on the timeline to scrub, SPACE to pause.
+ * Drag on the timeline to scrub, SPACE to pause, B to toggle bloom.
  */
 static final float D = 12;
 static final int N = 120;
@@ -42,6 +36,9 @@ float zoom = 1;
 
 float barX0 = 40, barX1 = 600, barY = 604;
 boolean scrubbing = false;
+
+PShader bloom;
+boolean bloomOn = true;
 
 void settings() {
     size(640, 640, P3D);
@@ -180,6 +177,9 @@ void setup() {
     for (int i = 0; i < dust.length; i++) {
         dust[i] = PVector.random3D(this).mult(random(240, 520));
     }
+
+    // The shader is in the data folder, see bloom.glsl.
+    bloom = loadShader("bloom.glsl");
 }
 
 void impact(int i) {
@@ -219,6 +219,13 @@ void draw() {
     popMatrix();
 
     blendMode(BLEND);
+    // Bloom the scene, but not the HUD drawn after it.
+    if (bloomOn) {
+        bloom.set("threshold", 0.2f);
+        bloom.set("strength", 1.6f);
+        bloom.set("radius", 12f * pixelDensity);
+        filter(bloom);
+    }
     drawHud(ac);
 }
 
@@ -491,5 +498,7 @@ void mouseReleased() {
 void keyPressed() {
     if (key == ' ') {
         tm.play(!tm.isPlaying());
+    } else if (key == 'b' || key == 'B') {
+        bloomOn = !bloomOn;
     }
 }
