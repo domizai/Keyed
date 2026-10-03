@@ -22,7 +22,7 @@ void setup() {
 }
 
 Keyed<PVector> motion() {
-    return Keyed.of(new PVector())
+    return Keyed.ofPVector()
         .key(Key.at(0).setEasing(1 / 3f), new PVector(100, 200))
         .key(Key.at(2).setEasing(1 / 3f), new PVector(300, 200))
         .key(Key.at(4).setEasing(1 / 3f), new PVector(100, 200));

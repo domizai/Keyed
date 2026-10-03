@@ -994,7 +994,8 @@
 <p>See <a href="tutorial/basics.html">Getting Started</a> and <a href="tutorial/timeline.html#frames-instead-of-seconds">Timelines</a>.</p>
 <h2 id="animated-values-keyeda">Animated values: <code>Keyed&lt;A&gt;</code><a class="headerlink" href="#animated-values-keyeda" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Built-in types:</strong> <code>Keyed.of(float)</code>, <code>of(PVector)</code>, <code>of(String)</code>, <code>of(boolean)</code>, <code>ofInt(int)</code>, <code>ofColor(int)</code>.</li>
+<li><strong>Built-in types:</strong> <code>Keyed.ofFloat()</code>, <code>ofInt()</code>, <code>ofColor()</code>, <code>ofBoolean()</code>, <code>ofString()</code>, <code>ofPVector()</code>, each optionally with a default value used while there are no keys.</li>
+<li><strong>Shorthand:</strong> <code>Keyed.of(value)</code> picks the type from a <code>float</code>, <code>PVector</code>, <code>String</code> or <code>boolean</code> value.</li>
 <li><strong>Any type:</strong> <code>new Keyed&lt;&gt;(lerp, default)</code>, or <code>Keyed.of(obj)</code> for <code>Lerpable</code> types.</li>
 <li><strong>Keys:</strong> <code>key(t, value)</code>, <code>removeKey(...)</code>, <code>clearKeys()</code>, <code>keys()</code>.</li>
 <li><strong>Reading:</strong> <code>value()</code> is the value now; <code>value(t)</code> the value at any time.</li>

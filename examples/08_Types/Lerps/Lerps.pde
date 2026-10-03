@@ -15,12 +15,12 @@ void setup() {
     textSize(14);
     textAlign(CENTER, CENTER);
 
-    // A Lerp decides how two values blend. Keyed.of() picks one for you,
+    // A Lerp decides how two values blend. Keyed.ofFloat() and friends pick one,
     // new Keyed<>(lerp, default) lets you choose.
 
-    // Keyed.of(float) uses FloatLerp, which blends the numbers:
+    // Keyed.ofFloat() uses FloatLerp, which blends the numbers:
     // from 330° to 30° it turns back 300°.
-    longWay = Keyed.of(0f)
+    longWay = Keyed.ofFloat()
         .key(Key.at(0).setEasing(1 / 3f), radians(330))
         .key(Key.at(2).setEasing(1 / 3f), radians(30))
         .key(Key.at(4).setEasing(1 / 3f), radians(330));
@@ -33,7 +33,7 @@ void setup() {
 
     // Keyed.ofColor() uses ColorLerp, which blends red, green and blue:
     // red to cyan passes through gray.
-    rgb = Keyed.ofColor(0)
+    rgb = Keyed.ofColor()
         .key(0, color(255, 0, 0))
         .key(2, color(0, 255, 255))
         .key(4, color(255, 0, 0));
@@ -46,8 +46,8 @@ void setup() {
         .key(2, color(0, 255, 255))
         .key(4, color(255, 0, 0));
 
-    // Keyed.of(String) uses StringLerp, which morphs one character at a time.
-    morph = Keyed.of("")
+    // Keyed.ofString() uses StringLerp, which morphs one character at a time.
+    morph = Keyed.ofString()
         .key(0, "keyed")
         .key(2, "lerps")
         .key(4, "keyed");

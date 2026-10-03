@@ -16,14 +16,14 @@ void setup() {
 
     // Even jumps: one full turn in 8 equal steps,
     // with a stepped easing on a single segment.
-    hand = Keyed.of(0f)
+    hand = Keyed.ofFloat()
         .key(Key.at(0).setEasing(Easing.steps(ticks)), 0f)
         .key(4, TWO_PI);
 
     // Uneven timing: green for 2 seconds, yellow for 0.5, red for 1.5.
     // hold() keeps a key's value until the next key. Without it the lamp
     // index would be blended and rounded, switching halfway between keys.
-    lamp = Keyed.ofInt(0)
+    lamp = Keyed.ofInt()
         .key(Key.at(0).hold(), 2)
         .key(Key.at(2).hold(), 1)
         .key(2.5f, 0);

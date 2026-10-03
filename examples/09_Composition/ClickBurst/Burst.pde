@@ -22,19 +22,19 @@ class Burst extends Composition {
         // Here they are fractions of the duration, so the timing stretches with it.
         float d = duration;
 
-        ring = add(Keyed.of(0f)
+        ring = add(Keyed.ofFloat()
             .key(Key.at(0).setEasing(Easing.CUBIC_OUT), 0f)
             .key(d, 90f * size));
 
-        fade = add(Keyed.of(0f)
+        fade = add(Keyed.ofFloat()
             .key(0.4f * d, 255f)
             .key(d, 0f));
 
-        spread = add(Keyed.of(0f)
+        spread = add(Keyed.ofFloat()
             .key(Key.at(0).setEasing(Easing.QUART_OUT), 0f)
             .key(d, 60f * size));
 
-        dotSize = add(Keyed.of(0f)
+        dotSize = add(Keyed.ofFloat()
             .key(0, 14f * size)
             .key(d, 0f));
     }

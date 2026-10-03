@@ -26,7 +26,7 @@ void setup() {
     // around like this closes the loop.
     spline = new Spline(pts[4], pts[0], pts[1], pts[2], pts[3], pts[4], pts[0], pts[1]);
 
-    pos = Keyed.of(new PVector())
+    pos = Keyed.ofPVector()
         .key(0, spline)
         .key(5, spline);
 }

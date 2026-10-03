@@ -20,28 +20,28 @@ void setup() {
         new PVector(80, ground - r), new PVector(200, 0), new PVector(320, ground - r));
     Curve hop = arc.add(arc.slice(1, 0));
 
-    ball = Keyed.of(new PVector())
+    ball = Keyed.ofPVector()
         .key(0, hop)
         .key(2, hop);
 
     // x() turns a path into a Tween<Float> of its x coordinate (y() works too),
     // so the shadow follows the ball along the ground.
     Tween<Float> hopX = hop.x();
-    shadowX = Keyed.of(0f)
+    shadowX = Keyed.ofFloat()
         .key(0, hopX)
         .key(2, hopX);
 
     // map() turns a tween's values into something else:
     // the higher the ball, the narrower its shadow.
     Tween<Float> hopWidth = hop.map(p -> map(p.y, ground - r, 140, 60, 20));
-    shadowWidth = Keyed.of(0f)
+    shadowWidth = Keyed.ofFloat()
         .key(0, hopWidth)
         .key(2, hopWidth);
 
     // A Tween is just a function of d from 0 to 1, so a lambda works too.
     // This one squashes the ball as it lands, at d = 0, 0.5 and 1.
     Tween<Float> landing = d -> 1 - 0.3f * pow(abs(cos(d * TWO_PI)), 12);
-    squash = Keyed.of(1f)
+    squash = Keyed.ofFloat()
         .key(0, landing)
         .key(2, landing);
 }

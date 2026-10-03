@@ -32,7 +32,7 @@ void setup() {
 
 // Keys at frames 0, 45 and 90: 3 seconds at 30 fps.
 Keyed<Float> bounce(Timeline tm) {
-    return Keyed.of(0f)
+    return Keyed.ofFloat()
         .setTimeline(tm)
         .key(Key.at(0).setEasing(1 / 3f), 60f)
         .key(Key.at(45).setEasing(1 / 3f), 340f)

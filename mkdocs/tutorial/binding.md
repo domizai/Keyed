@@ -55,7 +55,7 @@ Keyed.bind(new ColorLerp(), color(255), c -> bg = c)
 Or call `bind()` on an existing `Keyed`. The setter can convert the value, here from an `int` to a line of text:
 
 ```java
-score = Keyed.ofInt(0)
+score = Keyed.ofInt()
     .key(0, 0)
     .key(4, 100)
     .bind(this::showScore);

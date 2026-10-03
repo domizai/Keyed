@@ -40,11 +40,11 @@ void setup() {
         }
     });
 
-    angle = Keyed.of(0f)
+    angle = Keyed.ofFloat()
         .key(Key.at(0).setEasing(Easing.CUBIC_IN_OUT), 0f)
         .key(duration, TWO_PI / 3);
 
-    spread = Keyed.of(0f)
+    spread = Keyed.ofFloat()
         .key(Key.at(0).setEasing(1 / 3f), 60f)
         .key(Key.at(duration / 2).setEasing(1 / 3f), 130f)
         .key(Key.at(duration).setEasing(1 / 3f), 60f);

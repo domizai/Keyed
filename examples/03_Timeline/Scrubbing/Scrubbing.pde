@@ -16,7 +16,7 @@ void setup() {
 
     tm = new Timeline().setDuration(4);
 
-    pos = Keyed.of(new PVector())
+    pos = Keyed.ofPVector()
         .setTimeline(tm)
         .key(Key.at(0).setEasing(1 / 3f), new PVector(80, 80))
         .key(Key.at(1).setEasing(1 / 3f), new PVector(320, 80))

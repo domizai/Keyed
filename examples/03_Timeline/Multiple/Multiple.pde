@@ -14,7 +14,7 @@ void setup() {
     textAlign(CENTER, CENTER);
 
     // Without setTimeline(), values follow the default timeline.
-    angle = Keyed.of(0f)
+    angle = Keyed.ofFloat()
         .key(0, 0f)
         .key(1, TWO_PI);
 
@@ -22,12 +22,12 @@ void setup() {
     // so it stops at the end instead of starting over.
     intro = new Timeline().setDuration(1.2f, false);
 
-    cardY = Keyed.of(0f)
+    cardY = Keyed.ofFloat()
         .setTimeline(intro)
         .key(Key.at(0).setEasing(Easing.CUBIC_OUT), 420f)
         .key(1.2f, 180f);
 
-    cardAlpha = Keyed.of(0f)
+    cardAlpha = Keyed.ofFloat()
         .setTimeline(intro)
         .key(0, 0f)
         .key(0.6f, 255f);

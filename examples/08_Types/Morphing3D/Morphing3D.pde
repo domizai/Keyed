@@ -24,7 +24,7 @@ void setup() {
         .key(Key.at(8).setEasing(0.6f), circle());
 
     // One turn per loop, to see the depth.
-    spin = Keyed.of(0f)
+    spin = Keyed.ofFloat()
         .key(0, 0f)
         .key(8, TWO_PI);
 }

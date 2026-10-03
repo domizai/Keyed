@@ -16,7 +16,7 @@ void setup() {
     tm = new Timeline().setDuration(3);
 
     // setTimeline() makes x follow tm instead of the default timeline.
-    x = Keyed.of(0f)
+    x = Keyed.ofFloat()
         .setTimeline(tm)
         .key(Key.at(0).setEasing(1 / 3f), 60f)
         .key(Key.at(1.5f).setEasing(1 / 3f), 340f)

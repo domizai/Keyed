@@ -9,7 +9,7 @@ Without easing, values move at constant speed and stop abruptly at each key. Eas
 Inspired by After Effects, easing is an **influence** between 0 and 1 that slows the motion near a key.
 
 ```java
-easy = Keyed.of(0f)
+easy = Keyed.ofFloat()
     .key(Key.at(0).setEasing(1 / 3f), x0)
     .key(Key.at(1.5f).setEasing(1 / 3f), x1)
     .key(Key.at(3).setEasing(1 / 3f), x0);
@@ -37,7 +37,7 @@ easy = Keyed.of(0f)
 An `Easing` shapes the whole segment from its key to the next one, so the last key doesn't need one:
 
 ```java
-Keyed.of(0f)
+Keyed.ofFloat()
     .key(Key.at(0).setEasing(Easing.CUBIC_IN_OUT), x0)
     .key(Key.at(1.5f).setEasing(Easing.CUBIC_IN_OUT), x1)
     .key(3, x0);
@@ -94,11 +94,11 @@ Sometimes values should jump instead of blend. There are two ways:
 - **Uneven timing:** `hold()` keeps a key's value until the next key. The traffic light is green for 2 seconds, yellow for 0.5 and red for 1.5.
 
 ```java
-hand = Keyed.of(0f)
+hand = Keyed.ofFloat()
     .key(Key.at(0).setEasing(Easing.steps(8)), 0f)
     .key(4, TWO_PI);
 
-lamp = Keyed.ofInt(0)
+lamp = Keyed.ofInt()
     .key(Key.at(0).hold(), 2)
     .key(Key.at(2).hold(), 1)
     .key(2.5f, 0);

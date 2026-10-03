@@ -1,6 +1,6 @@
 # 8. Types
 
-How two values blend is decided by a **`Lerp`**. `Keyed.of()` picks one for you, but you can choose your own, write one as a lambda, or teach your own classes to blend themselves. Keyed also comes with two types for shapes and 3D rotations.
+How two values blend is decided by a **`Lerp`**. `Keyed.ofFloat()`, `ofColor()` and the other factories pick one for you, but you can choose your own, write one as a lambda, or teach your own classes to blend themselves. Keyed also comes with two types for shapes and 3D rotations.
 
 ## Lerps
 

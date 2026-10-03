@@ -26,14 +26,14 @@ void setup() {
             new PVector(370, 220), new PVector(300, 300)));
 
     // Draws the curve on in 3 seconds, then holds for 1.
-    progress = Keyed.of(0f)
+    progress = Keyed.ofFloat()
         .key(Key.at(0).setEasing(1 / 3f), 0f)
         .key(Key.at(3).setEasing(1 / 3f), 1f);
 
     // slice(t0, t1) is the part of a path between t0 and t1.
     // With t1 < t0 it runs backwards.
     reversed = curve.slice(1, 0);
-    back = Keyed.of(new PVector())
+    back = Keyed.ofPVector()
         .key(0, reversed)
         .key(4, reversed);
 }

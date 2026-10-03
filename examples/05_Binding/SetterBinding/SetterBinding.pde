@@ -24,7 +24,7 @@ void setup() {
 
     // Or bind an existing Keyed. The setter can convert the value,
     // here from an int into a line of text.
-    score = Keyed.ofInt(0)
+    score = Keyed.ofInt()
         .key(0, 0)
         .key(4, 100)
         .bind(this::showScore);

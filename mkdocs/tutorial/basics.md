@@ -14,12 +14,12 @@ Keyed.init(this).setDuration(2);
 
 `init()` hooks Keyed into Processing, so animations follow real time without you having to advance them. It returns the **default timeline**, which we tell to loop every 2 seconds.
 
-Next, create an animated value. `Keyed.of(0f)` makes an animated `float` (`0f` is its default, used while there are no keys). Then add **keys**: a time in seconds and the value at that time.
+Next, create an animated value. `Keyed.ofFloat()` makes an animated `float`. Then add **keys**: a time in seconds and the value at that time.
 
 ```java
 Keyed<Float> x;
 
-x = Keyed.of(0f)
+x = Keyed.ofFloat()
     .key(0, 50f)
     .key(1, 350f)
     .key(2, 50f);
@@ -42,10 +42,10 @@ That's all there is to it. The rest of this tutorial adds to this pattern.
 
 ![Vectors](../assets/gifs/Vectors.gif){ .sketch }
 
-`Keyed.of(new PVector())` animates a `PVector`, blending x, y and z together. Here the ball visits one corner per second. The last key returns to the first corner, so the loop closes without a jump:
+`Keyed.ofPVector()` animates a `PVector`, blending x, y and z together. Here the ball visits one corner per second. The last key returns to the first corner, so the loop closes without a jump:
 
 ```java
-pos = Keyed.of(new PVector());
+pos = Keyed.ofPVector();
 for (int i = 0; i <= corners.length; i++) {
     pos.key(i, corners[i % corners.length]);
 }
@@ -66,22 +66,24 @@ Keyed knows how to blend more than numbers:
 
 | Factory | Type | How it blends |
 |---|---|---|
-| `Keyed.of(float)` | `Float` | linearly |
-| `Keyed.ofInt(int)` | `Integer` | linearly, rounded to the nearest int |
-| `Keyed.ofColor(color)` | `Integer` | red, green, blue and alpha |
-| `Keyed.of(PVector)` | `PVector` | x, y and z |
-| `Keyed.of(String)` | `String` | morphs one character edit at a time |
-| `Keyed.of(boolean)` | `Boolean` | switches when the next key is reached |
+| `Keyed.ofFloat()` | `Float` | linearly |
+| `Keyed.ofInt()` | `Integer` | linearly, rounded to the nearest int |
+| `Keyed.ofColor()` | `Integer` | red, green, blue and alpha |
+| `Keyed.ofPVector()` | `PVector` | x, y and z |
+| `Keyed.ofString()` | `String` | morphs one character edit at a time |
+| `Keyed.ofBoolean()` | `Boolean` | switches when the next key is reached |
+
+Each factory also takes a default value, e.g. `Keyed.ofFloat(50)`, used while there are no keys. Without one it's 0, opaque black, `false`, an empty `String` or `(0, 0, 0)`. `Keyed.of(value)` is a shorthand that picks the type from the value, e.g. `Keyed.of(0f)` is the same as `Keyed.ofFloat(0)`; ints and colors always need `ofInt()` and `ofColor()`.
 
 Colors are `int`s in Processing, so they need their own factory, `ofColor()`; otherwise they'd be blended as plain numbers.
 
 ```java
-col = Keyed.ofColor(color(0))
+col = Keyed.ofColor()
     .key(0, color(230, 60, 60))
     .key(2, color(60, 120, 230))
     .key(4, color(230, 60, 60));
 
-word = Keyed.of("")
+word = Keyed.ofString()
     .key(0, "keyed")
     .key(2, "animation")
     .key(4, "keyed");

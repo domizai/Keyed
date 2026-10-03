@@ -25,7 +25,7 @@ void setup() {
 
 // Jumps right at 0.5 seconds and back at 2.5, with no motion in between.
 Keyed<Float> jump() {
-    return Keyed.of(0f)
+    return Keyed.ofFloat()
         .key(Key.at(0).hold(), 100f)
         .key(Key.at(0.5f).hold(), 300f)
         .key(2.5f, 100f);

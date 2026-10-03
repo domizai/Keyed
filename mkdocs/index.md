@@ -15,7 +15,7 @@ void setup() {
     size(400, 400);
     Keyed.init(this).setDuration(2);
 
-    x = Keyed.of(0f)
+    x = Keyed.ofFloat()
         .key(0, 50f)
         .key(1, 350f)
         .key(2, 50f);

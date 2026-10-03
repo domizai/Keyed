@@ -20,7 +20,7 @@ quad = new QuadraticBezier(q[0], q[1], q[2]);
 Two keys on the same path travel along all of it, start to end:
 
 ```java
-a = Keyed.of(new PVector())
+a = Keyed.ofPVector()
     .key(0, cubic)
     .key(3, cubic);
 ```
@@ -28,7 +28,7 @@ a = Keyed.of(new PVector())
 `at()` pins a key to one position on the path: 0 is the start, 1 the end. From `at(0)` to `at(1)` and back to `at(0)` goes there and back again. Easing works as usual, shaping the progress along the path:
 
 ```java
-b = Keyed.of(new PVector())
+b = Keyed.ofPVector()
     .key(Key.at(0).setEasing(1 / 3f), quad.at(0))
     .key(Key.at(1.5f).setEasing(1 / 3f), quad.at(1))
     .key(Key.at(3).setEasing(1 / 3f), quad.at(0));
@@ -50,7 +50,7 @@ A path is a `Tween<PVector>`: `value(d)` is the point at `d`, from 0 to 1. Paths
 ```java
 spline = new Spline(pts[4], pts[0], pts[1], pts[2], pts[3], pts[4], pts[0], pts[1]);
 
-pos = Keyed.of(new PVector())
+pos = Keyed.ofPVector()
     .key(0, spline)
     .key(5, spline);
 ```
@@ -78,7 +78,7 @@ curve = new CubicBezier(...)
 
 ```java
 reversed = curve.slice(1, 0);
-back = Keyed.of(new PVector())
+back = Keyed.ofPVector()
     .key(0, reversed)
     .key(4, reversed);
 ```
@@ -99,7 +99,7 @@ Paths are one kind of `Tween<T>`: a value as a function of `d` from 0 to 1. Twee
 
 ```java
 Tween<Float> hopX = hop.x();
-shadowX = Keyed.of(0f)
+shadowX = Keyed.ofFloat()
     .key(0, hopX)
     .key(2, hopX);
 
@@ -110,7 +110,7 @@ And since a `Tween` is just a function, a lambda works too. This one squashes th
 
 ```java
 Tween<Float> landing = d -> 1 - 0.3f * pow(abs(cos(d * TWO_PI)), 12);
-squash = Keyed.of(1f)
+squash = Keyed.ofFloat()
     .key(0, landing)
     .key(2, landing);
 ```

@@ -17,7 +17,7 @@ void settings() {
 void setup() {
     Keyed.init(this).setDuration(4);
 
-    pos = Keyed.of(new PVector());
+    pos = Keyed.ofPVector();
     // One corner per second. The last key returns to the first corner,
     // so the loop closes without a jump.
     for (int i = 0; i <= corners.length; i++) {

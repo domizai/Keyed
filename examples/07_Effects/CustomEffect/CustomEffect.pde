@@ -29,7 +29,7 @@ void setup() {
 }
 
 Keyed<PVector> sweep(float y) {
-    return Keyed.of(new PVector())
+    return Keyed.ofPVector()
         .key(Key.at(0).setEasing(1 / 3f), new PVector(80, y))
         .key(Key.at(1.5f).setEasing(1 / 3f), new PVector(320, y))
         .key(Key.at(3).setEasing(1 / 3f), new PVector(80, y));

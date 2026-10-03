@@ -146,14 +146,67 @@ public class Keyed<A> {
         return new Keyed<>(new BooleanLerp(), defaultValue);
     }
 
+    // Named factories: the type is in the name, so the no-argument versions need no default value,
+    // which is only used while there are no keys.
+
+    /** Animated float, 0 while there are no keys. */
+    public static Keyed<Float> ofFloat() {
+        return ofFloat(0);
+    }
+
+    /** Same as of(float). */
+    public static Keyed<Float> ofFloat(float defaultValue) {
+        return of(defaultValue);
+    }
+
+    /** Animated int, 0 while there are no keys. */
+    public static Keyed<Integer> ofInt() {
+        return ofInt(0);
+    }
+
     /** Animated int; named because of(int) would clash with of(float). */
     public static Keyed<Integer> ofInt(int defaultValue) {
         return new Keyed<>(new IntLerp(), defaultValue);
     }
 
+    /** Animated color, opaque black while there are no keys. */
+    public static Keyed<Integer> ofColor() {
+        return ofColor(0xFF000000);
+    }
+
     /** Animated color; colors are ints too, hence the name. */
     public static Keyed<Integer> ofColor(int defaultValue) {
         return new Keyed<>(new ColorLerp(), defaultValue);
+    }
+
+    /** Animated boolean, false while there are no keys. */
+    public static Keyed<Boolean> ofBoolean() {
+        return ofBoolean(false);
+    }
+
+    /** Same as of(boolean). */
+    public static Keyed<Boolean> ofBoolean(boolean defaultValue) {
+        return of(defaultValue);
+    }
+
+    /** Animated String, empty while there are no keys. */
+    public static Keyed<String> ofString() {
+        return ofString("");
+    }
+
+    /** Same as of(String). */
+    public static Keyed<String> ofString(String defaultValue) {
+        return of(defaultValue);
+    }
+
+    /** Animated PVector, (0, 0, 0) while there are no keys. */
+    public static Keyed<PVector> ofPVector() {
+        return ofPVector(new PVector());
+    }
+
+    /** Same as of(PVector). */
+    public static Keyed<PVector> ofPVector(PVector defaultValue) {
+        return of(defaultValue);
     }
 
     /** The setter receives value() before every draw() once init() has been called. */

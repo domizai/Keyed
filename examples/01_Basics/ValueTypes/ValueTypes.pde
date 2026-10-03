@@ -15,25 +15,25 @@ void setup() {
     textAlign(LEFT, CENTER);
 
     // Colors are ints in Processing, so they have their own factory.
-    col = Keyed.ofColor(color(0))
+    col = Keyed.ofColor()
         .key(0, color(230, 60, 60))
         .key(2, color(60, 120, 230))
         .key(4, color(230, 60, 60));
 
     // Whole numbers, rounded to the nearest int.
-    count = Keyed.ofInt(0)
+    count = Keyed.ofInt()
         .key(0, 0)
         .key(2, 100)
         .key(4, 0);
 
     // Text morphs one character edit at a time.
-    word = Keyed.of("")
+    word = Keyed.ofString()
         .key(0, "keyed")
         .key(2, "animation")
         .key(4, "keyed");
 
     // Booleans can't blend, so they switch when the next key is reached.
-    visible = Keyed.of(false)
+    visible = Keyed.ofBoolean()
         .key(0, true)
         .key(2, false);
 }

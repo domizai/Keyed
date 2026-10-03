@@ -11,7 +11,7 @@ A **marker** calls back whenever playback crosses its time. It can be placed at 
 ```java
 hit = Pin.at(1.5f);
 
-x = Keyed.of(0f)
+x = Keyed.ofFloat()
     .key(0, 50f)
     .key(hit, 350f)
     .key(3, 50f);

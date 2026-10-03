@@ -15,7 +15,7 @@ void setup() {
     Timeline tm = Keyed.init(this).setDuration(1);
     textFont(createFont("Courier", 14));
 
-    x = Keyed.of(0f)
+    x = Keyed.ofFloat()
         .key(Key.at(0).setEasing(1 / 3f), 60f)
         .key(Key.at(0.5f).setEasing(1 / 3f), 340f)
         .key(Key.at(1).setEasing(1 / 3f), 60f);
@@ -26,7 +26,7 @@ void setup() {
 
     // Plays once, in 2 seconds.
     once = new Timeline().setDuration(2, false);
-    progress = Keyed.of(0f)
+    progress = Keyed.ofFloat()
         .setTimeline(once)
         .key(0, 0f)
         .key(2, 1f);

@@ -14,23 +14,23 @@ class Shockwave extends Composition {
         this.g = g;
         this.col = col;
 
-        radius = add(Keyed.of(0f)
+        radius = add(Keyed.ofFloat()
             .key(Key.at(0).setEasing(Easing.cubicBezier(0.1f, 0.9f, 0.2f, 1)), 10f)
             .key(LIFE, 440f));
 
-        alpha = add(Keyed.of(0f)
+        alpha = add(Keyed.ofFloat()
             .key(Key.at(0).setEasing(Easing.QUAD_IN), 255f)
             .key(LIFE, 0f));
 
-        weight = add(Keyed.of(0f)
+        weight = add(Keyed.ofFloat()
             .key(0, 14f)
             .key(LIFE, 1f));
 
-        spray = add(Keyed.of(0f)
+        spray = add(Keyed.ofFloat()
             .key(Key.at(0).setEasing(Easing.QUART_OUT), 0f)
             .key(LIFE, 340f));
 
-        flash = add(Keyed.of(0f)
+        flash = add(Keyed.ofFloat()
             .key(Key.at(0).setEasing(Easing.CUBIC_OUT), 1f)
             .key(0.4f, 0f));
     }

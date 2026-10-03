@@ -78,7 +78,7 @@ void setup() {
     core.addEffect(new Spring<>(ShapeMorph::lerp, 1.4f, 0.3f))
         .addEffect(ripple);
 
-    rippleAmp = Keyed.of(0f)
+    rippleAmp = Keyed.ofFloat()
         .key(Key.at(scene[0]).setEasing(0.6f), 40f)
         .key(Key.at(scene[1]).setEasing(0.6f), 10f)
         .key(Key.at(scene[2]).setEasing(0.6f), 55f)
@@ -101,7 +101,7 @@ void setup() {
         .addEffect(new Spring<>(Quaternion::lerp, 0.9f, 0.55f));
 
     // A slow turntable underneath the camera.
-    spin = Keyed.of(0f)
+    spin = Keyed.ofFloat()
         .key(0, 0f)
         .key(D, -TWO_PI);
 
@@ -115,7 +115,7 @@ void setup() {
         .addEffect(new Spring<>(new FloatLerp(), 2.2f, 0.25f));
 
     // Lag crossfades the hard color cuts...
-    accent = Keyed.ofColor(palette[0]);
+    accent = Keyed.ofColor();
     for (int i = 0; i < 4; i++) {
         accent.key(Key.at(scene[i]).hold(), palette[i]);
     }
@@ -123,7 +123,7 @@ void setup() {
         .addEffect(new Lag<>(new ColorLerp(), 0.6f, 16));
 
     // ...and, being generic, morphs the words letter by letter.
-    word = Keyed.of("");
+    word = Keyed.ofString();
     for (int i = 0; i < 4; i++) {
         word.key(Key.at(scene[i]).hold(), names[i]);
     }
@@ -141,7 +141,7 @@ void setup() {
             new PVector(0, 0, 50 + i * 42),
             new PVector(cos(a + PI / 6) * 240, sin(a + PI / 6) * 240, side * 70)
         };
-        Keyed<PVector> m = Keyed.of(new PVector());
+        Keyed<PVector> m = Keyed.ofPVector();
         for (int s = 0; s < 4; s++) {
             m.key(Key.at(scene[s]).hold(), formation[s]);
         }
@@ -162,7 +162,7 @@ void setup() {
     }
     Spline lap = new Spline(pts[n - 1], pts[0], pts[1], pts[2], pts[3], pts[4], pts[5], pts[6], pts[0], pts[1]);
     Curve twoLaps = new Curve(lap, lap);
-    comet = Keyed.of(new PVector())
+    comet = Keyed.ofPVector()
         .key(0, twoLaps)
         .key(D, twoLaps)
         .addEffect(new Wiggle(new PVector(12, 12, 12), 2, 7));

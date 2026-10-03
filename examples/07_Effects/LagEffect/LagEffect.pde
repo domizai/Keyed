@@ -32,7 +32,7 @@ void setup() {
 
 // One corner per second, at constant speed.
 Keyed<PVector> square() {
-    Keyed<PVector> k = Keyed.of(new PVector());
+    Keyed<PVector> k = Keyed.ofPVector();
     for (int i = 0; i <= corners.length; i++) {
         k.key(i, corners[i % corners.length]);
     }

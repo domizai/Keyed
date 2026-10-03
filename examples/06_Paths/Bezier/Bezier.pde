@@ -26,14 +26,14 @@ void setup() {
 
     // A key can follow a path instead of holding a fixed value.
     // Two keys on the same path travel along all of it, start to end.
-    a = Keyed.of(new PVector())
+    a = Keyed.ofPVector()
         .key(0, cubic)
         .key(3, cubic);
 
     // at() pins a key to one position on the path: 0 is the start, 1 the end.
     // From at(0) to at(1) and back to at(0) goes there and back again.
     // Easing works as usual, shaping the progress along the path.
-    b = Keyed.of(new PVector())
+    b = Keyed.ofPVector()
         .key(Key.at(0).setEasing(1 / 3f), quad.at(0))
         .key(Key.at(1.5f).setEasing(1 / 3f), quad.at(1))
         .key(Key.at(3).setEasing(1 / 3f), quad.at(0));

@@ -11,7 +11,7 @@ void settings() {
 void setup() {
     Keyed.init(this).setDuration(3);
 
-    pos = Keyed.of(new PVector())
+    pos = Keyed.ofPVector()
         .key(0, new PVector(80, 300))
         .key(1, new PVector(200, 80))
         .key(2, new PVector(320, 300))

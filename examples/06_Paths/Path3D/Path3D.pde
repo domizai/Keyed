@@ -30,18 +30,18 @@ void setup() {
     // Wrapping the points around closes the loop, as in SplinePath.
     track = new Spline(pts[n - 1], pts[0], pts[1], pts[2], pts[3], pts[4], pts[5], pts[0], pts[1]);
 
-    ball = Keyed.of(new PVector())
+    ball = Keyed.ofPVector()
         .key(0, track)
         .key(6, track);
 
     // map() flattens the track onto the ground, for the shadow.
     shadowPath = track.map(p -> new PVector(p.x, ground, p.z));
-    shadow = Keyed.of(new PVector())
+    shadow = Keyed.ofPVector()
         .key(0, shadowPath)
         .key(6, shadowPath);
 
     // Half a turn per loop, to see the depth.
-    spin = Keyed.of(0f)
+    spin = Keyed.ofFloat()
         .key(0, 0f)
         .key(6, PI);
 }

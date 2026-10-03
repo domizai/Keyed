@@ -23,7 +23,7 @@ void setup() {
 }
 
 Keyed<Float> sweep() {
-    return Keyed.of(0f)
+    return Keyed.ofFloat()
         .key(Key.at(0).setEasing(1 / 3f), 80f)
         .key(Key.at(1).setEasing(1 / 3f), 320f)
         .key(Key.at(2).setEasing(1 / 3f), 80f);

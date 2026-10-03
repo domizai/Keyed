@@ -15,7 +15,7 @@ void setup() {
     textFont(createFont("Courier", 14));
 
     // The ball's height over time.
-    ballY = Keyed.of(0f)
+    ballY = Keyed.ofFloat()
         .key(Key.at(0).setEasing(1 / 3f), 300f)
         .key(Key.at(1).setEasing(1 / 3f), 100f)
         .key(Key.at(2.5f).setEasing(1 / 3f), 220f)

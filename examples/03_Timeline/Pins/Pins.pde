@@ -20,17 +20,17 @@ void setup() {
     arrive = Pin.at(1);
 
     // Pass the pin instead of a time. Key.at(pin) adds easing as usual.
-    x = Keyed.of(0f)
+    x = Keyed.ofFloat()
         .key(Key.at(0).setEasing(1 / 3f), 60f)
         .key(Key.at(arrive).setEasing(1 / 3f), 340f)
         .key(Key.at(duration).setEasing(1 / 3f), 60f);
 
-    size = Keyed.of(0f)
+    size = Keyed.ofFloat()
         .key(0, 20f)
         .key(arrive, 80f)
         .key(duration, 20f);
 
-    col = Keyed.ofColor(color(0))
+    col = Keyed.ofColor()
         .key(0, color(0))
         .key(arrive, color(230, 60, 60))
         .key(duration, color(0));

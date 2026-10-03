@@ -38,7 +38,7 @@ void setup() {
     for (Easing e : easings) {
         // An Easing shapes the whole segment from its key to the next one,
         // so the last key doesn't need one.
-        lanes.add(Keyed.of(0f)
+        lanes.add(Keyed.ofFloat()
             .key(Key.at(0).setEasing(e), x0)
             .key(Key.at(1.5f).setEasing(e), x1)
             .key(3, x0));

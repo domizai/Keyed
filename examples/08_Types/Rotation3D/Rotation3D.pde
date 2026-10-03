@@ -17,7 +17,7 @@ void setup() {
     // no rotation, and rotateX(PI) plus rotateZ(PI).
 
     // Blending the three angles one by one tumbles along the way.
-    euler = Keyed.of(new PVector())
+    euler = Keyed.ofPVector()
         .key(Key.at(0).setEasing(1 / 3f), new PVector(0, 0, 0))
         .key(Key.at(1.5f).setEasing(1 / 3f), new PVector(PI, 0, PI))
         .key(Key.at(3).setEasing(1 / 3f), new PVector(0, 0, 0));

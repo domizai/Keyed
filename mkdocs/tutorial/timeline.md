@@ -13,7 +13,7 @@ Keyed.init(this);
 
 tm = new Timeline().setDuration(3);
 
-x = Keyed.of(0f)
+x = Keyed.ofFloat()
     .setTimeline(tm)
     .key(Key.at(0).setEasing(1 / 3f), 60f)
     .key(Key.at(1.5f).setEasing(1 / 3f), 340f)
@@ -79,7 +79,7 @@ Each timeline is an independent clock. Here the spinner loops on the default tim
 ```java
 intro = new Timeline().setDuration(1.2f, false);
 
-cardY = Keyed.of(0f)
+cardY = Keyed.ofFloat()
     .setTimeline(intro)
     .key(Key.at(0).setEasing(Easing.CUBIC_OUT), 420f)
     .key(1.2f, 180f);
@@ -101,12 +101,12 @@ When several values share a moment, say a ball arriving while it grows and turns
 ```java
 arrive = Pin.at(1);
 
-x = Keyed.of(0f)
+x = Keyed.ofFloat()
     .key(Key.at(0).setEasing(1 / 3f), 60f)
     .key(Key.at(arrive).setEasing(1 / 3f), 340f)
     .key(Key.at(duration).setEasing(1 / 3f), 60f);
 
-size = Keyed.of(0f)
+size = Keyed.ofFloat()
     .key(0, 20f)
     .key(arrive, 80f)
     .key(duration, 20f);

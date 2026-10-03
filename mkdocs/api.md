@@ -15,7 +15,8 @@ See [Getting Started](tutorial/basics.md) and [Timelines](tutorial/timeline.md#f
 
 ## Animated values: `Keyed<A>`
 
-- **Built-in types:** `Keyed.of(float)`, `of(PVector)`, `of(String)`, `of(boolean)`, `ofInt(int)`, `ofColor(int)`.
+- **Built-in types:** `Keyed.ofFloat()`, `ofInt()`, `ofColor()`, `ofBoolean()`, `ofString()`, `ofPVector()`, each optionally with a default value used while there are no keys.
+- **Shorthand:** `Keyed.of(value)` picks the type from a `float`, `PVector`, `String` or `boolean` value.
 - **Any type:** `new Keyed<>(lerp, default)`, or `Keyed.of(obj)` for `Lerpable` types.
 - **Keys:** `key(t, value)`, `removeKey(...)`, `clearKeys()`, `keys()`.
 - **Reading:** `value()` is the value now; `value(t)` the value at any time.
