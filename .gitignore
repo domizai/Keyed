@@ -6,6 +6,7 @@ bin/
 .vscode/
 /test/
 /release/
+/tools/
 
 # Ignore Gradle project-specific cache directory
 .gradle
@@ -15,3 +16,9 @@ build
 
 # Ignore Kotlin plugin data
 .kotlin
+
+# Ignore Python and uv files
+.venv/
+.python-version
+pyproject.toml
+uv.lock

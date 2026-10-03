@@ -1,0 +1,60 @@
+site_name: Keyed
+site_description: Keyframe animation for Processing.
+
+repo_url: https://github.com/domizai/Keyed
+docs_dir: mkdocs
+site_dir: docs
+
+copyright: GNU General Public License
+
+plugins:
+  - offline
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+  features:
+    - navigation.footer
+    - navigation.sections
+    - navigation.indexes
+    - content.code.copy
+
+extra_css:
+  - assets/extra.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.snippets:
+      base_path: [examples]
+      check_paths: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Tutorial:
+    - 1. Getting Started: tutorial/basics.md
+    - 2. Easing: tutorial/easing.md
+    - 3. Timelines: tutorial/timeline.md
+    - 4. Events: tutorial/events.md
+    - 5. Binding: tutorial/binding.md
+    - 6. Paths: tutorial/paths.md
+    - 7. Effects: tutorial/effects.md
+    - 8. Types: tutorial/types.md
+    - 9. Composition: tutorial/composition.md
+    - 10. Export: tutorial/export.md
+  - API Overview: api.md

@@ -1,0 +1,5 @@
+/* The example GIFs are rendered at 2x, so show them at their sketch size. */
+.md-typeset img.sketch {
+    width: 400px;
+    border-radius: 4px;
+}
