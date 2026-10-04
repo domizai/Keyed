@@ -165,6 +165,34 @@ Declaring the type tells Java which kind of effect the lambda is. Both can also 
     --8<-- "07_Effects/CustomEffect/CustomEffect.pde"
     ```
 
+## Avoid (a custom effect)
+
+![Avoid](../assets/gifs/Avoid.gif){ .sketch }
+
+A custom effect can also take parameters: write a method that returns it. This one keeps a path out of a circle. Points inside are pushed onto its edge, so the motion walks around the obstacle instead of passing through it:
+
+```java
+Effect<PVector> avoid(PVector center, float r, float soft) {
+    return (PVector p, float t) -> {
+        PVector away = PVector.sub(p, center);
+        float d = away.mag();
+        if (d >= r + soft || d == 0) return p;
+        float h = max(soft - abs(d - r), 0) / soft;
+        float target = max(d, r) + h * h * soft / 4;
+        return PVector.add(center, away.setMag(target));
+    };
+}
+
+pos.addEffect(avoid(obstacle, radius, softness));
+```
+
+`target` is a smooth `max(d, r)`: the distance never drops below `r`, and `soft` rounds off the corners where the path meets the circle. The effect keeps a reference to `obstacle`, so changing it with `obstacle.set()` moves the obstacle. If the path runs right through the center, the motion swaps sides quickly there.
+
+??? example "Full sketch: Avoid"
+    ```java
+    --8<-- "07_Effects/Avoid/Avoid.pde"
+    ```
+
 ## Echo (motion trails) { #echo }
 
 ![Echo](../assets/gifs/Echo.gif){ .sketch }
