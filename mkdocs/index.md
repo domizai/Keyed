@@ -4,6 +4,8 @@
 
 Keyed brings keyframes to your sketches. Set a value at a few points in time, and Keyed blends everything in between, with easing, paths, effects and events.
 
+Using p5.js? There is also [p5.keyed](https://github.com/domizai/p5.keyed), the same library for p5.js.
+
 ![Morphing](assets/gifs/Showcase.gif){ .sketch }
 
 ```java

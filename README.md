@@ -4,6 +4,8 @@ Keyframe animation for Processing. Set a value at a few points in time, and Keye
 
 👉 [Documentation and Tutorial](https://domizai.github.io/Keyed/)
 
+Using p5.js? There is also [p5.keyed](https://github.com/domizai/p5.keyed), the same library for p5.js.
+
 ![Showcase](mkdocs/assets/gifs/Showcase.gif)
 
 ```java
