@@ -92,6 +92,16 @@ back = Keyed.ofPVector()
 
 ![TweenMap](../assets/gifs/TweenMap.gif){ .sketch }
 
+!!! info "What is a tween?"
+    *Tween* is short for *in-between*: in hand-drawn animation, the drawings between two key poses. In Keyed, a tween is a value that isn't fixed: a function that gives a value for any position `d` from 0 to 1. Wherever a key takes a value, it can take a tween instead:
+
+    ```java
+    .key(0, 50f)    // a fixed value
+    .key(0, hopX)   // a Tween<Float>: its value changes along the way
+    ```
+
+    Two keys on the same tween play it from `d = 0` to `d = 1` between them, and `at(d)` pins a key to one position, like the paths above. A fixed value is simply a tween that always returns the same value.
+
 Paths are one kind of `Tween<T>`: a value as a function of `d` from 0 to 1. Tweens can be transformed:
 
 - `x()` and `y()` turn a path into a `Tween<Float>` of one coordinate. The shadow follows the ball along the ground with `hop.x()`.

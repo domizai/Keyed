@@ -2,7 +2,7 @@
 
 Keyframe animation for Processing. Set a value at a few points in time, and Keyed blends everything in between, with easing, paths, effects and events.
 
-👉 [Documentation](https://domizai.github.io/Keyed/)
+👉 [Documentation and Tutorial](https://domizai.github.io/Keyed/)
 
 ![Showcase](mkdocs/assets/gifs/Showcase.gif)
 
