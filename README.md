@@ -48,7 +48,38 @@ Or download [Keyed.zip](https://github.com/domizai/Keyed/releases/latest/downloa
 
 ## Examples
 
-The library comes with 40 examples, grouped like the chapters of the [tutorial](https://domizai.github.io/Keyed/). Find them in Processing under *File > Examples > Contributed Libraries > Keyed*.
+The library comes with many examples, grouped like the chapters of the [tutorial](https://domizai.github.io/Keyed/). Find them in Processing under *File > Examples > Contributed Libraries > Keyed*.
+
+## Development
+
+Needs Java 17, which Gradle downloads if it's missing, and Processing 4. The library is in `src/main/java`, the examples in `examples/`. On Windows, use `gradlew.bat` instead of `./gradlew`.
+
+```bash
+./gradlew stageRelease           # build/release/Keyed: the library folder as Processing expects it
+./gradlew buildReleaseArtifacts  # release/Keyed.zip, Keyed.pdex and Keyed.txt
+```
+
+To try the current code in Processing, link `build/release/Keyed` into the `libraries` folder of your sketchbook once (its location is shown in Processing's Preferences). Then rerun `./gradlew stageRelease` after each change and restart Processing.
+
+```bash
+# macOS and Linux
+ln -s "$PWD/build/release/Keyed" "<sketchbook>/libraries/Keyed"
+# Windows (cmd)
+mklink /J "<sketchbook>\libraries\Keyed" "%CD%\build\release\Keyed"
+```
+
+Examples can also be run from the terminal with Processing's command-line mode, where `<processing>` is the Processing app's executable (on macOS `/Applications/Processing.app/Contents/MacOS/Processing`). The sketch path must be absolute:
+
+```bash
+<processing> cli --sketch="<path to Keyed>/examples/01_Basics/FirstKey" --run
+```
+
+The documentation is built with MkDocs Material (`mkdocs.yml`, sources in `mkdocs/`). `mkdocs build` writes the site to `docs/`, which GitHub Pages serves.
+
+```bash
+uv sync
+uv run mkdocs serve  # or: uv run mkdocs build
+```
 
 * * *
 

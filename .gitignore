@@ -17,8 +17,5 @@ build
 # Ignore Kotlin plugin data
 .kotlin
 
-# Ignore Python and uv files
+# Ignore Python virtual environment
 .venv/
-.python-version
-pyproject.toml
-uv.lock

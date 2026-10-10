@@ -1,0 +1,8 @@
+[project]
+name = "keyed"
+version = "0.1.0"
+description = "Keyframe animation for Processing"
+requires-python = ">=3.12"
+dependencies = [
+    "mkdocs-material>=9.7.7",
+]
