@@ -30,6 +30,7 @@ public class Timeline {
     private long lastNanos = -1;
     private boolean started = false;
     private PApplet sketch;
+    private Binder binder;
     private final List<Marker> markers = new ArrayList<>();
     private final List<Consumer<Timeline>> loopListeners = new ArrayList<>();
     private final List<Consumer<Timeline>> finishListeners = new ArrayList<>();
@@ -46,12 +47,19 @@ public class Timeline {
     /** Advances before every draw() of sketch; null only moves via step() or to(). */
     public Timeline(PApplet sketch) {
         this.sketch = sketch;
-        if (sketch != null) {
+        if (sketch == null) {
+            return;
+        }
+        if (sketch == Keyed.sketch()) {
+            // The binder steps it, so bound values see the new t.
+            binder = Keyed.binder();
+            binder.addTimeline(this);
+        } else {
             sketch.registerMethod("pre", this);
         }
     }
 
-    /** Called by Processing before each draw(); public only so it can be registered. The first frame shows t = 0. */
+    /** Called before each draw() by Keyed's binder, or by Processing for a sketch other than Keyed.init()'s; public only so it can be registered. The first frame shows t = 0. */
     public void pre() {
         if (!autoplay) {
             // Re-enabling autoplay starts a fresh clock instead of jumping by the paused gap.
@@ -306,10 +314,13 @@ public class Timeline {
 
     /** Stops advancing with the sketch; call when the timeline is no longer needed so it can be garbage collected. */
     public void dispose() {
-        if (sketch != null) {
+        if (binder != null) {
+            binder.removeTimeline(this);
+            binder = null;
+        } else if (sketch != null) {
             sketch.unregisterMethod("pre", this);
-            sketch = null;
         }
+        sketch = null;
     }
 
     private float fit(float t) {

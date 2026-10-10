@@ -38,7 +38,8 @@ public class Keyed<A> {
     private static boolean autoplay = true;
     private static float frameRate = 60;
     private static Timeline defaultTimeline = new Timeline();
-    private static final Binder binder = new Binder(); // Used to register the pre() method with the Processing sketch.
+    // Registered with the sketch once; steps the timelines before applying bound values, in that order.
+    private static final Binder binder = new Binder();
 
     private A defaultValue;
     private List<KeyEntry<A>> keys = new ArrayList<>();
@@ -52,11 +53,19 @@ public class Keyed<A> {
     /** Call in setup() so timelines follow real time without passing the sketch around. */
     public static Timeline init(PApplet sketch) {
         if (Keyed.sketch != sketch) {
+            if (Keyed.sketch != null) {
+                Keyed.sketch.unregisterMethod("pre", binder);
+            }
             sketch.registerMethod("pre", binder);
         }
         Keyed.sketch = sketch;
+        defaultTimeline.dispose();
         defaultTimeline = new Timeline(sketch);
         return defaultTimeline;
+    }
+
+    static Binder binder() {
+        return binder;
     }
 
     /** Sketch passed to init(); null before. */

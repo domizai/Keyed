@@ -4,7 +4,7 @@ bin/
 *.jar
 !gradle/wrapper/gradle-wrapper.jar
 .vscode/
-/test/
+/private/
 /release/
 /tools/
 
