@@ -53,3 +53,5 @@ The library comes with 40 examples, grouped like the chapters of the [tutorial](
 * * *
 
 Tested with Processing 4.5.7 on macOS 26.4.
+
+AI coding assistants were used for parts of the code, debugging, documentation, code examples, and code reviews. All changes were reviewed and tested before being released.

@@ -10,6 +10,7 @@ A compact summary of the library. Each section links to the tutorial chapter tha
     - `Keyed.setFrameRate(fps)` sets the frame rate used to convert between frames and seconds.
     - `Keyed.sync(bool)`: `true` follows real time; `false` advances exactly one frame per `draw()`, for repeatable exports.
     - `Keyed.autoplay(bool)` turns automatic advancing on or off.
+- **`Keyed.VERSION`** is the installed library version, e.g. for bug reports: `println(Keyed.VERSION);`
 
 See [Getting Started](tutorial/basics.md) and [Timelines](tutorial/timeline.md#frames-instead-of-seconds).
 

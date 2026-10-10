@@ -37,6 +37,10 @@ tasks.jar {
     archiveBaseName = libName
     archiveVersion = ""
     archiveClassifier = ""
+    // Read back by Keyed.VERSION.
+    manifest {
+        attributes("Implementation-Version" to project.version.toString())
+    }
 }
 
 tasks.javadoc {

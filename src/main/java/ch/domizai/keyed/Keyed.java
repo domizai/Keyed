@@ -28,6 +28,9 @@ import static processing.core.PApplet.map;
 
 /** A value animated between keys, plus the library-wide settings as static methods. */
 public class Keyed<A> {
+    /** Library version, e.g. "1.1.0"; "dev" when running from source instead of the jar. */
+    public static final String VERSION = versionOrDev();
+
     public static final Unit SECOND = Unit.SECOND;
     public static final Unit FRAME = Unit.FRAME;
 
@@ -453,6 +456,12 @@ public class Keyed<A> {
             this.key = key;
             this.tween = tween;
         }
+    }
+
+    // The jar's manifest holds the version written by the build; classes run from source have none.
+    private static String versionOrDev() {
+        String v = Keyed.class.getPackage().getImplementationVersion();
+        return v != null ? v : "dev";
     }
 
     private static Field findField(Class<?> type, String name) {

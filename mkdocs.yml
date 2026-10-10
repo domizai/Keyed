@@ -47,7 +47,8 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.keys
   - pymdownx.snippets:
-      base_path: [examples]
+      # examples/ for the sketches, . for files in the repository root like CHANGELOG.md.
+      base_path: [examples, .]
       check_paths: true
   - pymdownx.superfences
   - pymdownx.tabbed:
@@ -72,3 +73,4 @@ nav:
     - 9. Composition: tutorial/composition.md
     - 10. Export: tutorial/export.md
   - API Overview: api.md
+  - Changelog: changelog.md
