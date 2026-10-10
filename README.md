@@ -87,4 +87,6 @@ uv run mkdocs serve  # or: uv run mkdocs build
 
 Tested with Processing 4.5.7 on macOS 26.4.
 
+Found a bug or have an idea? Please open an [issue](https://github.com/domizai/Keyed/issues).
+
 AI coding assistants were used for parts of the code, debugging, documentation, code examples, and code reviews. All changes were reviewed and tested before being released.
